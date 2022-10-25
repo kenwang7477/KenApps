@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Ken Apps</string>
+
+    <string name="kh_garbage_truck_map_title">高雄市垃圾車地圖</string>
+    <string name="kh_parking_space_map_title">高雄市停車場地圖</string>
+    <string name="tv_program_list_title">數位電視節目表</string>
+    <string name="kh_arm_recycler_map_title">高雄市 ARM 回收地圖</string>
+    <string name="kh_cctv_system_title">高雄市路況監視系統</string>
+
+    <string name="loading">讀取中…</string>
+    <string name="enable_permission">開啟權限</string>
+    <string name="please_enable_network">請打開網路</string>
+    <string name="please_enable_location_permission">請同意 location 權限</string>
+    <string name="no_data">沒有資料</string>
+    <string name="unknown_error">未知錯誤</string>
+    <string name="please_input_location">請輸入地點</string>
+    <string name="refresh_label">間隔(秒)</string>
+    <string name="start_refresh">開啟自動更新</string>
+    <string name="stop_refresh">關閉自動更新</string>
+</resources>
