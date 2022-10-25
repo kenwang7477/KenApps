@@ -4,10 +4,12 @@ import com.google.common.truth.Truth
 import com.kenwang.kenapps.data.repository.armrecycler.ArmRecyclerService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import org.junit.Ignore
 import org.junit.Test
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+@Ignore("Ignore API test")
 @OptIn(ExperimentalCoroutinesApi::class)
 class ArmRecyclerAPITest {
 

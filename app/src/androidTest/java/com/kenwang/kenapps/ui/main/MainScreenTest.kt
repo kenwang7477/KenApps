@@ -16,9 +16,9 @@ import org.junit.Test
 @HiltAndroidTest
 class MainScreenTest {
 
-//    @get:Rule(order = 0)
-//    val hiltRule = HiltAndroidRule(this)
-    @get:Rule
+    @get:Rule(order = 0)
+    val hiltRule = HiltAndroidRule(this)
+    @get:Rule(order = 1)
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
 //    lateinit var navController: TestNavHostController

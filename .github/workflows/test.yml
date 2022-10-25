@@ -24,6 +24,9 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
       
       # Execute unit tests
       - name: Unit Test
@@ -32,9 +35,10 @@ jobs:
       - name: Android Unit Test Report
         uses: asadmansr/android-test-report-action@v1.2.0
         if: ${{ always() }} # IMPORTANT: run Android Test Report regardless
-  
+
+  # https://github.com/android/architecture-samples/actions/runs/2759319594/workflow
   instrumented-tests:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
       - name: Checkout
@@ -46,5 +50,11 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
 
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
       - name: Run instrumented tests
-        run: ./gradlew -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" pixel5api33DebugAndroidTest
+        run: ./gradlew pixel5api33DebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"

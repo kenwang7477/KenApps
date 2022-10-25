@@ -1,14 +1,15 @@
 package com.kenwang.kenapps.api
 
 import com.google.common.truth.Truth
-import com.kenwang.kenapps.data.repository.cctvlist.CctvListService
 import com.kenwang.kenapps.data.repository.parkinglist.ParkingListService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import org.junit.Ignore
 import org.junit.Test
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+@Ignore("Ignore API test")
 @OptIn(ExperimentalCoroutinesApi::class)
 class ParkingListAPITest {
 
