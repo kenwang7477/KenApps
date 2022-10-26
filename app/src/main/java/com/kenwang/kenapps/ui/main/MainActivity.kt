@@ -3,6 +3,7 @@ package com.kenwang.kenapps.ui.main
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -18,6 +19,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -103,113 +106,171 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
         },
         content = { paddingValues ->
             NavHost(navController = navController, startDestination = Screens.Main.route) {
-                composable(Screens.Main.route) {
-                    MainScreen.MainUI(
-                        paddingValues = paddingValues,
-                        navToItem = { listItem ->
-                            when (listItem) {
-                                MainViewModel.ListItem.ParkingMap -> {
-                                    navController.toParkingList()
-                                }
-
-                                MainViewModel.ListItem.GarbageTruckMap -> {
-                                    navController.toGarbageTruckList()
-                                }
-
-                                MainViewModel.ListItem.TvProgramList -> {
-                                    navController.toTvProgramList()
-                                }
-                                MainViewModel.ListItem.ArmRecyclerMap -> {
-                                    navController.toArmRecyclerList()
-                                }
-                                MainViewModel.ListItem.CctvList -> {
-                                    navController.toCctvList()
-                                }
-                            }
-                        }
-                    )
-                }
-                composable(Screens.ParkingList.route) {
-                    ParkingListScreen.ParkingListUI(
-                        paddingValues = paddingValues,
-                        toParkingMap = {
-                            navController.toParkingMap(it)
-                        }
-                    )
-                }
-                composable(
-                    route = "${Screens.ParkingMap.route}/{${Screens.ParkingMap.argParkingSpace}}",
-                    arguments = listOf(
-                        navArgument(Screens.ParkingMap.argParkingSpace){ type = ParkingSpace.NavigationType }
-                    )
-                ) {
-                    val parkingSpace = if (isVersionAboveTiramisu()) {
-                        it.arguments?.getParcelable(Screens.ParkingMap.argParkingSpace, ParkingSpace::class.java) ?: ParkingSpace()
-                    } else {
-                        it.arguments?.getParcelable(Screens.ParkingMap.argParkingSpace) ?: ParkingSpace()
-                    }
-                    ParkingMapScreen.ParkingMapUI(
-                        paddingValues = paddingValues,
-                        parkingSpace = parkingSpace
-                    )
-                }
-                composable(Screens.GarbageTruckList.route) {
-                    GarbageTruckListScreen.GarbageTruckListUI(
-                        paddingValues = paddingValues,
-                        toGarbageTruckMap = {
-                            navController.toGarbageTruckMap(it)
-                        }
-                    )
-                }
-                composable(
-                    route = "${Screens.GarbageTruckMap.route}/{${Screens.GarbageTruckMap.argGarbageTruck}}",
-                    arguments = listOf(
-                        navArgument(Screens.GarbageTruckMap.argGarbageTruck) { type = GarbageTruck.NavigationType }
-                    )
-                ) {
-                    val truck = if (isVersionAboveTiramisu()) {
-                        it.arguments?.getParcelable(Screens.GarbageTruckMap.argGarbageTruck, GarbageTruck::class.java) ?: GarbageTruck()
-                    } else {
-                        it.arguments?.getParcelable(Screens.GarbageTruckMap.argGarbageTruck) ?: GarbageTruck()
-                    }
-                    GarbageTruckMapScreen.TruckMapUI(
-                        paddingValues,
-                        garbageTruck = truck
-                    )
-                }
-                composable(Screens.TvProgramList.route) {
-                    TvProgramListScreen.TvProgramListUI(paddingValues)
-                }
-                composable(Screens.ArmRecyclerList.route) {
-                    ArmRecyclerListScreen.ArmRecyclerListUI(
-                        paddingValues = paddingValues
-                    )
-                }
-                composable(Screens.CctvList.route) {
-                    CctvListScreen.CctvListUI(
-                        paddingValues = paddingValues,
-                        toCctvMap = {
-                            navController.toCctvMap(it)
-                        }
-                    )
-                }
-                composable(
-                    route = "${Screens.CctvMap.route}/{${Screens.CctvMap.argCctvMonitor}}",
-                    arguments = listOf(
-                        navArgument(Screens.CctvMap.argCctvMonitor) { type = CctvMonitor.NavigationType }
-                    )
-                ) {
-                    val cctvMonitor = if (isVersionAboveTiramisu()) {
-                        it.arguments?.getParcelable(Screens.CctvMap.argCctvMonitor, CctvMonitor::class.java) ?: CctvMonitor()
-                    } else {
-                        it.arguments?.getParcelable(Screens.CctvMap.argCctvMonitor) ?: CctvMonitor()
-                    }
-                    CctvMapScreen.CctvMapUI(
-                        paddingValues = paddingValues,
-                        cctvMonitor = cctvMonitor
-                    )
-                }
+                addMainGraph(paddingValues, navController)
+                addParkingListGraph(paddingValues, navController)
+                addParkingMapGraph(paddingValues)
+                addGarbageTruckListGraph(paddingValues, navController)
+                addGarbageTruckMapGraph(paddingValues)
+                addTvProgramListGraph(paddingValues)
+                addArmRecyclerListGraph(paddingValues)
+                addCctvMonitorListGraph(paddingValues, navController)
+                addCctvMonitorMapGraph(paddingValues)
             }
         }
     )
+}
+
+fun NavGraphBuilder.addMainGraph(
+    paddingValues: PaddingValues,
+    navController: NavController
+) {
+    composable(Screens.Main.route) {
+        MainScreen.MainUI(
+            paddingValues = paddingValues,
+            navToItem = { listItem ->
+                when (listItem) {
+                    MainViewModel.ListItem.ParkingMap -> {
+                        navController.toParkingList()
+                    }
+
+                    MainViewModel.ListItem.GarbageTruckMap -> {
+                        navController.toGarbageTruckList()
+                    }
+
+                    MainViewModel.ListItem.TvProgramList -> {
+                        navController.toTvProgramList()
+                    }
+                    MainViewModel.ListItem.ArmRecyclerMap -> {
+                        navController.toArmRecyclerList()
+                    }
+                    MainViewModel.ListItem.CctvList -> {
+                        navController.toCctvList()
+                    }
+                }
+            }
+        )
+    }
+}
+
+fun NavGraphBuilder.addParkingListGraph(
+    paddingValues: PaddingValues,
+    navController: NavController
+) {
+    composable(Screens.ParkingList.route) {
+        ParkingListScreen.ParkingListUI(
+            paddingValues = paddingValues,
+            toParkingMap = {
+                navController.toParkingMap(it)
+            }
+        )
+    }
+}
+
+fun NavGraphBuilder.addParkingMapGraph(
+    paddingValues: PaddingValues
+) {
+    composable(
+        route = "${Screens.ParkingMap.route}/{${Screens.ParkingMap.argParkingSpace}}",
+        arguments = listOf(
+            navArgument(Screens.ParkingMap.argParkingSpace){ type = ParkingSpace.NavigationType }
+        )
+    ) {
+        val parkingSpace = if (isVersionAboveTiramisu()) {
+            it.arguments?.getParcelable(Screens.ParkingMap.argParkingSpace, ParkingSpace::class.java) ?: ParkingSpace()
+        } else {
+            it.arguments?.getParcelable(Screens.ParkingMap.argParkingSpace) ?: ParkingSpace()
+        }
+        ParkingMapScreen.ParkingMapUI(
+            paddingValues = paddingValues,
+            parkingSpace = parkingSpace
+        )
+    }
+}
+
+fun NavGraphBuilder.addGarbageTruckListGraph(
+    paddingValues: PaddingValues,
+    navController: NavController
+) {
+    composable(Screens.GarbageTruckList.route) {
+        GarbageTruckListScreen.GarbageTruckListUI(
+            paddingValues = paddingValues,
+            toGarbageTruckMap = {
+                navController.toGarbageTruckMap(it)
+            }
+        )
+    }
+}
+
+fun NavGraphBuilder.addGarbageTruckMapGraph(
+    paddingValues: PaddingValues
+) {
+    composable(
+        route = "${Screens.GarbageTruckMap.route}/{${Screens.GarbageTruckMap.argGarbageTruck}}",
+        arguments = listOf(
+            navArgument(Screens.GarbageTruckMap.argGarbageTruck) { type = GarbageTruck.NavigationType }
+        )
+    ) {
+        val truck = if (isVersionAboveTiramisu()) {
+            it.arguments?.getParcelable(Screens.GarbageTruckMap.argGarbageTruck, GarbageTruck::class.java) ?: GarbageTruck()
+        } else {
+            it.arguments?.getParcelable(Screens.GarbageTruckMap.argGarbageTruck) ?: GarbageTruck()
+        }
+        GarbageTruckMapScreen.TruckMapUI(
+            paddingValues,
+            garbageTruck = truck
+        )
+    }
+}
+
+fun NavGraphBuilder.addTvProgramListGraph(
+    paddingValues: PaddingValues
+) {
+    composable(Screens.TvProgramList.route) {
+        TvProgramListScreen.TvProgramListUI(paddingValues)
+    }
+}
+
+fun NavGraphBuilder.addArmRecyclerListGraph(
+    paddingValues: PaddingValues
+) {
+    composable(Screens.ArmRecyclerList.route) {
+        ArmRecyclerListScreen.ArmRecyclerListUI(
+            paddingValues = paddingValues
+        )
+    }
+}
+
+fun NavGraphBuilder.addCctvMonitorListGraph(
+    paddingValues: PaddingValues,
+    navController: NavController
+) {
+    composable(Screens.CctvList.route) {
+        CctvListScreen.CctvListUI(
+            paddingValues = paddingValues,
+            toCctvMap = {
+                navController.toCctvMap(it)
+            }
+        )
+    }
+}
+
+fun NavGraphBuilder.addCctvMonitorMapGraph(
+    paddingValues: PaddingValues
+) {
+    composable(
+        route = "${Screens.CctvMap.route}/{${Screens.CctvMap.argCctvMonitor}}",
+        arguments = listOf(
+            navArgument(Screens.CctvMap.argCctvMonitor) { type = CctvMonitor.NavigationType }
+        )
+    ) {
+        val cctvMonitor = if (isVersionAboveTiramisu()) {
+            it.arguments?.getParcelable(Screens.CctvMap.argCctvMonitor, CctvMonitor::class.java) ?: CctvMonitor()
+        } else {
+            it.arguments?.getParcelable(Screens.CctvMap.argCctvMonitor) ?: CctvMonitor()
+        }
+        CctvMapScreen.CctvMapUI(
+            paddingValues = paddingValues,
+            cctvMonitor = cctvMonitor
+        )
+    }
 }
