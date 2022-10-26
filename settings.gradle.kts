@@ -35,7 +35,7 @@ dependencyResolutionManagement {
             // Chrome custom tab
             library("androidx-browser", "androidx.browser:browser:1.4.0")
 
-            library("junit4", "junit:junit:4.13.2")
+            library("mockk", "io.mockk:mockk:1.11.0")
             library("kotlinx-coroutines-test", "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
             library("truth", "com.google.truth:truth:1.1.2")
             library("androidx-compose-ui-test-junit4", "androidx.compose.ui:ui-test-junit4:$composeVersion")

@@ -99,7 +99,7 @@ dependencies {
     // Chrome custom tab
     implementation(libs.androidx.browser)
 
-    testImplementation(libs.junit4)
+    testImplementation(libs.mockk)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.truth)
     testImplementation(libs.androidx.compose.ui.test.junit4)

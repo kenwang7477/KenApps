@@ -3,12 +3,14 @@ package com.kenwang.kenapps.api
 import com.google.gson.JsonArray
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import org.junit.Ignore
 import org.junit.Test
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 
+@Ignore("Ignore API test")
 @OptIn(ExperimentalCoroutinesApi::class)
 class ApiTest {
 
