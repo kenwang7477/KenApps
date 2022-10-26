@@ -3,6 +3,9 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("dagger.hilt.android.plugin")
     id("kotlin-parcelize")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.firebase-perf")
+    id("com.google.firebase.crashlytics")
     kotlin("kapt")
 }
 
@@ -84,6 +87,11 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.constraintlayout.compose)
+
+    // Firebase
+    implementation(platform(libs.firebase))
+    implementation("com.google.firebase:firebase-perf")
+    implementation("com.google.firebase:firebase-crashlytics")
 
     // Compose permission
     implementation(libs.accompanist.permissions)

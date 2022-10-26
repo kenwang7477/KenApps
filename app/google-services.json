@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "477873580862",
+    "project_id": "kenapps-1cf3b",
+    "storage_bucket": "kenapps-1cf3b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:477873580862:android:1b7d365f8fbb413f395a6f",
+        "android_client_info": {
+          "package_name": "com.kenwang.kenapps"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "477873580862-b6t1f853nfmjmpo8676bgu4cp5phrptm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAA1I8vyBL2aXK5R6UsH1gB0YPgnW9XniE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "477873580862-b6t1f853nfmjmpo8676bgu4cp5phrptm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -26,6 +26,9 @@ dependencyResolutionManagement {
             library("androidx-navigation-compose", "androidx.navigation:navigation-compose:2.5.2")
             library("androidx-constraintlayout-compose", "androidx.constraintlayout:constraintlayout-compose:1.0.1")
 
+            // Firebase
+            library("firebase", "com.google.firebase:firebase-bom:31.0.1")
+
             // Compose permission
             library("accompanist-permissions", "com.google.accompanist:accompanist-permissions:0.23.1")
 
