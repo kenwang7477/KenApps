@@ -22,6 +22,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kenwang.kenapps.R
+import com.kenwang.kenapps.domain.usecase.main.MainListItem
+import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 object MainScreen {
@@ -29,7 +31,7 @@ object MainScreen {
     @Composable
     fun MainUI(
         paddingValues: PaddingValues,
-        navToItem: (item: MainViewModel.ListItem) -> Unit,
+        navToItem: (item: MainListItem) -> Unit,
         mainViewModel: MainViewModel = hiltViewModel()
     ) {
         when (val state = mainViewModel.viewState.collectAsStateWithLifecycle().value) {
@@ -43,8 +45,8 @@ object MainScreen {
     @Composable
     private fun GridListLayout(
         paddingValues: PaddingValues,
-        navToItem: (item: MainViewModel.ListItem) -> Unit,
-        itemList: List<MainViewModel.ListItem>
+        navToItem: (item: MainListItem) -> Unit,
+        itemList: ImmutableList<MainListItem>
     ) {
         LazyVerticalGrid(
             modifier = Modifier.padding(paddingValues),
@@ -58,8 +60,8 @@ object MainScreen {
 
     @Composable
     private fun ItemCardLayout(
-        item: MainViewModel.ListItem,
-        navToItem: (item: MainViewModel.ListItem) -> Unit
+        item: MainListItem,
+        navToItem: (item: MainListItem) -> Unit
     ) {
         Card(
             shape = RoundedCornerShape(5.dp),
@@ -78,19 +80,19 @@ object MainScreen {
                 contentAlignment = Alignment.Center
             ) {
                 when (item) {
-                    MainViewModel.ListItem.ParkingMap -> {
+                    MainListItem.ParkingMap -> {
                         Text(text = stringResource(id = R.string.kh_parking_space_map_title))
                     }
-                    MainViewModel.ListItem.GarbageTruckMap -> {
+                    MainListItem.GarbageTruckMap -> {
                         Text(text = stringResource(id = R.string.kh_garbage_truck_map_title))
                     }
-                    MainViewModel.ListItem.TvProgramList -> {
+                    MainListItem.TvProgramList -> {
                         Text(text = stringResource(id = R.string.tv_program_list_title))
                     }
-                    MainViewModel.ListItem.ArmRecyclerMap -> {
+                    MainListItem.ArmRecyclerMap -> {
                         Text(text = stringResource(id = R.string.kh_arm_recycler_map_title))
                     }
-                    MainViewModel.ListItem.CctvList -> {
+                    MainListItem.CctvList -> {
                         Text(text = stringResource(id = R.string.kh_cctv_system_title))
                     }
                 }

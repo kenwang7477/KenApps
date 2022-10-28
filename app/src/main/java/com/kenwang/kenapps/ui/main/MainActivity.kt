@@ -30,6 +30,7 @@ import com.kenwang.kenapps.R
 import com.kenwang.kenapps.data.model.CctvMonitor
 import com.kenwang.kenapps.data.model.ParkingSpace
 import com.kenwang.kenapps.data.model.GarbageTruck
+import com.kenwang.kenapps.domain.usecase.main.MainListItem
 import com.kenwang.kenapps.extensions.isVersionAboveTiramisu
 import com.kenwang.kenapps.extensions.toArmRecyclerList
 import com.kenwang.kenapps.extensions.toCctvList
@@ -53,6 +54,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -129,21 +131,21 @@ fun NavGraphBuilder.addMainGraph(
             paddingValues = paddingValues,
             navToItem = { listItem ->
                 when (listItem) {
-                    MainViewModel.ListItem.ParkingMap -> {
+                    MainListItem.ParkingMap -> {
                         navController.toParkingList()
                     }
 
-                    MainViewModel.ListItem.GarbageTruckMap -> {
+                    MainListItem.GarbageTruckMap -> {
                         navController.toGarbageTruckList()
                     }
 
-                    MainViewModel.ListItem.TvProgramList -> {
+                    MainListItem.TvProgramList -> {
                         navController.toTvProgramList()
                     }
-                    MainViewModel.ListItem.ArmRecyclerMap -> {
+                    MainListItem.ArmRecyclerMap -> {
                         navController.toArmRecyclerList()
                     }
-                    MainViewModel.ListItem.CctvList -> {
+                    MainListItem.CctvList -> {
                         navController.toCctvList()
                     }
                 }

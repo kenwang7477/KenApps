@@ -3,43 +3,53 @@ package com.kenwang.kenapps.ui.parkingtool.parkinglist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.SphericalUtil
 import com.kenwang.kenapps.data.model.ParkingSpace
-import com.kenwang.kenapps.data.repository.parkinglist.ParkingListRepository
+import com.kenwang.kenapps.domain.usecase.parkinglist.GetParkingListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Provider
 
 @HiltViewModel
 class ParkingListViewModel @Inject constructor(
-    private val parkingListRepository: ParkingListRepository
+    private val getParkingListUseCase: Provider<GetParkingListUseCase>
 ) : ViewModel() {
 
-    private val _viewState = MutableStateFlow<ParkingListViewState>(
-        ParkingListViewState.Success(
-            emptyList()
-        )
-    )
+    private val _viewState = MutableStateFlow<ParkingListViewState>(ParkingListViewState.Loading)
     val viewState = _viewState.asStateFlow()
 
     fun getParkingList(currentLatLng: LatLng? = null) {
         viewModelScope.launch {
-            _viewState.value = ParkingListViewState.Loading
+            _viewState.emit(ParkingListViewState.Loading)
 
-            val parkingSpaces = currentLatLng?.let {
-                parkingListRepository.getParkingList().sortedBy { parkingSpace ->
-                    val to = LatLng(parkingSpace.latitude, parkingSpace.longitude)
-                    SphericalUtil.computeDistanceBetween(currentLatLng, to)
+            getParkingListUseCase.get()
+                .apply {
+                    this.currentLatLng = currentLatLng
                 }
-            } ?: parkingListRepository.getParkingList()
-            _viewState.value = ParkingListViewState.Success(parkingSpaces)
+                .invoke()
+                .collect { result ->
+                    when (result) {
+                        is GetParkingListUseCase.Result.Empty -> {
+                            _viewState.emit(ParkingListViewState.Empty)
+                        }
+
+                        is GetParkingListUseCase.Result.Success -> {
+                            _viewState.emit(
+                                ParkingListViewState.Success(result.list.toImmutableList())
+                            )
+                        }
+                    }
+                }
         }
     }
 
     sealed class ParkingListViewState {
-        data class Success(val list: List<ParkingSpace>) : ParkingListViewState()
+        data class Success(val list: ImmutableList<ParkingSpace>) : ParkingListViewState()
+        object Empty : ParkingListViewState()
         object Loading : ParkingListViewState()
     }
 }

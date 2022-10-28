@@ -6,7 +6,6 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,16 +22,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kenwang.kenapps.R
 import com.kenwang.kenapps.data.model.ArmRecycler
+import com.kenwang.kenapps.extensions.isVersionAboveTiramisu
+import com.kenwang.kenapps.ui.commonscreen.EmptyView
+import com.kenwang.kenapps.ui.commonscreen.LoadingView
+import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 object ArmRecyclerListScreen {
@@ -67,16 +68,19 @@ object ArmRecyclerListScreen {
 //                    }
 //                }
             }
+            is ArmRecyclerListViewModel.ArmRecyclerListViewState.Empty -> {
+                EmptyView(
+                    modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                )
+            }
             is ArmRecyclerListViewModel.ArmRecyclerListViewState.Loading -> {
-                Column(
+                LoadingView(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(paddingValues),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(text = stringResource(id = R.string.loading))
-                }
+                        .padding(paddingValues)
+                )
             }
         }
     }
@@ -91,11 +95,20 @@ object ArmRecyclerListScreen {
         LaunchedEffect(true) {
             val geoCoder = Geocoder(context)
             armRecyclers.forEach { armRecycler ->
-                val address = try {
-                    geoCoder.getFromLocationName(armRecycler.address, 1)?.getOrNull(0)
-                } catch (e: Exception) { null }
-                armRecycler.longitude = address?.longitude ?: 0.0
-                armRecycler.latitude = address?.latitude ?: 0.0
+                if (isVersionAboveTiramisu()) {
+                    geoCoder.getFromLocationName(armRecycler.address, 1) {
+                        it.getOrNull(0)?.let { address ->
+                            armRecycler.longitude = address.longitude ?: 0.0
+                            armRecycler.latitude = address.latitude ?: 0.0
+                        }
+                    }
+                } else {
+                    val address = try {
+                        geoCoder.getFromLocationName(armRecycler.address, 1)?.getOrNull(0)
+                    } catch (e: Exception) { null }
+                    armRecycler.longitude = address?.longitude ?: 0.0
+                    armRecycler.latitude = address?.latitude ?: 0.0
+                }
             }
 
             successState()
@@ -105,7 +118,7 @@ object ArmRecyclerListScreen {
     @Composable
     fun ArmRecyclerList(
         modifier: Modifier,
-        armRecyclers: List<ArmRecycler>
+        armRecyclers: ImmutableList<ArmRecycler>
     ) {
         LazyColumn(modifier = modifier) {
             items(armRecyclers) { armRecycler ->
@@ -132,12 +145,15 @@ object ArmRecyclerListScreen {
                         .fillMaxWidth()
                         .clickable {
                             try {
-                                val mapUri: Uri = Uri.parse("geo:0,0?q=" + Uri.encode(armRecycler.address))
+                                val mapUri: Uri =
+                                    Uri.parse("geo:0,0?q=" + Uri.encode(armRecycler.address))
                                 val mapIntent = Intent(Intent.ACTION_VIEW, mapUri)
                                 mapIntent.setPackage("com.google.android.apps.maps")
                                 context.startActivity(mapIntent)
                             } catch (e: Exception) {
-                                Toast.makeText(context, R.string.unknown_error, Toast.LENGTH_SHORT).show()
+                                Toast
+                                    .makeText(context, R.string.unknown_error, Toast.LENGTH_SHORT)
+                                    .show()
                             }
                         }
                 ) {

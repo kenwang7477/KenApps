@@ -21,7 +21,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Card
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -49,7 +48,9 @@ import com.google.android.gms.maps.model.LatLng
 import com.kenwang.kenapps.R
 import com.kenwang.kenapps.data.model.GarbageTruck
 import com.kenwang.kenapps.ui.commonscreen.EmptyView
+import com.kenwang.kenapps.ui.commonscreen.LoadingView
 import com.kenwang.kenapps.ui.commonscreen.ShowLocationPermissionView
+import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalLifecycleComposeApi::class, ExperimentalMaterial3Api::class)
 object GarbageTruckListScreen {
@@ -61,7 +62,9 @@ object GarbageTruckListScreen {
         viewModel: GarbageTruckListViewModel = hiltViewModel()
     ) {
         ShowLocationPermissionView(
-            modifier = Modifier.padding(paddingValues).fillMaxSize()
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize()
         ) {
             val context = LocalContext.current
             val connectivityManager =
@@ -101,27 +104,20 @@ object GarbageTruckListScreen {
                 onDispose { connectivityManager.unregisterNetworkCallback(callback) }
             }
 
-            ConstraintLayout(
-                modifier = Modifier.padding(paddingValues).fillMaxSize()
+            Column(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize()
             ) {
-                val (content, noNetworkView) = createRefs()
                 if (networkState) {
                     ConstraintLayout(
-                        modifier = Modifier
-                            .constrainAs(content) {
-                                top.linkTo(parent.top)
-                                start.linkTo(parent.start)
-                                end.linkTo(parent.end)
-                                bottom.linkTo(parent.bottom)
-                                height = Dimension.fillToConstraints
-                                width = Dimension.fillToConstraints
-                            }
+                        modifier = Modifier.fillMaxSize()
                     ) {
                         var searchText by remember {
                             mutableStateOf("")
                         }
 
-                        val (editView, listView, emptyView, loadingProgress) = createRefs()
+                        val (editView, listView) = createRefs()
 
                         OutlinedTextField(
                             value = searchText,
@@ -156,50 +152,34 @@ object GarbageTruckListScreen {
                         )
                         when (val state = viewModel.viewState.collectAsStateWithLifecycle().value) {
                             is GarbageTruckListViewModel.GarbageTruckViewState.Success -> {
-                                if (state.garbageTrucks.isEmpty()) {
-                                    EmptyView(
-                                        modifier = Modifier.constrainAs(emptyView) {
-                                            start.linkTo(parent.start)
-                                            end.linkTo(parent.end)
-                                            top.linkTo(editView.bottom)
-                                            bottom.linkTo(parent.bottom)
-                                        },
-                                        text = stringResource(R.string.no_data)
-                                    )
-                                } else {
-                                    TruckList(
-                                        modifier = Modifier.constrainAs(listView) {
-                                            start.linkTo(parent.start)
-                                            end.linkTo(parent.end)
-                                            top.linkTo(anchor = editView.bottom, margin = 10.dp)
-                                            bottom.linkTo(parent.bottom)
-                                            height = Dimension.fillToConstraints
-                                        },
-                                        toGarbageTruckMap = toGarbageTruckMap,
-                                        garbageTrucks = state.garbageTrucks
-                                    )
-                                }
-                            }
-                            is GarbageTruckListViewModel.GarbageTruckViewState.Loading -> {
-                                CircularProgressIndicator(
-                                    modifier = Modifier.constrainAs(loadingProgress) {
+                                TruckList(
+                                    modifier = Modifier.constrainAs(listView) {
                                         start.linkTo(parent.start)
                                         end.linkTo(parent.end)
-                                        top.linkTo(parent.top)
+                                        top.linkTo(anchor = editView.bottom, margin = 10.dp)
                                         bottom.linkTo(parent.bottom)
-                                    }
+                                        height = Dimension.fillToConstraints
+                                    },
+                                    toGarbageTruckMap = toGarbageTruckMap,
+                                    garbageTrucks = state.garbageTrucks
+                                )
+                            }
+                            is GarbageTruckListViewModel.GarbageTruckViewState.Empty -> {
+                                EmptyView(
+                                    modifier = Modifier.fillMaxSize()
+                                )
+                            }
+
+                            is GarbageTruckListViewModel.GarbageTruckViewState.Loading -> {
+                                LoadingView(
+                                    modifier = Modifier.fillMaxSize()
                                 )
                             }
                         }
                     }
                 } else {
                     EmptyView(
-                        modifier = Modifier.constrainAs(noNetworkView) {
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
-                            top.linkTo(parent.top)
-                            bottom.linkTo(parent.bottom)
-                        },
+                        modifier = Modifier.fillMaxSize(),
                         text = stringResource(R.string.please_enable_network)
                     )
                 }
@@ -211,7 +191,7 @@ object GarbageTruckListScreen {
     fun TruckList(
         modifier: Modifier,
         toGarbageTruckMap: (garbageTruck: GarbageTruck) -> Unit,
-        garbageTrucks: List<GarbageTruck>
+        garbageTrucks: ImmutableList<GarbageTruck>
     ) {
         LazyColumn(modifier = modifier) {
             items(garbageTrucks) { truck ->

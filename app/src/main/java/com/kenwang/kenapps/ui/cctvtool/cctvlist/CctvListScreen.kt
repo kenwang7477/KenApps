@@ -37,6 +37,7 @@ import com.kenwang.kenapps.R
 import com.kenwang.kenapps.data.model.CctvMonitor
 import com.kenwang.kenapps.ui.commonscreen.EmptyView
 import com.kenwang.kenapps.ui.commonscreen.LoadingView
+import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalLifecycleComposeApi::class, ExperimentalMaterial3Api::class)
 object CctvListScreen {
@@ -107,7 +108,7 @@ object CctvListScreen {
     @Composable
     fun CctvListLayout(
         toCctvMap: (cctvMonitor: CctvMonitor) -> Unit,
-        cctvList: List<CctvMonitor>
+        cctvList: ImmutableList<CctvMonitor>
     ) {
         LazyColumn {
             items(cctvList) { cctvMonitor ->

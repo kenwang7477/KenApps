@@ -94,12 +94,18 @@ object GarbageTruckMapScreen {
                 onClick = {
                     refreshState = !refreshState
                     if (refreshState) {
-                        val refreshTimeS = try {
-                            TimeUnit.SECONDS.toMillis(refreshTime.toLong())
+                        val refreshTimeL = try {
+                            val time = refreshTime.toLong()
+                            if (time > 0) {
+                                TimeUnit.SECONDS.toMillis(time)
+                            } else {
+                                TimeUnit.SECONDS.toMillis(5L)
+                            }
                         } catch (e: Exception) {
                             TimeUnit.SECONDS.toMillis(20L)
                         }
-                        garbageTruckMapViewModel.startRefresh(refreshTimeS)
+                        refreshTime = TimeUnit.MILLISECONDS.toSeconds(refreshTimeL).toString()
+                        garbageTruckMapViewModel.startRefresh(refreshTimeL)
                     } else {
                         garbageTruckMapViewModel.stopRefresh()
                     }

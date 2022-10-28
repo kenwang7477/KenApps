@@ -7,15 +7,25 @@ import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
-@Parcelize
-data class ArmRecycler(
+data class ArmRecyclerBean(
     @SerializedName("單位名稱") val name: String = "",
     @SerializedName("地址") val address: String = "",
     @SerializedName("數量") val count: String = "",
     @SerializedName("行政區") val area: String = "",
     @SerializedName("使用時間") val time: String = "",
     @SerializedName("回收項目") val recycleItem: String = "",
-    @SerializedName("詳細位置") val position: String = "",
+    @SerializedName("詳細位置") val position: String = ""
+)
+
+@Parcelize
+data class ArmRecycler(
+    val name: String = "",
+    val address: String = "",
+    val count: String = "",
+    val area: String = "",
+    val time: String = "",
+    val recycleItem: String = "",
+    val position: String = "",
     var longitude: Double = 0.0,
     var latitude: Double = 0.0
 ) : Parcelable {

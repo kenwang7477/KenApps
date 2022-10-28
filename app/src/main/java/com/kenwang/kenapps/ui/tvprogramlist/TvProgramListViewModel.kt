@@ -4,18 +4,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tvprogramlist.repository.TvProgramRepository
 import com.kenwang.kenapps.data.model.TvProgram
+import com.kenwang.kenapps.domain.usecase.tvprogramlist.GetTvProgramListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Provider
 
 @HiltViewModel
 class TvProgramListViewModel @Inject constructor(
-    private val tvProgramRepository: TvProgramRepository
+    private val getTvProgramListUseCase: Provider<GetTvProgramListUseCase>
 ) : ViewModel() {
 
-    private val _viewState = MutableStateFlow<TvProgramListViewState>(TvProgramListViewState.Empty)
+    private val _viewState = MutableStateFlow<TvProgramListViewState>(TvProgramListViewState.Loading)
     val viewState = _viewState.asStateFlow()
 
     init {
@@ -24,13 +28,31 @@ class TvProgramListViewModel @Inject constructor(
 
     fun getProgramList(eProgram: TvProgramRepository.TvProgramEnum) {
         viewModelScope.launch {
-            val programs = tvProgramRepository.getProgramList(eProgram)
-            _viewState.emit(TvProgramListViewState.Success(programs))
+            _viewState.emit(TvProgramListViewState.Loading)
+
+            getTvProgramListUseCase.get().apply {
+                this.eProgram = eProgram
+            }
+                .invoke()
+                .collect { result ->
+                    when (result) {
+                        is GetTvProgramListUseCase.Result.Success -> {
+                            _viewState.emit(
+                                TvProgramListViewState.Success(result.list.toImmutableList())
+                            )
+                        }
+
+                        is GetTvProgramListUseCase.Result.Empty -> {
+                            _viewState.emit(TvProgramListViewState.Empty)
+                        }
+                    }
+                }
         }
     }
 
     sealed class TvProgramListViewState {
-        data class Success(var programs: List<TvProgram>) : TvProgramListViewState()
+        data class Success(var programs: ImmutableList<TvProgram>) : TvProgramListViewState()
+        object Loading : TvProgramListViewState()
         object Empty : TvProgramListViewState()
     }
 }

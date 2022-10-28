@@ -9,6 +9,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.spyk
 import io.mockk.verify
+import io.mockk.verifyOrder
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -58,5 +59,20 @@ class GarbageTruckRepositoryTest {
             .assertThat(garbageTruckLocalDataSource.trucks)
             .isEqualTo(truckList)
         coVerify(exactly = 0) { garbageTruckServerDataSource.getTrucks() }
+    }
+
+    @Test
+    fun `Test getTrucks with forceUpdate then set garbageTruckLocalDataSource trucks to empty`() = runTest {
+        val emptyTruckList = emptyList<GarbageTruck>()
+        val serverTruckList = listOf(GarbageTruck())
+        coEvery { garbageTruckServerDataSource.getTrucks() } returns serverTruckList
+        every { garbageTruckLocalDataSource.trucks } returns emptyTruckList
+
+        garbageTruckRepository.getTrucks(true)
+
+        verifyOrder {
+            garbageTruckLocalDataSource.trucks = emptyTruckList
+            garbageTruckLocalDataSource.trucks = serverTruckList
+        }
     }
 }

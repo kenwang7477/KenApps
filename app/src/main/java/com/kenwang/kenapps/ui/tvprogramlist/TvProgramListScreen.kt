@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -40,7 +41,10 @@ import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tvprogramlist.repository.TvProgramRepository
 import com.kenwang.kenapps.data.model.TvProgram
+import com.kenwang.kenapps.ui.commonscreen.EmptyView
+import com.kenwang.kenapps.ui.commonscreen.LoadingView
 import com.kenwang.kenapps.utils.ChromeTabUtil
+import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class)
 object TvProgramListScreen {
@@ -52,8 +56,25 @@ object TvProgramListScreen {
     ) {
         Column(modifier = Modifier.padding(paddingValues)) {
             ProgramSelector(viewModel)
-            val state by viewModel.viewState.collectAsStateWithLifecycle()
-            ProgramList(state)
+            when (val state = viewModel.viewState.collectAsStateWithLifecycle().value) {
+                is TvProgramListViewModel.TvProgramListViewState.Success -> {
+                    ProgramList(programList = state.programs)
+                }
+                is TvProgramListViewModel.TvProgramListViewState.Loading -> {
+                    LoadingView(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(paddingValues)
+                    )
+                }
+                is TvProgramListViewModel.TvProgramListViewState.Empty -> {
+                    EmptyView(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(paddingValues)
+                    )
+                }
+            }
         }
     }
 
@@ -76,7 +97,8 @@ object TvProgramListScreen {
                 onValueChange = {
                     selectedText = it
                 },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .onGloballyPositioned { coordinates ->
                         //This value is used to assign to the DropDown the same width
                         textFieldSize = coordinates.size.toSize()
@@ -109,18 +131,11 @@ object TvProgramListScreen {
     }
 
     @Composable
-    fun ProgramList(
-        state: TvProgramListViewModel.TvProgramListViewState
-    ) {
-        when (state) {
-            is TvProgramListViewModel.TvProgramListViewState.Success -> {
-                LazyColumn {
-                    items(state.programs) { program ->
-                        ProgramCardItem(program = program)
-                    }
-                }
+    fun ProgramList(programList: ImmutableList<TvProgram>) {
+        LazyColumn {
+            items(programList) { program ->
+                ProgramCardItem(program = program)
             }
-            is TvProgramListViewModel.TvProgramListViewState.Empty -> Unit
         }
     }
 

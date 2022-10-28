@@ -18,7 +18,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,8 +31,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.gms.maps.model.LatLng
@@ -41,7 +38,9 @@ import com.kenwang.kenapps.R
 import com.kenwang.kenapps.data.model.ParkingSpace
 import com.kenwang.kenapps.extensions.cleanLineBreak
 import com.kenwang.kenapps.ui.commonscreen.EmptyView
+import com.kenwang.kenapps.ui.commonscreen.LoadingView
 import com.kenwang.kenapps.ui.commonscreen.ShowLocationPermissionView
+import kotlinx.collections.immutable.ImmutableList
 
 object ParkingListScreen {
 
@@ -94,70 +93,36 @@ object ParkingListScreen {
                 onDispose { connectivityManager.unregisterNetworkCallback(callback) }
             }
 
-            ConstraintLayout(
+            Column(
                 modifier = Modifier.padding(paddingValues).fillMaxSize()
             ) {
-                val (content, noNetworkView) = createRefs()
                 if (networkState) {
-                    ConstraintLayout(
-                        modifier = Modifier
-                            .constrainAs(content) {
-                                top.linkTo(parent.top)
-                                start.linkTo(parent.start)
-                                end.linkTo(parent.end)
-                                bottom.linkTo(parent.bottom)
-                                height = Dimension.fillToConstraints
-                                width = Dimension.fillToConstraints
-                            }
+                    Column(
+                        modifier = Modifier.fillMaxSize()
                     ) {
-                        val (listView, emptyView, loadingProgress) = createRefs()
-
                         when (val state = viewModel.viewState.collectAsState().value) {
                             is ParkingListViewModel.ParkingListViewState.Success -> {
-                                if (state.list.isEmpty()) {
-                                    EmptyView(
-                                        modifier = Modifier.constrainAs(emptyView) {
-                                            start.linkTo(parent.start)
-                                            end.linkTo(parent.end)
-                                            top.linkTo(parent.top)
-                                            bottom.linkTo(parent.bottom)
-                                        },
-                                        text = stringResource(R.string.no_data)
-                                    )
-                                } else {
-                                    ParkingList(
-                                        modifier = Modifier.constrainAs(listView) {
-                                            start.linkTo(parent.start)
-                                            end.linkTo(parent.end)
-                                            top.linkTo(anchor = parent.top, margin = 10.dp)
-                                            bottom.linkTo(parent.bottom)
-                                            height = Dimension.fillToConstraints
-                                        },
-                                        toParkingMap = toParkingMap,
-                                        parkingSpaces = state.list
-                                    )
-                                }
+                                ParkingList(
+                                    modifier = Modifier.padding(top = 10.dp),
+                                    toParkingMap = toParkingMap,
+                                    parkingSpaces = state.list
+                                )
+                            }
+                            is ParkingListViewModel.ParkingListViewState.Empty -> {
+                                EmptyView(
+                                    modifier = Modifier.fillMaxSize()
+                                )
                             }
                             is ParkingListViewModel.ParkingListViewState.Loading -> {
-                                CircularProgressIndicator(
-                                    modifier = Modifier.constrainAs(loadingProgress) {
-                                        start.linkTo(parent.start)
-                                        end.linkTo(parent.end)
-                                        top.linkTo(parent.top)
-                                        bottom.linkTo(parent.bottom)
-                                    }
+                                LoadingView(
+                                    modifier = Modifier.fillMaxSize()
                                 )
                             }
                         }
                     }
                 } else {
                     EmptyView(
-                        modifier = Modifier.constrainAs(noNetworkView) {
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
-                            top.linkTo(parent.top)
-                            bottom.linkTo(parent.bottom)
-                        },
+                        modifier = Modifier.fillMaxSize(),
                         text = stringResource(R.string.please_enable_network)
                     )
                 }
@@ -169,7 +134,7 @@ object ParkingListScreen {
     fun ParkingList(
         modifier: Modifier,
         toParkingMap: (parkingSpace: ParkingSpace) -> Unit,
-        parkingSpaces: List<ParkingSpace>
+        parkingSpaces: ImmutableList<ParkingSpace>
     ) {
         LazyColumn(modifier = modifier) {
             items(parkingSpaces) { parkingSpace ->

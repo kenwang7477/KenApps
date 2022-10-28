@@ -2,14 +2,21 @@ package com.kenwang.kenapps.ui.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kenwang.kenapps.domain.usecase.main.GetMainListUseCase
+import com.kenwang.kenapps.domain.usecase.main.MainListItem
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Provider
 
 @HiltViewModel
-class MainViewModel @Inject constructor() : ViewModel() {
+class MainViewModel @Inject constructor(
+    private val getMainListUseCase: Provider<GetMainListUseCase>
+) : ViewModel() {
 
     private val _viewState = MutableStateFlow<MainViewState>(MainViewState.Empty)
     val viewState = _viewState.asStateFlow()
@@ -19,28 +26,15 @@ class MainViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun getMainList() {
-        val items = listOf(
-            ListItem.ParkingMap,
-            ListItem.GarbageTruckMap,
-            ListItem.TvProgramList,
-            ListItem.ArmRecyclerMap,
-            ListItem.CctvList
-        )
         viewModelScope.launch {
-            _viewState.emit(MainViewState.Success(items))
+            getMainListUseCase.get().invoke().collect { result ->
+                _viewState.emit(MainViewState.Success(result.list.toImmutableList()))
+            }
         }
     }
 
     sealed class MainViewState {
         object Empty : MainViewState()
-        data class Success(val items: List<ListItem>) : MainViewState()
-    }
-
-    enum class ListItem {
-        ParkingMap,
-        GarbageTruckMap,
-        TvProgramList,
-        ArmRecyclerMap,
-        CctvList,
+        data class Success(val items: ImmutableList<MainListItem>) : MainViewState()
     }
 }

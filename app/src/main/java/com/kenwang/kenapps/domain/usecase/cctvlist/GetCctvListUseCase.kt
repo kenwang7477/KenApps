@@ -2,6 +2,7 @@ package com.kenwang.kenapps.domain.usecase.cctvlist
 
 import com.kenwang.kenapps.data.model.CctvMonitor
 import com.kenwang.kenapps.data.repository.cctvlist.CctvListRepository
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class GetCctvListUseCase @Inject constructor(
@@ -10,14 +11,14 @@ class GetCctvListUseCase @Inject constructor(
 
     private var keyword: String = ""
 
-    suspend operator fun invoke(): Result {
+    operator fun invoke() = flow {
         val cctvList = cctvListRepository.getCctvList().filter {
             it.roadsection.contains(keyword)
         }
-        return if (cctvList.isEmpty()) {
-            Result.Empty
+        if (cctvList.isEmpty()) {
+            emit(Result.Empty)
         } else {
-            Result.Success(cctvList)
+            emit(Result.Success(cctvList))
         }
     }
 

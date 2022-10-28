@@ -5,6 +5,7 @@ import com.kenwang.kenapps.data.model.GarbageTruck
 
 class GarbageTruckClient(
     private val garbageTruckService: GarbageTruckService,
+    private val garbageTruckMapper: GarbageTruckMapper,
     private val gson: Gson
 ) {
 
@@ -12,7 +13,7 @@ class GarbageTruckClient(
         return garbageTruckService.getTrucks().body()?.getAsJsonArray("data")?.mapNotNull {
             try {
                 val bean = gson.fromJson(it, GarbageTruckBean::class.java)
-                GarbageTruckMapper.toGarbageTruck(bean)
+                garbageTruckMapper.toGarbageTruck(bean)
             } catch (e: Exception) {
                 null
             }
@@ -20,7 +21,7 @@ class GarbageTruckClient(
     }
 }
 
-object GarbageTruckMapper {
+class GarbageTruckMapper {
 
     fun toGarbageTruck(bean: GarbageTruckBean): GarbageTruck {
         return GarbageTruck(

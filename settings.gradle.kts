@@ -25,6 +25,7 @@ dependencyResolutionManagement {
             library("androidx-lifecycle-runtime-compose", "androidx.lifecycle:lifecycle-runtime-compose:2.6.0-alpha02")
             library("androidx-navigation-compose", "androidx.navigation:navigation-compose:2.5.2")
             library("androidx-constraintlayout-compose", "androidx.constraintlayout:constraintlayout-compose:1.0.1")
+            library("kotlinx-collections-immutable", "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
 
             // Firebase
             library("firebase", "com.google.firebase:firebase-bom:31.0.1")

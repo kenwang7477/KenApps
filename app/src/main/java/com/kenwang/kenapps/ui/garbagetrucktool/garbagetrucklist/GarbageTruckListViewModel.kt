@@ -3,18 +3,20 @@ package com.kenwang.kenapps.ui.garbagetrucktool.garbagetrucklist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.SphericalUtil
 import com.kenwang.kenapps.data.model.GarbageTruck
-import com.kenwang.kenapps.data.repository.garbagetruck.GarbageTruckRepository
+import com.kenwang.kenapps.domain.usecase.garbagetrucklist.GetGarbageTruckListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Provider
 
 @HiltViewModel
 class GarbageTruckListViewModel @Inject constructor(
-    private val garbageTruckRepository: GarbageTruckRepository
+    private val getGarbageTruckListUseCase: Provider<GetGarbageTruckListUseCase>
 ) : ViewModel() {
 
     private val _viewState = MutableStateFlow<GarbageTruckViewState>(GarbageTruckViewState.Loading)
@@ -23,23 +25,33 @@ class GarbageTruckListViewModel @Inject constructor(
     private var garbageTruckList: List<GarbageTruck> = emptyList()
     private var filterString: String = ""
 
-    fun getTrucks(currentLatLng: LatLng?, forceRefresh: Boolean = false) {
+    init {
+        getTrucks(null, true)
+    }
+
+    fun getTrucks(currentLatLng: LatLng?, forceUpdate: Boolean = false) {
         viewModelScope.launch {
             _viewState.value = GarbageTruckViewState.Loading
-            if (garbageTruckList.isEmpty() || forceRefresh) {
 
-                val trucks = currentLatLng?.let {
-                    garbageTruckRepository.getTrucks()
-                        .sortedBy {
-                            val to = LatLng(it.latitude, it.longitude)
-                            SphericalUtil.computeDistanceBetween(currentLatLng, to)
+            getGarbageTruckListUseCase.get()
+                .apply {
+                    this.currentLatLng = currentLatLng
+                    this.forceUpdate = forceUpdate
+                }
+                .invoke()
+                .collect { result ->
+                    when (result) {
+                        is GetGarbageTruckListUseCase.Result.Success -> {
+                            _viewState.emit(
+                                GarbageTruckViewState.Success(result.list.toImmutableList())
+                            )
                         }
-                } ?: garbageTruckRepository.getTrucks()
-                _viewState.emit(GarbageTruckViewState.Success(trucks))
-                garbageTruckList = trucks
-            } else {
-                _viewState.emit(GarbageTruckViewState.Success(garbageTruckList))
-            }
+
+                        is GetGarbageTruckListUseCase.Result.Empty -> {
+                            _viewState.emit(GarbageTruckViewState.Empty)
+                        }
+                    }
+                }
         }
     }
 
@@ -51,12 +63,13 @@ class GarbageTruckListViewModel @Inject constructor(
             garbageTruckList
         }
         viewModelScope.launch {
-            _viewState.emit(GarbageTruckViewState.Success(trucks))
+            _viewState.emit(GarbageTruckViewState.Success(trucks.toImmutableList()))
         }
     }
 
     sealed class GarbageTruckViewState {
         object Loading : GarbageTruckViewState()
-        data class Success(val garbageTrucks: List<GarbageTruck>) : GarbageTruckViewState()
+        object Empty : GarbageTruckViewState()
+        data class Success(val garbageTrucks: ImmutableList<GarbageTruck>) : GarbageTruckViewState()
     }
 }

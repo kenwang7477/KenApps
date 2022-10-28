@@ -2,13 +2,16 @@ package com.kenwang.kenapps.di
 
 import com.google.gson.Gson
 import com.kenwang.kenapps.data.repository.armrecycler.ArmRecyclerClient
+import com.kenwang.kenapps.data.repository.armrecycler.ArmRecyclerMapper
 import com.kenwang.kenapps.data.repository.armrecycler.ArmRecyclerService
 import com.kenwang.kenapps.data.repository.cctvlist.CctvListClient
 import com.kenwang.kenapps.data.repository.cctvlist.CctvListService
 import com.kenwang.kenapps.data.repository.garbagetruck.GarbageTruckClient
+import com.kenwang.kenapps.data.repository.garbagetruck.GarbageTruckMapper
 import com.kenwang.kenapps.data.repository.garbagetruck.GarbageTruckService
 import com.kenwang.kenapps.data.repository.parkinglist.ParkingListClient
 import com.kenwang.kenapps.data.repository.parkinglist.ParkingListService
+import com.kenwang.kenapps.data.repository.parkinglist.ParkingSpaceMapper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -37,14 +40,14 @@ object NetworkModule {
     fun provideParkingListClient(
         parkingListService: ParkingListService,
         gson: Gson
-    ) = ParkingListClient(parkingListService, gson)
+    ) = ParkingListClient(parkingListService, ParkingSpaceMapper(), gson)
 
     @Provides
     @Singleton
     fun provideGarbageTruckClient(
         clientService: GarbageTruckService,
         gson: Gson
-    ) = GarbageTruckClient(clientService, gson)
+    ) = GarbageTruckClient(clientService, GarbageTruckMapper(), gson)
 
     @Provides
     @Singleton
@@ -68,7 +71,7 @@ object NetworkModule {
     fun provideArmRecyclerClient(
         armRecyclerService: ArmRecyclerService,
         gson: Gson
-    ) = ArmRecyclerClient(armRecyclerService, gson)
+    ) = ArmRecyclerClient(armRecyclerService, ArmRecyclerMapper(), gson)
 
     @Provides
     @Singleton

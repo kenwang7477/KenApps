@@ -7,7 +7,10 @@ class GarbageTruckRepository(
     private val garbageTruckLocalDataSource: GarbageTruckLocalDataSource
 ) {
 
-    suspend fun getTrucks(): List<GarbageTruck> {
+    suspend fun getTrucks(forceUpdate: Boolean = false): List<GarbageTruck> {
+        if (forceUpdate) {
+            garbageTruckLocalDataSource.trucks = emptyList()
+        }
         return garbageTruckLocalDataSource.trucks.ifEmpty {
             garbageTruckLocalDataSource.trucks = garbageTruckServerDataSource.getTrucks()
             garbageTruckLocalDataSource.trucks
