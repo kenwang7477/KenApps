@@ -44,7 +44,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.2.0"
+        kotlinCompilerExtensionVersion = "1.3.2"
     }
     packagingOptions {
         resources.excludes.add("META-INF/AL2.0")
@@ -88,6 +88,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.constraintlayout.compose)
     implementation(libs.kotlinx.collections.immutable)
+    implementation(libs.androidx.datastore)
 
     // Firebase
     implementation(platform(libs.firebase))

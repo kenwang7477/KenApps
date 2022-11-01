@@ -4,21 +4,24 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -30,6 +33,7 @@ import com.kenwang.kenapps.R
 import com.kenwang.kenapps.data.model.CctvMonitor
 import com.kenwang.kenapps.data.model.ParkingSpace
 import com.kenwang.kenapps.data.model.GarbageTruck
+import com.kenwang.kenapps.domain.usecase.darkmode.GetDarkModeUseCase
 import com.kenwang.kenapps.domain.usecase.main.MainListItem
 import com.kenwang.kenapps.extensions.isVersionAboveTiramisu
 import com.kenwang.kenapps.extensions.toArmRecyclerList
@@ -48,40 +52,49 @@ import com.kenwang.kenapps.ui.garbagetrucktool.garbagetrucklist.GarbageTruckList
 import com.kenwang.kenapps.ui.garbagetrucktool.garbagetruckmap.GarbageTruckMapScreen
 import com.kenwang.kenapps.ui.parkingtool.parkinglist.ParkingListScreen
 import com.kenwang.kenapps.ui.parkingtool.parkingmap.ParkingMapScreen
+import com.kenwang.kenapps.ui.setting.SettingScreen
 import com.kenwang.kenapps.ui.theme.KenAppsTheme
 import com.kenwang.kenapps.ui.tvprogramlist.TvProgramListScreen
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+import javax.inject.Provider
 
 @AndroidEntryPoint
+@OptIn(ExperimentalLifecycleComposeApi::class)
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var getDarkModeUseCase: Provider<GetDarkModeUseCase>
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            KenAppsTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    AppNavHost()
-                }
-            }
+            val darkMode = getDarkModeUseCase.get().invoke().collectAsStateWithLifecycle(
+                initialValue = false
+            ).value
+            AppNavHost(darkMode = darkMode)
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class)
 @Composable
-fun AppNavHost(navController: NavHostController = rememberNavController()) {
+fun AppNavHost(
+    darkMode: Boolean
+) {
+    
+    val navController: NavHostController = rememberNavController()
     val currentRoute = navController
         .currentBackStackEntryFlow
-        .collectAsState(initial = navController.currentBackStackEntry)
+        .collectAsStateWithLifecycle(initialValue = navController.currentBackStackEntry)
 
     val showBackButton = when (currentRoute.value?.destination?.route) {
         Screens.Main.route -> false
         else -> true
     }
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
     val topAppBarTitle = when (currentRoute.value?.destination?.route?.split("/")?.getOrNull(0)) {
         Screens.ParkingList.route,
         Screens.ParkingMap.route -> stringResource(id = R.string.kh_parking_space_map_title)
@@ -91,38 +104,62 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
         Screens.ArmRecyclerList.route -> stringResource(id = R.string.kh_arm_recycler_map_title)
         Screens.CctvList.route,
         Screens.CctvMap.route -> stringResource(id = R.string.kh_cctv_system_title)
+        Screens.Setting.route -> stringResource(id = R.string.setting)
         else -> stringResource(id = R.string.app_name)
     }
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(text = topAppBarTitle) },
-                navigationIcon = {
-                    if (showBackButton) {
-                        IconButton(
-                            onClick = { navController.popBackStack() }
-                        ) { Icon(Icons.Default.ArrowBack, "Back") }
+    KenAppsTheme(
+        darkTheme = darkMode
+    ) {
+        MainDrawer(
+            drawerState = drawerState,
+            navController = navController
+        ) {
+            Scaffold(
+                topBar = {
+                    CenterAlignedTopAppBar(
+                        title = { Text(text = topAppBarTitle) },
+                        navigationIcon = {
+                            if (showBackButton) {
+                                IconButton(
+                                    onClick = { navController.popBackStack() }
+                                ) { Icon(Icons.Default.ArrowBack, "Back") }
+                            } else {
+                                IconButton(
+                                    modifier = Modifier.testTag("mainMenu"),
+                                    onClick = {
+                                        scope.launch {
+                                            if (drawerState.isOpen) {
+                                                drawerState.close()
+                                            } else {
+                                                drawerState.open()
+                                            }
+                                        }
+                                    }
+                                ) { Icon(Icons.Default.Menu, "menu") }
+                            }
+                        }
+                    )
+                },
+                content = { paddingValues ->
+                    NavHost(navController = navController, startDestination = Screens.Main.route) {
+                        addMainGraph(paddingValues, navController)
+                        addParkingListGraph(paddingValues, navController)
+                        addParkingMapGraph(paddingValues)
+                        addGarbageTruckListGraph(paddingValues, navController)
+                        addGarbageTruckMapGraph(paddingValues)
+                        addTvProgramListGraph(paddingValues)
+                        addArmRecyclerListGraph(paddingValues)
+                        addCctvMonitorListGraph(paddingValues, navController)
+                        addCctvMonitorMapGraph(paddingValues)
+                        addSettingGraph(paddingValues)
                     }
                 }
             )
-        },
-        content = { paddingValues ->
-            NavHost(navController = navController, startDestination = Screens.Main.route) {
-                addMainGraph(paddingValues, navController)
-                addParkingListGraph(paddingValues, navController)
-                addParkingMapGraph(paddingValues)
-                addGarbageTruckListGraph(paddingValues, navController)
-                addGarbageTruckMapGraph(paddingValues)
-                addTvProgramListGraph(paddingValues)
-                addArmRecyclerListGraph(paddingValues)
-                addCctvMonitorListGraph(paddingValues, navController)
-                addCctvMonitorMapGraph(paddingValues)
-            }
         }
-    )
+    }
 }
 
-fun NavGraphBuilder.addMainGraph(
+private fun NavGraphBuilder.addMainGraph(
     paddingValues: PaddingValues,
     navController: NavController
 ) {
@@ -154,7 +191,7 @@ fun NavGraphBuilder.addMainGraph(
     }
 }
 
-fun NavGraphBuilder.addParkingListGraph(
+private fun NavGraphBuilder.addParkingListGraph(
     paddingValues: PaddingValues,
     navController: NavController
 ) {
@@ -168,7 +205,7 @@ fun NavGraphBuilder.addParkingListGraph(
     }
 }
 
-fun NavGraphBuilder.addParkingMapGraph(
+private fun NavGraphBuilder.addParkingMapGraph(
     paddingValues: PaddingValues
 ) {
     composable(
@@ -189,7 +226,7 @@ fun NavGraphBuilder.addParkingMapGraph(
     }
 }
 
-fun NavGraphBuilder.addGarbageTruckListGraph(
+private fun NavGraphBuilder.addGarbageTruckListGraph(
     paddingValues: PaddingValues,
     navController: NavController
 ) {
@@ -203,7 +240,7 @@ fun NavGraphBuilder.addGarbageTruckListGraph(
     }
 }
 
-fun NavGraphBuilder.addGarbageTruckMapGraph(
+private fun NavGraphBuilder.addGarbageTruckMapGraph(
     paddingValues: PaddingValues
 ) {
     composable(
@@ -224,7 +261,7 @@ fun NavGraphBuilder.addGarbageTruckMapGraph(
     }
 }
 
-fun NavGraphBuilder.addTvProgramListGraph(
+private fun NavGraphBuilder.addTvProgramListGraph(
     paddingValues: PaddingValues
 ) {
     composable(Screens.TvProgramList.route) {
@@ -232,7 +269,7 @@ fun NavGraphBuilder.addTvProgramListGraph(
     }
 }
 
-fun NavGraphBuilder.addArmRecyclerListGraph(
+private fun NavGraphBuilder.addArmRecyclerListGraph(
     paddingValues: PaddingValues
 ) {
     composable(Screens.ArmRecyclerList.route) {
@@ -242,7 +279,7 @@ fun NavGraphBuilder.addArmRecyclerListGraph(
     }
 }
 
-fun NavGraphBuilder.addCctvMonitorListGraph(
+private fun NavGraphBuilder.addCctvMonitorListGraph(
     paddingValues: PaddingValues,
     navController: NavController
 ) {
@@ -256,7 +293,7 @@ fun NavGraphBuilder.addCctvMonitorListGraph(
     }
 }
 
-fun NavGraphBuilder.addCctvMonitorMapGraph(
+private fun NavGraphBuilder.addCctvMonitorMapGraph(
     paddingValues: PaddingValues
 ) {
     composable(
@@ -273,6 +310,16 @@ fun NavGraphBuilder.addCctvMonitorMapGraph(
         CctvMapScreen.CctvMapUI(
             paddingValues = paddingValues,
             cctvMonitor = cctvMonitor
+        )
+    }
+}
+
+private fun NavGraphBuilder.addSettingGraph(
+    paddingValues: PaddingValues
+) {
+    composable(Screens.Setting.route) {
+        SettingScreen.SettingUI(
+            paddingValues = paddingValues
         )
     }
 }

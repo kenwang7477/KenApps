@@ -22,7 +22,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,6 +32,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.gms.maps.model.LatLng
 import com.kenwang.kenapps.R
 import com.kenwang.kenapps.data.model.ParkingSpace
@@ -42,6 +43,7 @@ import com.kenwang.kenapps.ui.commonscreen.LoadingView
 import com.kenwang.kenapps.ui.commonscreen.ShowLocationPermissionView
 import kotlinx.collections.immutable.ImmutableList
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 object ParkingListScreen {
 
     @SuppressLint("PermissionLaunchedDuringComposition")
@@ -100,7 +102,7 @@ object ParkingListScreen {
                     Column(
                         modifier = Modifier.fillMaxSize()
                     ) {
-                        when (val state = viewModel.viewState.collectAsState().value) {
+                        when (val state = viewModel.viewState.collectAsStateWithLifecycle().value) {
                             is ParkingListViewModel.ParkingListViewState.Success -> {
                                 ParkingList(
                                     modifier = Modifier.padding(top = 10.dp),

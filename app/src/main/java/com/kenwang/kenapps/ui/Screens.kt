@@ -16,4 +16,5 @@ sealed class Screens(val route: String) {
     object CctvMap : Screens("CctvMap") {
         const val argCctvMonitor = "CctvMonitor"
     }
+    object Setting : Screens("Setting")
 }

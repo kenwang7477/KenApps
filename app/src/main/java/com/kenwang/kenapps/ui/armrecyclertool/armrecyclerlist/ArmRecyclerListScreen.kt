@@ -1,9 +1,6 @@
 package com.kenwang.kenapps.ui.armrecyclertool.armrecyclerlist
 
-import android.content.Intent
 import android.location.Geocoder
-import android.net.Uri
-import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -28,11 +25,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.kenwang.kenapps.R
 import com.kenwang.kenapps.data.model.ArmRecycler
 import com.kenwang.kenapps.extensions.isVersionAboveTiramisu
 import com.kenwang.kenapps.ui.commonscreen.EmptyView
 import com.kenwang.kenapps.ui.commonscreen.LoadingView
+import com.kenwang.kenapps.utils.MapUtil
 import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
@@ -144,17 +141,7 @@ object ArmRecyclerListScreen {
                     Modifier
                         .fillMaxWidth()
                         .clickable {
-                            try {
-                                val mapUri: Uri =
-                                    Uri.parse("geo:0,0?q=" + Uri.encode(armRecycler.address))
-                                val mapIntent = Intent(Intent.ACTION_VIEW, mapUri)
-                                mapIntent.setPackage("com.google.android.apps.maps")
-                                context.startActivity(mapIntent)
-                            } catch (e: Exception) {
-                                Toast
-                                    .makeText(context, R.string.unknown_error, Toast.LENGTH_SHORT)
-                                    .show()
-                            }
+                            MapUtil.openGoogleMapByAddress(context, armRecycler.address)
                         }
                 ) {
                     Text(text = "單位名稱：${armRecycler.name}")

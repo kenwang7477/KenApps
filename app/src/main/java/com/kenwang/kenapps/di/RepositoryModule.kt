@@ -1,5 +1,6 @@
 package com.kenwang.kenapps.di
 
+import android.content.Context
 import com.example.tvprogramlist.repository.TvProgramRepository
 import com.kenwang.kenapps.data.repository.armrecycler.ArmRecyclerClient
 import com.kenwang.kenapps.data.repository.armrecycler.ArmRecyclerLocalDataSource
@@ -17,10 +18,13 @@ import com.kenwang.kenapps.data.repository.parkinglist.ParkingListClient
 import com.kenwang.kenapps.data.repository.parkinglist.ParkingListLocalDataSource
 import com.kenwang.kenapps.data.repository.parkinglist.ParkingListRepository
 import com.kenwang.kenapps.data.repository.parkinglist.ParkingListServerDataSource
+import com.kenwang.kenapps.data.repository.systempreference.SystemPreferenceLocalDataStore
+import com.kenwang.kenapps.data.repository.systempreference.SystemPreferenceRepository
 import com.kenwang.kenapps.data.repository.tvprogramlist.TvProgramDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -67,4 +71,10 @@ object RepositoryModule {
         CctvListServerDataSource(cctvListClient),
         CctvListLocalDataSource()
     )
+
+    @Provides
+    @Singleton
+    fun provideSystemPreferenceRepository(
+        @ApplicationContext context: Context
+    ): SystemPreferenceRepository = SystemPreferenceRepository(SystemPreferenceLocalDataStore(context))
 }

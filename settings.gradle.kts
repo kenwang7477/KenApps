@@ -13,19 +13,20 @@ dependencyResolutionManagement {
     }
     versionCatalogs {
         create("libs") {
-            val composeVersion = "1.2.1"
+            val composeVersion = "1.3.0"
             val hiltVersion = "2.44"
 
             library("androidx-core", "androidx.core:core-ktx:1.9.0")
             library("androidx-lifecycle-runtime", "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
-            library("androidx-activity-compose", "androidx.activity:activity-compose:1.6.0")
+            library("androidx-activity-compose", "androidx.activity:activity-compose:1.6.1")
             library("androidx-compose-ui", "androidx.compose.ui:ui:$composeVersion")
-            library("androidx-compose-material3", "androidx.compose.material3:material3:1.0.0-rc01")
+            library("androidx-compose-material3", "androidx.compose.material3:material3:1.1.0-alpha01")
             library("androidx-lifecycle-viewmodel-compose", "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
-            library("androidx-lifecycle-runtime-compose", "androidx.lifecycle:lifecycle-runtime-compose:2.6.0-alpha02")
+            library("androidx-lifecycle-runtime-compose", "androidx.lifecycle:lifecycle-runtime-compose:2.6.0-alpha03")
             library("androidx-navigation-compose", "androidx.navigation:navigation-compose:2.5.2")
             library("androidx-constraintlayout-compose", "androidx.constraintlayout:constraintlayout-compose:1.0.1")
             library("kotlinx-collections-immutable", "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
+            library("androidx-datastore", "androidx.datastore:datastore-preferences:1.0.0")
 
             // Firebase
             library("firebase", "com.google.firebase:firebase-bom:31.0.1")

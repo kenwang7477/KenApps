@@ -2,9 +2,8 @@ package com.kenwang.kenapps.ui.main
 
 import com.kenwang.kenapps.R
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -25,7 +24,7 @@ class MainScreenTest {
 
     @Before
     fun setup() {
-//        hiltRule.inject()
+        hiltRule.inject()
 //        composeTestRule.setContent {
 //            navController = TestNavHostController(LocalContext.current)
 //            navController.navigatorProvider.addNavigator(ComposeNavigator())
@@ -34,7 +33,7 @@ class MainScreenTest {
     }
 
     @Test
-    fun testMenuDisplayed() {
+    fun testMainListDisplayed() {
         val armRecyclerString = composeTestRule.activity.getString(R.string.kh_arm_recycler_map_title)
         val cctvString = composeTestRule.activity.getString(R.string.kh_cctv_system_title)
         val garbageTruckString = composeTestRule.activity.getString(R.string.kh_garbage_truck_map_title)
@@ -46,5 +45,15 @@ class MainScreenTest {
         composeTestRule.onNodeWithText(garbageTruckString).assertIsDisplayed()
         composeTestRule.onNodeWithText(parkingMapString).assertIsDisplayed()
         composeTestRule.onNodeWithText(tvProgramString).assertIsDisplayed()
+    }
+
+    @Test
+    fun testMenuItemDisplayed() {
+        val mainMenu = composeTestRule.onNodeWithTag("mainMenu")
+        mainMenu.assertIsDisplayed()
+
+        val settingString = composeTestRule.activity.getString(R.string.setting)
+        mainMenu.performClick()
+        composeTestRule.onNodeWithText(settingString).assertIsDisplayed()
     }
 }

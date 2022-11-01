@@ -6,6 +6,8 @@
     <string name="tv_program_list_title">數位電視節目表</string>
     <string name="kh_arm_recycler_map_title">高雄市 ARM 回收地圖</string>
     <string name="kh_cctv_system_title">高雄市路況監視系統</string>
+    <string name="setting">設定</string>
+    <string name="dark_mode">黑暗模式</string>
 
     <string name="loading">讀取中…</string>
     <string name="enable_permission">開啟權限</string>

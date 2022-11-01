@@ -34,3 +34,7 @@ fun NavController.toCctvMap(cctvMonitor: CctvMonitor) {
     val cctv = Gson().toJson(cctvMonitor)
     navigate("${Screens.CctvMap.route}/$cctv")
 }
+
+fun NavController.toSetting() {
+    navigate(Screens.Setting.route)
+}
