@@ -37,6 +37,12 @@ dependencyResolutionManagement {
             // Chrome custom tab
             library("androidx-browser", "androidx.browser:browser:1.4.0")
 
+            // Room
+            val roomVersion = "2.4.3"
+            library("androidx-room-runtime", "androidx.room:room-runtime:$roomVersion")
+            library("androidx-room-compiler", "androidx.room:room-compiler:$roomVersion")
+            library("androidx-room-ktx", "androidx.room:room-ktx:$roomVersion")
+
             library("mockk", "io.mockk:mockk:1.11.0")
             library("kotlinx-coroutines-test", "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
             library("truth", "com.google.truth:truth:1.1.2")

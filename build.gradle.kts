@@ -11,5 +11,6 @@ buildscript {
         classpath("com.google.gms:google-services:4.3.14")
         classpath("com.google.firebase:firebase-crashlytics-gradle:2.9.2")
         classpath("com.google.firebase:perf-plugin:1.4.2")
+        classpath("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:1.7.20-1.0.8")
     }
 }

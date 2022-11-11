@@ -6,6 +6,7 @@ plugins {
     id("com.google.gms.google-services")
     id("com.google.firebase.firebase-perf")
     id("com.google.firebase.crashlytics")
+    id("com.google.devtools.ksp")
     kotlin("kapt")
 }
 
@@ -24,6 +25,16 @@ android {
 //        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
+        }
+
+        /**
+         * To fix
+         * Schema export directory is not provided to the annotation processor so we cannot export the schema. You can either provide `room.schemaLocation` annotation processor argument OR set exportSchema to false.
+         * issue
+         * reference: https://blog.csdn.net/qq_41886129/article/details/124111081
+         */
+        ksp {
+            arg("room.schemaKenApps", "$projectDir/schemas")
         }
     }
 
@@ -101,27 +112,32 @@ dependencies {
     // Chrome custom tab
     implementation(libs.androidx.browser)
 
+    // Room
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+
     testImplementation(libs.mockk)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.truth)
     testImplementation(libs.androidx.compose.ui.test.junit4)
-    testImplementation(libs.hilt.android.testing)
     testImplementation(libs.robolectric)
     androidTestImplementation(libs.androidx.test.core)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.androidx.navigation.testing)
-    androidTestImplementation(libs.hilt.android.testing)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
-    kaptTest(libs.hilt.android.compiler)
-    kaptAndroidTest(libs.hilt.android.compiler)
 
     // hilt
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
+    testImplementation(libs.hilt.android.testing)
+    androidTestImplementation(libs.hilt.android.testing)
     kapt(libs.hilt.android.compiler)
+    kaptTest(libs.hilt.android.compiler)
+    kaptAndroidTest(libs.hilt.android.compiler)
 
     // Map
     implementation(libs.maps.compose)
@@ -129,7 +145,6 @@ dependencies {
     implementation(libs.android.maps.utils)
 
     // retrofit
-    val retrofitVersion = "2.9.0"
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
 }
