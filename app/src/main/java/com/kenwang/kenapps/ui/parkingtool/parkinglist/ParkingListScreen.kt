@@ -96,7 +96,9 @@ object ParkingListScreen {
             }
 
             Column(
-                modifier = Modifier.padding(paddingValues).fillMaxSize()
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize()
             ) {
                 if (networkState) {
                     Column(
@@ -160,11 +162,11 @@ object ParkingListScreen {
                     .fillMaxWidth()
                     .padding(10.dp)
             ) {
-                Text(text = "地區：${parkingSpace.area.cleanLineBreak()}")
-                Text(text = "類型：${parkingSpace.type.cleanLineBreak()}")
-                Text(text = "名稱：${parkingSpace.name.cleanLineBreak()}")
-                Text(text = "收費：${parkingSpace.charges.cleanLineBreak()}")
-                Text(text = "聯絡資訊：${parkingSpace.information.cleanLineBreak()}")
+                Text(text = "${stringResource(id = R.string.area)}:${parkingSpace.area.cleanLineBreak()}")
+                Text(text = "${stringResource(id = R.string.type)}:${parkingSpace.type.cleanLineBreak()}")
+                Text(text = "${stringResource(id = R.string.name)}:${parkingSpace.name.cleanLineBreak()}")
+                Text(text = "${stringResource(id = R.string.charge)}:${parkingSpace.charges.cleanLineBreak()}")
+                Text(text = "${stringResource(id = R.string.contact_information)}:${parkingSpace.information.cleanLineBreak()}")
             }
         }
     }

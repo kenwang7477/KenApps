@@ -125,7 +125,7 @@ object MapLocationListScreen {
                 val (titleId, descriptionId, timestampId, deleteIconId) = createRefs()
 
                 Text(
-                    text = "標題: ${mapLocation.title}",
+                    text = "${stringResource(id = R.string.title)}: ${mapLocation.title}",
                     modifier = Modifier.constrainAs(titleId) {
                         start.linkTo(parent.start)
                         top.linkTo(parent.top)
@@ -134,7 +134,7 @@ object MapLocationListScreen {
                     }
                 )
                 Text(
-                    text = "描述: ${mapLocation.description}",
+                    text = "${stringResource(id = R.string.description)}: ${mapLocation.description}",
                     modifier = Modifier.constrainAs(descriptionId) {
                         start.linkTo(parent.start)
                         top.linkTo(anchor = titleId.bottom, margin = 5.dp)
@@ -143,7 +143,7 @@ object MapLocationListScreen {
                     }
                 )
                 Text(
-                    text = "時間: ${TimeUtil.timestampToDate(mapLocation.timestamp)}",
+                    text = "${stringResource(id = R.string.date)}: ${TimeUtil.timestampToDate(mapLocation.timestamp)}",
                     modifier = Modifier.constrainAs(timestampId) {
                         start.linkTo(parent.start)
                         top.linkTo(anchor = descriptionId.bottom, margin = 5.dp)

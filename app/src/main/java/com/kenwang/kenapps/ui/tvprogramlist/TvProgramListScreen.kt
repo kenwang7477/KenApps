@@ -34,12 +34,14 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tvprogramlist.repository.TvProgramRepository
+import com.kenwang.kenapps.R
 import com.kenwang.kenapps.data.model.TvProgram
 import com.kenwang.kenapps.ui.commonscreen.EmptyView
 import com.kenwang.kenapps.ui.commonscreen.LoadingView
@@ -103,7 +105,7 @@ object TvProgramListScreen {
                         //This value is used to assign to the DropDown the same width
                         textFieldSize = coordinates.size.toSize()
                     },
-                label = { Text("網站") },
+                label = { Text(text = stringResource(id = R.string.website)) },
                 trailingIcon = {
                     Icon(icon,"contentDescription",
                         Modifier.clickable { expanded = !expanded })

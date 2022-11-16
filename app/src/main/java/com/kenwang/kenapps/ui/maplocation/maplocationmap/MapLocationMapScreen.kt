@@ -186,7 +186,7 @@ object MapLocationMapScreen {
                 val barrier = createEndBarrier(titleId, descId)
 
                 Text(
-                    text = stringResource(id = R.string.enter_map_location_dialog_subject),
+                    text = stringResource(id = R.string.title),
                     modifier = Modifier.constrainAs(titleId) {
                         top.linkTo(titleFieldId.top)
                         bottom.linkTo(titleFieldId.bottom)
@@ -194,7 +194,7 @@ object MapLocationMapScreen {
                     }
                 )
                 Text(
-                    text = stringResource(id = R.string.enter_map_location_dialog_description),
+                    text = stringResource(id = R.string.description),
                     modifier = Modifier.constrainAs(descId) {
                         top.linkTo(descFieldId.top)
                         bottom.linkTo(descFieldId.bottom)

@@ -27,6 +27,9 @@ android {
             useSupportLibrary = true
         }
 
+        //TODO: error in AGP 7.3.1, wait for AGP update to fix
+//        resourceConfigurations.addAll(listOf("en", "zh-Hant-TW"))
+
         /**
          * To fix
          * Schema export directory is not provided to the annotation processor so we cannot export the schema. You can either provide `room.schemaLocation` annotation processor argument OR set exportSchema to false.

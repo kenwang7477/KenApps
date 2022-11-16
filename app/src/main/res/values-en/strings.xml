@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">Ken Apps</string>
+
+    <string name="kh_garbage_truck_map_title">Kaohsiung Garbage Truck Map</string>
+    <string name="kh_parking_space_map_title">Kaohsiung Parking Space Map</string>
+    <string name="tv_program_list_title">TV Program List</string>
+    <string name="kh_arm_recycler_map_title">Kaohsiung ARM Recycle Map</string>
+    <string name="kh_cctv_system_title">Kaohsiung CCTV System Map</string>
+    <string name="map_location_title">Map Location Helper</string>
+    <string name="setting">Setting</string>
+    <string name="dark_mode">Dark Mode</string>
+
+    <string name="loading">Loading…</string>
+    <string name="enable_permission">Allow permission</string>
+    <string name="please_enable_network">Please turn on the Network</string>
+    <string name="please_enable_location_permission">Please allow location permission</string>
+    <string name="no_data">No Data</string>
+    <string name="unknown_error">unknown error</string>
+    <string name="please_input_location">Please enter the location</string>
+    <string name="refresh_label">Time interval(s)</string>
+    <string name="start_refresh">Start auto refresh</string>
+    <string name="stop_refresh">Stop auto refresh</string>
+    <string name="add_map_location">Add location</string>
+    <string name="enter_map_location_dialog_title">please enter the information of Location</string>
+    <string name="confirm_to_delete_record">Are you sure to delete this record?</string>
+
+    <string name="area">Area</string>
+    <string name="type">Type</string>
+    <string name="name">Name</string>
+    <string name="charge">Charge</string>
+    <string name="contact_information">Contact Information</string>
+    <string name="website">Website</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="date">Date</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+</resources>
