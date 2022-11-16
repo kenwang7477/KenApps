@@ -11,7 +11,8 @@ class GetMainListUseCase @Inject constructor() {
             MainListItem.GarbageTruckMap,
             MainListItem.TvProgramList,
             MainListItem.ArmRecyclerMap,
-            MainListItem.CctvList
+            MainListItem.CctvList,
+            MainListItem.MapLocation
         )
         emit(Result.Success(items))
     }
@@ -27,4 +28,5 @@ enum class MainListItem {
     TvProgramList,
     ArmRecyclerMap,
     CctvList,
+    MapLocation
 }

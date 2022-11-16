@@ -9,9 +9,11 @@ import android.net.Network
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imeNestedScroll
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -52,7 +54,9 @@ import com.kenwang.kenapps.ui.commonscreen.LoadingView
 import com.kenwang.kenapps.ui.commonscreen.ShowLocationPermissionView
 import kotlinx.collections.immutable.ImmutableList
 
-@OptIn(ExperimentalLifecycleComposeApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalLifecycleComposeApi::class, ExperimentalMaterial3Api::class,
+    ExperimentalLayoutApi::class
+)
 object GarbageTruckListScreen {
 
     @Composable
@@ -159,7 +163,7 @@ object GarbageTruckListScreen {
                                         top.linkTo(anchor = editView.bottom, margin = 10.dp)
                                         bottom.linkTo(parent.bottom)
                                         height = Dimension.fillToConstraints
-                                    },
+                                    }.imeNestedScroll(),
                                     toGarbageTruckMap = toGarbageTruckMap,
                                     garbageTrucks = state.garbageTrucks
                                 )

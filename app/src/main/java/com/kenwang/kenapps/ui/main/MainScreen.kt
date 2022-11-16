@@ -95,6 +95,9 @@ object MainScreen {
                     MainListItem.CctvList -> {
                         Text(text = stringResource(id = R.string.kh_cctv_system_title))
                     }
+                    MainListItem.MapLocation -> {
+                        Text(text = stringResource(id = R.string.map_location_title))
+                    }
                 }
             }
         }

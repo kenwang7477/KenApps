@@ -27,11 +27,13 @@ import kotlinx.coroutines.launch
 fun MainDrawer(
     drawerState: DrawerState,
     navController: NavController,
+    gesturesEnabled: Boolean,
     content: @Composable () -> Unit
 ) {
     val scope = rememberCoroutineScope()
     ModalNavigationDrawer(
         drawerState = drawerState,
+        gesturesEnabled = gesturesEnabled,
         drawerContent = {
             ModalDrawerSheet {
                 Column(modifier = Modifier

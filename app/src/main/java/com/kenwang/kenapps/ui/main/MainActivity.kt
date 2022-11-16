@@ -25,6 +25,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -41,6 +42,8 @@ import com.kenwang.kenapps.extensions.toCctvList
 import com.kenwang.kenapps.extensions.toCctvMap
 import com.kenwang.kenapps.extensions.toGarbageTruckList
 import com.kenwang.kenapps.extensions.toGarbageTruckMap
+import com.kenwang.kenapps.extensions.toMapLocationList
+import com.kenwang.kenapps.extensions.toMapLocationMap
 import com.kenwang.kenapps.extensions.toParkingList
 import com.kenwang.kenapps.extensions.toParkingMap
 import com.kenwang.kenapps.extensions.toTvProgramList
@@ -50,6 +53,8 @@ import com.kenwang.kenapps.ui.cctvtool.cctvlist.CctvListScreen
 import com.kenwang.kenapps.ui.cctvtool.cctvmap.CctvMapScreen
 import com.kenwang.kenapps.ui.garbagetrucktool.garbagetrucklist.GarbageTruckListScreen
 import com.kenwang.kenapps.ui.garbagetrucktool.garbagetruckmap.GarbageTruckMapScreen
+import com.kenwang.kenapps.ui.maplocation.maplocationlist.MapLocationListScreen
+import com.kenwang.kenapps.ui.maplocation.maplocationmap.MapLocationMapScreen
 import com.kenwang.kenapps.ui.parkingtool.parkinglist.ParkingListScreen
 import com.kenwang.kenapps.ui.parkingtool.parkingmap.ParkingMapScreen
 import com.kenwang.kenapps.ui.setting.SettingScreen
@@ -95,7 +100,7 @@ fun AppNavHost(
     }
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-    val topAppBarTitle = when (currentRoute.value?.destination?.route?.split("/")?.getOrNull(0)) {
+    val topAppBarTitle = when (currentRoute.value?.destination?.route?.split("/", "?")?.getOrNull(0)) {
         Screens.ParkingList.route,
         Screens.ParkingMap.route -> stringResource(id = R.string.kh_parking_space_map_title)
         Screens.GarbageTruckList.route,
@@ -105,6 +110,8 @@ fun AppNavHost(
         Screens.CctvList.route,
         Screens.CctvMap.route -> stringResource(id = R.string.kh_cctv_system_title)
         Screens.Setting.route -> stringResource(id = R.string.setting)
+        Screens.MapLocationList.route,
+        Screens.MapLocationMap.route -> stringResource(id = R.string.map_location_title)
         else -> stringResource(id = R.string.app_name)
     }
     KenAppsTheme(
@@ -112,7 +119,8 @@ fun AppNavHost(
     ) {
         MainDrawer(
             drawerState = drawerState,
-            navController = navController
+            navController = navController,
+            gesturesEnabled = !showBackButton
         ) {
             Scaffold(
                 topBar = {
@@ -152,6 +160,8 @@ fun AppNavHost(
                         addCctvMonitorListGraph(paddingValues, navController)
                         addCctvMonitorMapGraph(paddingValues)
                         addSettingGraph(paddingValues)
+                        addMapLocationGraph(paddingValues, navController)
+                        addMapLocationMapGraph(paddingValues)
                     }
                 }
             )
@@ -184,6 +194,9 @@ private fun NavGraphBuilder.addMainGraph(
                     }
                     MainListItem.CctvList -> {
                         navController.toCctvList()
+                    }
+                    MainListItem.MapLocation -> {
+                        navController.toMapLocationList()
                     }
                 }
             }
@@ -265,7 +278,7 @@ private fun NavGraphBuilder.addTvProgramListGraph(
     paddingValues: PaddingValues
 ) {
     composable(Screens.TvProgramList.route) {
-        TvProgramListScreen.TvProgramListUI(paddingValues)
+        TvProgramListScreen.TvProgramListUI(paddingValues = paddingValues)
     }
 }
 
@@ -273,9 +286,7 @@ private fun NavGraphBuilder.addArmRecyclerListGraph(
     paddingValues: PaddingValues
 ) {
     composable(Screens.ArmRecyclerList.route) {
-        ArmRecyclerListScreen.ArmRecyclerListUI(
-            paddingValues = paddingValues
-        )
+        ArmRecyclerListScreen.ArmRecyclerListUI(paddingValues = paddingValues)
     }
 }
 
@@ -318,8 +329,46 @@ private fun NavGraphBuilder.addSettingGraph(
     paddingValues: PaddingValues
 ) {
     composable(Screens.Setting.route) {
-        SettingScreen.SettingUI(
-            paddingValues = paddingValues
+        SettingScreen.SettingUI(paddingValues = paddingValues)
+    }
+}
+
+private fun NavGraphBuilder.addMapLocationGraph(
+    paddingValues: PaddingValues,
+    navController: NavController
+) {
+    composable(Screens.MapLocationList.route) {
+        MapLocationListScreen.MapLocationListUI(
+            paddingValues = paddingValues,
+            toMapLocationMap = { longitude, latitude ->
+                navController.toMapLocationMap(longitude, latitude)
+            }
+        )
+    }
+}
+
+private fun NavGraphBuilder.addMapLocationMapGraph(
+    paddingValues: PaddingValues
+) {
+    composable(
+        route = "${Screens.MapLocationMap.route}?${Screens.MapLocationMap.argLongitude}={${Screens.MapLocationMap.argLongitude}}&${Screens.MapLocationMap.argLatitude}={${Screens.MapLocationMap.argLatitude}}",
+        arguments = listOf(
+            navArgument(Screens.MapLocationMap.argLongitude) {
+                type = NavType.StringType
+                nullable = true
+            },
+            navArgument(Screens.MapLocationMap.argLatitude) {
+                type = NavType.StringType
+                nullable = true
+            }
+        )
+    ) { backStackEntry ->
+        val longitude = backStackEntry.arguments?.getString(Screens.MapLocationMap.argLongitude)
+        val latitude = backStackEntry.arguments?.getString(Screens.MapLocationMap.argLatitude)
+        MapLocationMapScreen.MapLocationMapUI(
+            paddingValues = paddingValues,
+            targetLongitude = longitude?.toDouble(),
+            targetLatitude = latitude?.toDouble()
         )
     }
 }

@@ -14,7 +14,9 @@ object MapUtil {
                 Uri.parse("geo:0,0?q=" + Uri.encode(address))
             val mapIntent = Intent(Intent.ACTION_VIEW, mapUri)
             mapIntent.setPackage("com.google.android.apps.maps")
-            context.startActivity(mapIntent)
+            mapIntent.resolveActivity(context.packageManager)?.let {
+                context.startActivity(mapIntent)
+            }
         } catch (e: Exception) {
             Toast
                 .makeText(context, R.string.unknown_error, Toast.LENGTH_SHORT)

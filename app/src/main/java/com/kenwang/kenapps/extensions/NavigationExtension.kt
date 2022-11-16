@@ -38,3 +38,16 @@ fun NavController.toCctvMap(cctvMonitor: CctvMonitor) {
 fun NavController.toSetting() {
     navigate(Screens.Setting.route)
 }
+
+fun NavController.toMapLocationList() = navigate(Screens.MapLocationList.route)
+
+fun NavController.toMapLocationMap(
+    longitude: Double?,
+    latitude: Double?
+) {
+    if (longitude == null || latitude == null) {
+        navigate(Screens.MapLocationMap.route)
+    } else {
+        navigate("${Screens.MapLocationMap.route}?${Screens.MapLocationMap.argLongitude}=$longitude&${Screens.MapLocationMap.argLatitude}=$latitude")
+    }
+}
