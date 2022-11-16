@@ -36,25 +36,26 @@ jobs:
         uses: asadmansr/android-test-report-action@v1.2.0
         if: ${{ always() }} # IMPORTANT: run Android Test Report regardless
 
+  # disable instrumented test prevent github action exceed the limit
   # https://github.com/android/architecture-samples/actions/runs/2759319594/workflow
-  instrumented-tests:
-    runs-on: macos-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          java-version: '11'
-          distribution: 'adopt'
-
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v2
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-
-      - name: Run instrumented tests
-        run: ./gradlew pixel5api33DebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+#  instrumented-tests:
+#    runs-on: macos-latest
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#
+#      - name: Setup Java
+#        uses: actions/setup-java@v3
+#        with:
+#          java-version: '11'
+#          distribution: 'adopt'
+#
+#      - name: Setup Android SDK
+#        uses: android-actions/setup-android@v2
+#
+#      - name: Grant execute permission for gradlew
+#        run: chmod +x gradlew
+#
+#      - name: Run instrumented tests
+#        run: ./gradlew pixel5api33DebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
