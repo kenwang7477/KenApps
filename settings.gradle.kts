@@ -27,6 +27,7 @@ dependencyResolutionManagement {
             library("androidx-constraintlayout-compose", "androidx.constraintlayout:constraintlayout-compose:1.0.1")
             library("kotlinx-collections-immutable", "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
             library("androidx-datastore", "androidx.datastore:datastore-preferences:1.0.0")
+            library("io-coil-compose", "io.coil-kt:coil-compose:2.2.2")
 
             // Firebase
             library("firebase", "com.google.firebase:firebase-bom:31.0.1")
@@ -36,6 +37,12 @@ dependencyResolutionManagement {
 
             // Chrome custom tab
             library("androidx-browser", "androidx.browser:browser:1.4.0")
+
+            // Camara
+//            val cameraVersion = "1.1.0"
+//            library("androidx-camera2", "androidx.camera:camera-camera2:$cameraVersion")
+//            library("androidx-camera-lifecycle", "androidx.camera:camera-lifecycle:$cameraVersion")
+//            library("androidx-camera-view", "androidx.camera:camera-view:$cameraVersion")
 
             // Room
             val roomVersion = "2.4.3"

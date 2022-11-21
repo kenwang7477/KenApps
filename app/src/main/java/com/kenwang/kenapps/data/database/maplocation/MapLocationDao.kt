@@ -30,5 +30,6 @@ data class MapLocationEntity(
     @ColumnInfo val title: String,
     @ColumnInfo val description: String,
     @ColumnInfo val longitude: Double,
-    @ColumnInfo val latitude: Double
+    @ColumnInfo val latitude: Double,
+    @ColumnInfo val pictureUri: String?
 )

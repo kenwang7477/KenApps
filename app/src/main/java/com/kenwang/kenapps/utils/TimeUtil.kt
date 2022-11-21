@@ -6,8 +6,8 @@ import java.util.Locale
 
 object TimeUtil {
 
-    fun timestampToDate(timestamp: Long): String {
-        val dateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.getDefault())
+    fun timestampToDate(timestamp: Long, pattern: String = "yyyy/MM/dd HH:mm"): String {
+        val dateFormat = SimpleDateFormat(pattern, Locale.getDefault())
         val date = Date(timestamp)
         return dateFormat.format(date)
     }

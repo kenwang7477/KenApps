@@ -27,7 +27,7 @@ class MapLocationListViewModel @Inject constructor(
         getMapLocationList()
     }
 
-    fun getMapLocationList() {
+    private fun getMapLocationList() {
         viewModelScope.launch {
             _viewState.emit(MapLocationListViewState.Loading)
 

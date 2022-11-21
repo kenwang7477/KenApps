@@ -14,6 +14,7 @@
     <string name="enable_permission">開啟權限</string>
     <string name="please_enable_network">請打開網路</string>
     <string name="please_enable_location_permission">請同意 location 權限</string>
+    <string name="please_enable_permissions">請同意權限</string>
     <string name="no_data">沒有資料</string>
     <string name="unknown_error">未知錯誤</string>
     <string name="please_input_location">請輸入地點</string>
@@ -23,6 +24,8 @@
     <string name="add_map_location">新增地點</string>
     <string name="enter_map_location_dialog_title">請輸入地點資訊</string>
     <string name="confirm_to_delete_record">確認要刪除這筆記錄嗎？</string>
+    <string name="take_picture">拍照</string>
+    <string name="delete_picture">刪除照片</string>
 
     <string name="area">地區</string>
     <string name="type">類型</string>

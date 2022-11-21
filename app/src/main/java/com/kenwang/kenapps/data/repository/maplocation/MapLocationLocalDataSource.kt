@@ -1,5 +1,6 @@
 package com.kenwang.kenapps.data.repository.maplocation
 
+import androidx.core.net.toUri
 import com.kenwang.kenapps.data.database.maplocation.MapLocationDao
 import com.kenwang.kenapps.data.database.maplocation.MapLocationEntity
 import com.kenwang.kenapps.data.model.MapLocation
@@ -31,7 +32,8 @@ class MapLocationMapper {
             title = mapLocationEntity.title,
             description =  mapLocationEntity.description,
             longitude = mapLocationEntity.longitude,
-            latitude = mapLocationEntity.latitude
+            latitude = mapLocationEntity.latitude,
+            pictureUri = mapLocationEntity.pictureUri?.toUri()
         )
     }
 
@@ -41,7 +43,8 @@ class MapLocationMapper {
             title = mapLocation.title,
             description =  mapLocation.description,
             longitude = mapLocation.longitude,
-            latitude = mapLocation.latitude
+            latitude = mapLocation.latitude,
+            pictureUri = mapLocation.pictureUri?.toString()
         )
     }
 }

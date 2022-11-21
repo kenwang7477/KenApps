@@ -4,6 +4,9 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.LocationManager
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -12,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -22,17 +26,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -44,9 +50,12 @@ import com.google.maps.android.compose.rememberCameraPositionState
 import com.kenwang.kenapps.R
 import com.kenwang.kenapps.data.model.MapLocation
 import com.kenwang.kenapps.ui.commonscreen.CustomDialog
-import com.kenwang.kenapps.ui.commonscreen.ShowLocationPermissionView
+import com.kenwang.kenapps.ui.commonscreen.ShowPermissionView
+import com.kenwang.kenapps.utils.FileUtil
+import com.kenwang.kenapps.utils.TimeUtil
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalLifecycleComposeApi::class, ExperimentalMaterial3Api::class)
 object MapLocationMapScreen {
@@ -58,10 +67,15 @@ object MapLocationMapScreen {
         targetLatitude: Double?,
         viewModel: MapLocationMapViewModel = hiltViewModel()
     ) {
-        ShowLocationPermissionView(
+        ShowPermissionView(
             modifier = Modifier
                 .padding(paddingValues)
-                .fillMaxSize()
+                .fillMaxSize(),
+            permissions = listOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.CAMERA
+            )
         ) {
             val targetLatLng = if (targetLongitude != null && targetLatitude != null) {
                 LatLng(targetLatitude, targetLongitude)
@@ -82,12 +96,18 @@ object MapLocationMapScreen {
                     Text(text = stringResource(id = R.string.add_map_location))
                 }
                 if (openDialog.value) {
+                    val coroutineScope = rememberCoroutineScope()
                     AddLocationDialog(
-                        onConfirm = { title, description ->
+                        onConfirm = { title, description, uri ->
                             val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
                             val latLng = getCurrentLocation(context, locationManager)
-                            viewModel.addMapLocation(title, description, latLng)
-                            openDialog.value = false
+                            coroutineScope.launch {
+//                                val uri = bitmap?.let {
+//                                    FileUtil.saveImageToAppFolder(context, it)
+//                                }
+                                viewModel.addMapLocation(title, description, latLng, uri)
+                                openDialog.value = false
+                            }
                         },
                         onDismiss = {
                             openDialog.value = false
@@ -143,11 +163,18 @@ object MapLocationMapScreen {
 
     @Composable
     private fun AddLocationDialog(
-        onConfirm: (title: String, description: String) -> Unit,
+        onConfirm: (title: String, description: String, pictureUri: Uri?) -> Unit,
         onDismiss: () -> Unit
     ) {
         var titleText by remember { mutableStateOf("") }
         var descText by remember { mutableStateOf("") }
+        val context = LocalContext.current
+        val fileName = TimeUtil.timestampToDate(
+            System.currentTimeMillis(),
+            "yyyyMMddHHmm"
+        )
+        val pictureUri = FileUtil.getAppFolderImageUri(context, fileName)
+        var pictureUriState by remember { mutableStateOf<Uri?>(null) }
 
         CustomDialog(
             title = {
@@ -164,25 +191,31 @@ object MapLocationMapScreen {
             confirmButton = {
                 TextButton(
                     onClick = {
-                        onConfirm(titleText, descText)
+                        onConfirm(titleText, descText, pictureUriState)
                     }
                 ) {
                     Text(text = stringResource(id = R.string.confirm))
                 }
             },
             cancelButton = {
-                TextButton(onClick = onDismiss) {
+                TextButton(
+                    onClick = {
+                        FileUtil.deleteFileFromUri(context, pictureUri)
+                        onDismiss()
+                    }
+                ) {
                     Text(text = stringResource(id = R.string.cancel))
                 }
             },
-            onDismiss = onDismiss
+            onDismiss = {
+                FileUtil.deleteFileFromUri(context, pictureUri)
+                onDismiss()
+            }
         ) {
             ConstraintLayout(
-                modifier = Modifier
-                    .sizeIn(minWidth = 280.dp, maxWidth = 560.dp)
-                    .padding(top = 24.dp)
+                modifier = Modifier.fillMaxWidth()
             ) {
-                val (titleId, titleFieldId, descId, descFieldId) = createRefs()
+                val (titleId, titleFieldId, descId, descFieldId, takePictureButtonId, pictureImageId, deletePictureButtonId) = createRefs()
                 val barrier = createEndBarrier(titleId, descId)
 
                 Text(
@@ -204,23 +237,72 @@ object MapLocationMapScreen {
                 OutlinedTextField(
                     value = titleText,
                     onValueChange = { titleText = it },
-                    modifier = Modifier.constrainAs(titleFieldId) {
-                        top.linkTo(parent.top)
-                        start.linkTo(anchor = barrier, margin = 10.dp)
-                        width = Dimension.fillToConstraints
-                        end.linkTo(parent.end)
-                    }
+                    modifier = Modifier
+                        .constrainAs(titleFieldId) {
+                            top.linkTo(parent.top)
+                            start.linkTo(anchor = barrier, margin = 10.dp)
+//                        width = Dimension.fillToConstraints
+                        }
+                        .width(200.dp)
                 )
                 OutlinedTextField(
                     value = descText,
                     onValueChange = { descText = it },
-                    modifier = Modifier.constrainAs(descFieldId) {
-                        top.linkTo(anchor = titleFieldId.bottom, margin = 20.dp)
-                        start.linkTo(anchor = barrier, margin = 10.dp)
-                        width = Dimension.fillToConstraints
-                        end.linkTo(parent.end)
-                    }
+                    modifier = Modifier
+                        .constrainAs(descFieldId) {
+                            top.linkTo(anchor = titleFieldId.bottom, margin = 20.dp)
+                            start.linkTo(anchor = barrier, margin = 10.dp)
+//                        width = Dimension.fillToConstraints
+                        }
+                        .width(200.dp)
                 )
+
+                var result by remember { mutableStateOf(false) }
+                val launcher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) {
+                    result = it
+                }
+
+                if (result) {
+                    pictureUriState = pictureUri
+                    Button(
+                        modifier = Modifier.constrainAs(deletePictureButtonId) {
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                            top.linkTo(anchor = descFieldId.bottom, margin = 10.dp)
+                        },
+                        onClick = {
+                            FileUtil.deleteFileFromUri(context, pictureUri)
+                            result = false
+                            pictureUriState = null
+                        }
+                    ) {
+                        Text(text = stringResource(id = R.string.delete_picture))
+                    }
+                    AsyncImage(
+                        modifier = Modifier
+                            .constrainAs(pictureImageId) {
+                                start.linkTo(parent.start)
+                                end.linkTo(parent.end)
+                                top.linkTo(anchor = deletePictureButtonId.bottom, margin = 10.dp)
+                            }
+                            .sizeIn(maxWidth = 300.dp, maxHeight = 300.dp),
+                        model = ImageRequest.Builder(context)
+                            .data(pictureUri)
+                            .build(),
+                        contentDescription = null
+                    )
+                } else {
+                    Button(
+                        modifier = Modifier.constrainAs(takePictureButtonId) {
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                            top.linkTo(anchor = descFieldId.bottom, margin = 10.dp)
+                        },
+                        onClick = { launcher.launch(pictureUri) }
+                    ) {
+                        Text(text = stringResource(id = R.string.take_picture))
+                    }
+                }
             }
         }
     }

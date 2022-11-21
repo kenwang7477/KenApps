@@ -16,7 +16,7 @@ android {
 
     defaultConfig {
         applicationId = "com.kenwang.kenapps"
-        minSdk = 24
+        minSdk = 29
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
@@ -103,6 +103,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout.compose)
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.androidx.datastore)
+    implementation(libs.io.coil.compose)
 
     // Firebase
     implementation(platform(libs.firebase))
@@ -119,6 +120,11 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
+
+    // Camera
+//    implementation(libs.androidx.camera2)
+//    implementation(libs.androidx.camera.lifecycle)
+//    implementation(libs.androidx.camera.view)
 
     testImplementation(libs.mockk)
     testImplementation(libs.kotlinx.coroutines.test)

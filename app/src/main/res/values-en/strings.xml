@@ -14,6 +14,7 @@
     <string name="enable_permission">Allow permission</string>
     <string name="please_enable_network">Please turn on the Network</string>
     <string name="please_enable_location_permission">Please allow location permission</string>
+    <string name="please_enable_permissions">Please allow permissions</string>
     <string name="no_data">No Data</string>
     <string name="unknown_error">unknown error</string>
     <string name="please_input_location">Please enter the location</string>
@@ -23,6 +24,8 @@
     <string name="add_map_location">Add location</string>
     <string name="enter_map_location_dialog_title">please enter the information of Location</string>
     <string name="confirm_to_delete_record">Are you sure to delete this record?</string>
+    <string name="take_picture">Take a picture</string>
+    <string name="delete_picture">Delete this picture</string>
 
     <string name="area">Area</string>
     <string name="type">Type</string>

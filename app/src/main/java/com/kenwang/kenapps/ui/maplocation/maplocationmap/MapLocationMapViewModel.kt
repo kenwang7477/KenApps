@@ -1,5 +1,6 @@
 package com.kenwang.kenapps.ui.maplocation.maplocationmap
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
@@ -28,14 +29,15 @@ class MapLocationMapViewModel @Inject constructor(
         getMapLocationList()
     }
 
-    fun addMapLocation(title: String, description: String, latLng: LatLng) {
+    fun addMapLocation(title: String, description: String, latLng: LatLng, uri: Uri?) {
         viewModelScope.launch {
             val mapLocation = MapLocation(
+                timestamp = System.currentTimeMillis(),
                 title = title,
                 description = description,
                 longitude = latLng.longitude,
                 latitude = latLng.latitude,
-                timestamp = System.currentTimeMillis()
+                pictureUri = uri
             )
             insertMapLocationUseCase.get().invoke(mapLocation)
         }
