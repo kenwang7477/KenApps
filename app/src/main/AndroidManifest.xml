@@ -45,7 +45,7 @@
         <!-- https://console.cloud.google.com/apis/credentials?project=map-project-301104 -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyD5e-Ez69Vt4QdofzePvUn_5JSbpbCTgfw" />
+            android:value="${GOOGLE_MAP_API_KEY}" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

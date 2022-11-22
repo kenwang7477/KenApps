@@ -27,6 +27,13 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+
+      # create local.properties for github actions
+      # https://docs.github.com/en/actions/security-guides/encrypted-secrets
+      - name: Access API_KEY
+        env:
+          GOOGLE_MAP_API_KEY: ${{ secrets.GOOGLE_MAP_API_KEY }}
+        run: echo "GOOGLE_MAP_API_KEY=$GOOGLE_MAP_API_KEY" > ./local.properties
       
       # Execute unit tests
       - name: Unit Test
