@@ -1,11 +1,14 @@
 package com.kenwang.kenapps.di
 
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.kenwang.kenapps.data.repository.armrecycler.ArmRecyclerClient
 import com.kenwang.kenapps.data.repository.armrecycler.ArmRecyclerMapper
 import com.kenwang.kenapps.data.repository.armrecycler.ArmRecyclerService
 import com.kenwang.kenapps.data.repository.cctvlist.CctvListClient
 import com.kenwang.kenapps.data.repository.cctvlist.CctvListService
+import com.kenwang.kenapps.data.repository.chatgpt.ChatGPTClient
+import com.kenwang.kenapps.data.repository.chatgpt.ChatGPTService
 import com.kenwang.kenapps.data.repository.garbagetruck.GarbageTruckClient
 import com.kenwang.kenapps.data.repository.garbagetruck.GarbageTruckMapper
 import com.kenwang.kenapps.data.repository.garbagetruck.GarbageTruckService
@@ -27,13 +30,16 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideGson(): Gson = Gson()
+    fun provideGson(): Gson = GsonBuilder()
+        .setLenient()
+        .create()
 
     @Provides
     @Singleton
     fun provideParkingListService(
-        okHttpClient: OkHttpClient
-    ) = govOpenDataRetrofit<ParkingListService>(okHttpClient)
+        okHttpClient: OkHttpClient,
+        gson: Gson
+    ) = govOpenDataRetrofit<ParkingListService>(okHttpClient, gson)
 
     @Provides
     @Singleton
@@ -52,9 +58,10 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideGarbageTruckService(
-        okHttpClient: OkHttpClient
+        okHttpClient: OkHttpClient,
+        gson: Gson
     ) = Retrofit.Builder()
-        .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create(gson))
         .baseUrl("https://api.kcg.gov.tw/")
         .client(okHttpClient)
         .build()
@@ -63,8 +70,9 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideArmRecyclerService(
-        okHttpClient: OkHttpClient
-    ) = govOpenDataRetrofit<ArmRecyclerService>(okHttpClient)
+        okHttpClient: OkHttpClient,
+        gson: Gson
+    ) = govOpenDataRetrofit<ArmRecyclerService>(okHttpClient, gson)
 
     @Provides
     @Singleton
@@ -76,8 +84,9 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideCctvListService(
-        okHttpClient: OkHttpClient
-    ) = govOpenDataRetrofit<CctvListService>(okHttpClient)
+        okHttpClient: OkHttpClient,
+        gson: Gson
+    ) = govOpenDataRetrofit<CctvListService>(okHttpClient, gson)
 
     @Provides
     @Singleton
@@ -100,10 +109,29 @@ object NetworkModule {
         return OkHttpClient.Builder().build()
     }
 
-    private inline fun <reified T: Any> govOpenDataRetrofit(
-        okHttpClient: OkHttpClient
+    @Provides
+    @Singleton
+    fun provideChatGPTService(
+        okHttpClient: OkHttpClient,
+        gson: Gson
     ) = Retrofit.Builder()
-        .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .baseUrl("https://api.openai.com/")
+            .client(okHttpClient)
+            .build()
+            .create(ChatGPTService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideChatGPTClient(
+        chatGPTService: ChatGPTService
+    ) = ChatGPTClient(chatGPTService)
+
+    private inline fun <reified T: Any> govOpenDataRetrofit(
+        okHttpClient: OkHttpClient,
+        gson: Gson
+    ) = Retrofit.Builder()
+        .addConverterFactory(GsonConverterFactory.create(gson))
         .baseUrl("https://quality.data.gov.tw/")
         .client(okHttpClient)
         .build()

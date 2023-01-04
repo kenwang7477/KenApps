@@ -40,6 +40,7 @@ import com.kenwang.kenapps.extensions.isVersionAboveTiramisu
 import com.kenwang.kenapps.extensions.toArmRecyclerList
 import com.kenwang.kenapps.extensions.toCctvList
 import com.kenwang.kenapps.extensions.toCctvMap
+import com.kenwang.kenapps.extensions.toChatGPT
 import com.kenwang.kenapps.extensions.toGarbageTruckList
 import com.kenwang.kenapps.extensions.toGarbageTruckMap
 import com.kenwang.kenapps.extensions.toMapLocationList
@@ -51,6 +52,7 @@ import com.kenwang.kenapps.ui.Screens
 import com.kenwang.kenapps.ui.armrecyclertool.armrecyclerlist.ArmRecyclerListScreen
 import com.kenwang.kenapps.ui.cctvtool.cctvlist.CctvListScreen
 import com.kenwang.kenapps.ui.cctvtool.cctvmap.CctvMapScreen
+import com.kenwang.kenapps.ui.chatgpt.ChatGPTScreen
 import com.kenwang.kenapps.ui.garbagetrucktool.garbagetrucklist.GarbageTruckListScreen
 import com.kenwang.kenapps.ui.garbagetrucktool.garbagetruckmap.GarbageTruckMapScreen
 import com.kenwang.kenapps.ui.maplocation.maplocationlist.MapLocationListScreen
@@ -162,6 +164,7 @@ fun AppNavHost(
                         addSettingGraph(paddingValues)
                         addMapLocationGraph(paddingValues, navController)
                         addMapLocationMapGraph(paddingValues)
+                        addChatGPTGraph(paddingValues)
                     }
                 }
             )
@@ -197,6 +200,9 @@ private fun NavGraphBuilder.addMainGraph(
                     }
                     MainListItem.MapLocation -> {
                         navController.toMapLocationList()
+                    }
+                    MainListItem.ChatGPT -> {
+                        navController.toChatGPT()
                     }
                 }
             }
@@ -370,5 +376,13 @@ private fun NavGraphBuilder.addMapLocationMapGraph(
             targetLongitude = longitude?.toDouble(),
             targetLatitude = latitude?.toDouble()
         )
+    }
+}
+
+private fun NavGraphBuilder.addChatGPTGraph(
+    paddingValues: PaddingValues
+) {
+    composable(Screens.ChatGPT.route) {
+        ChatGPTScreen.ChatGPTUI(paddingValues = paddingValues)
     }
 }

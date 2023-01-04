@@ -30,10 +30,16 @@ jobs:
 
       # create local.properties for github actions
       # https://docs.github.com/en/actions/security-guides/encrypted-secrets
-      - name: Access API_KEY
+      - name: Access Google API_KEY
         env:
           GOOGLE_MAP_API_KEY: ${{ secrets.GOOGLE_MAP_API_KEY }}
         run: echo "GOOGLE_MAP_API_KEY=$GOOGLE_MAP_API_KEY" > ./local.properties
+
+      # create ChatGPT API Key
+      - name: Access ChatGPT API_KEY
+        env:
+          ChatGPT_API_KEY: ${{ secrets.ChatGPT_API_KEY }}
+        run: echo "ChatGPT_API_KEY=$ChatGPT_API_KEY" >> ./local.properties
       
       # Execute unit tests
       - name: Unit Test

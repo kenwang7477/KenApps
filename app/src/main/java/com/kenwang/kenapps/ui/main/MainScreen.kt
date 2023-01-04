@@ -98,6 +98,9 @@ object MainScreen {
                     MainListItem.MapLocation -> {
                         Text(text = stringResource(id = R.string.map_location_title))
                     }
+                    MainListItem.ChatGPT -> {
+                        Text(text = stringResource(id = R.string.chatgpt_title))
+                    }
                 }
             }
         }

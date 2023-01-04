@@ -51,3 +51,5 @@ fun NavController.toMapLocationMap(
         navigate("${Screens.MapLocationMap.route}?${Screens.MapLocationMap.argLongitude}=$longitude&${Screens.MapLocationMap.argLatitude}=$latitude")
     }
 }
+
+fun NavController.toChatGPT() = navigate(Screens.ChatGPT.route)

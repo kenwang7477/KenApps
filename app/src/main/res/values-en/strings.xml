@@ -7,6 +7,7 @@
     <string name="kh_arm_recycler_map_title">Kaohsiung ARM Recycle Map</string>
     <string name="kh_cctv_system_title">Kaohsiung CCTV System Map</string>
     <string name="map_location_title">Map Location Helper</string>
+    <string name="chatgpt_title">ChatGPT</string>
     <string name="setting">Setting</string>
     <string name="dark_mode">Dark Mode</string>
 

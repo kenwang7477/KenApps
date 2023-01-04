@@ -19,7 +19,7 @@ class ArmRecyclerClient(
                 } else {
                     armRecyclerMapper.toArmRecycler(bean)
                 }
-            } catch(e: Exception) {
+            } catch (e: Exception) {
                 null
             }
         } ?: emptyList()
