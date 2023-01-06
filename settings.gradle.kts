@@ -13,14 +13,11 @@ dependencyResolutionManagement {
     }
     versionCatalogs {
         create("libs") {
-            val composeVersion = "1.3.0"
-            val hiltVersion = "2.44"
+            val hiltVersion = "2.44.2"
 
             library("androidx-core", "androidx.core:core-ktx:1.9.0")
             library("androidx-lifecycle-runtime", "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
             library("androidx-activity-compose", "androidx.activity:activity-compose:1.6.1")
-            library("androidx-compose-ui", "androidx.compose.ui:ui:$composeVersion")
-            library("androidx-compose-material3", "androidx.compose.material3:material3:1.1.0-alpha01")
             library("androidx-lifecycle-viewmodel-compose", "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
             library("androidx-lifecycle-runtime-compose", "androidx.lifecycle:lifecycle-runtime-compose:2.6.0-alpha03")
             library("androidx-navigation-compose", "androidx.navigation:navigation-compose:2.5.2")
@@ -38,12 +35,6 @@ dependencyResolutionManagement {
             // Chrome custom tab
             library("androidx-browser", "androidx.browser:browser:1.4.0")
 
-            // Camara
-//            val cameraVersion = "1.1.0"
-//            library("androidx-camera2", "androidx.camera:camera-camera2:$cameraVersion")
-//            library("androidx-camera-lifecycle", "androidx.camera:camera-lifecycle:$cameraVersion")
-//            library("androidx-camera-view", "androidx.camera:camera-view:$cameraVersion")
-
             // Room
             val roomVersion = "2.4.3"
             library("androidx-room-runtime", "androidx.room:room-runtime:$roomVersion")
@@ -53,15 +44,12 @@ dependencyResolutionManagement {
             library("mockk", "io.mockk:mockk:1.11.0")
             library("kotlinx-coroutines-test", "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
             library("truth", "com.google.truth:truth:1.1.2")
-            library("androidx-compose-ui-test-junit4", "androidx.compose.ui:ui-test-junit4:$composeVersion")
             library("hilt-android-testing", "com.google.dagger:hilt-android-testing:$hiltVersion")
             library("robolectric", "org.robolectric:robolectric:4.9")
             library("androidx-test-core", "androidx.test:core:1.5.0-beta01")
             library("androidx-test-ext-junit", "androidx.test.ext:junit:1.1.3")
             library("androidx-test-espresso-core", "androidx.test.espresso:espresso-core:3.4.0")
             library("androidx-navigation-testing", "androidx.navigation:navigation-testing:2.5.2")
-            library("androidx-compose-ui-tooling", "androidx.compose.ui:ui-tooling:$composeVersion")
-            library("androidx-compose-ui-test-manifest", "androidx.compose.ui:ui-test-manifest:$composeVersion")
 
             // hilt
             library("hilt-android", "com.google.dagger:hilt-android:$hiltVersion")
