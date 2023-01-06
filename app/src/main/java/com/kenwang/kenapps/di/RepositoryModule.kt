@@ -12,6 +12,8 @@ import com.kenwang.kenapps.data.repository.cctvlist.CctvListLocalDataSource
 import com.kenwang.kenapps.data.repository.cctvlist.CctvListRepository
 import com.kenwang.kenapps.data.repository.cctvlist.CctvListServerDataSource
 import com.kenwang.kenapps.data.repository.chatgpt.ChatGPTClient
+import com.kenwang.kenapps.data.repository.chatgpt.ChatGPTMessageLocalDataSource
+import com.kenwang.kenapps.data.repository.chatgpt.ChatGPTMessageRepository
 import com.kenwang.kenapps.data.repository.chatgpt.ChatGPTRepository
 import com.kenwang.kenapps.data.repository.chatgpt.ChatGPTServerDataSource
 import com.kenwang.kenapps.data.repository.garbagetruck.GarbageTruckClient
@@ -101,4 +103,8 @@ object RepositoryModule {
     fun provideChatGPTRepository(
         chatGPTClient: ChatGPTClient
     ) = ChatGPTRepository(ChatGPTServerDataSource(chatGPTClient))
+
+    @Provides
+    @Singleton
+    fun provideChatGPTMessageRepository() = ChatGPTMessageRepository(ChatGPTMessageLocalDataSource())
 }

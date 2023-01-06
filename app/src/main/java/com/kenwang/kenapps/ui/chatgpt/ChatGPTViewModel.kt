@@ -2,8 +2,11 @@ package com.kenwang.kenapps.ui.chatgpt
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kenwang.kenapps.data.model.ChatMessage
 import com.kenwang.kenapps.domain.usecase.chatgpt.GetChatGPTResultUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -20,9 +23,9 @@ class ChatGPTViewModel @Inject constructor(
 
     fun getResult(keyword: String) {
         viewModelScope.launch {
-            _viewState.emit(ChatGPTViewState.Loading)
+//            _viewState.emit(ChatGPTViewState.Loading)
             getChatGPTResultUseCase.get().invoke(keyword).collect {
-                _viewState.emit(ChatGPTViewState.ShowResult(it.result))
+                _viewState.emit(ChatGPTViewState.ShowResult(it.messageList.toImmutableList()))
             }
         }
     }
@@ -30,6 +33,6 @@ class ChatGPTViewModel @Inject constructor(
     sealed class ChatGPTViewState {
         object Empty : ChatGPTViewState()
         object Loading : ChatGPTViewState()
-        data class ShowResult(val result: String) : ChatGPTViewState()
+        data class ShowResult(val messageList: ImmutableList<ChatMessage>) : ChatGPTViewState()
     }
 }

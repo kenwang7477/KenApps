@@ -114,6 +114,7 @@ fun AppNavHost(
         Screens.Setting.route -> stringResource(id = R.string.setting)
         Screens.MapLocationList.route,
         Screens.MapLocationMap.route -> stringResource(id = R.string.map_location_title)
+        Screens.ChatGPT.route -> stringResource(id = R.string.chatgpt_title)
         else -> stringResource(id = R.string.app_name)
     }
     KenAppsTheme(
