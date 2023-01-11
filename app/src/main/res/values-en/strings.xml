@@ -8,6 +8,7 @@
     <string name="kh_cctv_system_title">Kaohsiung CCTV System Map</string>
     <string name="map_location_title">Map Location Helper</string>
     <string name="chatgpt_title">ChatGPT</string>
+    <string name="text_to_speech_title">Text To Speech</string>
     <string name="setting">Setting</string>
     <string name="dark_mode">Dark Mode</string>
 
@@ -39,4 +40,8 @@
     <string name="date">Date</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
+
+    <string name="play_speech">Play</string>
+    <string name="stop_speech">Stop</string>
+    <string name="speech_rate">Speech Rate:</string>
 </resources>

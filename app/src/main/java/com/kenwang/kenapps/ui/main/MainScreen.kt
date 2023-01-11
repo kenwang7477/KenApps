@@ -79,29 +79,33 @@ object MainScreen {
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                when (item) {
+                val title = when (item) {
                     MainListItem.ParkingMap -> {
-                        Text(text = stringResource(id = R.string.kh_parking_space_map_title))
+                        stringResource(id = R.string.kh_parking_space_map_title)
                     }
                     MainListItem.GarbageTruckMap -> {
-                        Text(text = stringResource(id = R.string.kh_garbage_truck_map_title))
+                        stringResource(id = R.string.kh_garbage_truck_map_title)
                     }
                     MainListItem.TvProgramList -> {
-                        Text(text = stringResource(id = R.string.tv_program_list_title))
+                        stringResource(id = R.string.tv_program_list_title)
                     }
                     MainListItem.ArmRecyclerMap -> {
-                        Text(text = stringResource(id = R.string.kh_arm_recycler_map_title))
+                        stringResource(id = R.string.kh_arm_recycler_map_title)
                     }
                     MainListItem.CctvList -> {
-                        Text(text = stringResource(id = R.string.kh_cctv_system_title))
+                        stringResource(id = R.string.kh_cctv_system_title)
                     }
                     MainListItem.MapLocation -> {
-                        Text(text = stringResource(id = R.string.map_location_title))
+                        stringResource(id = R.string.map_location_title)
                     }
                     MainListItem.ChatGPT -> {
-                        Text(text = stringResource(id = R.string.chatgpt_title))
+                        stringResource(id = R.string.chatgpt_title)
+                    }
+                    MainListItem.TextToSpeech -> {
+                        stringResource(id = R.string.text_to_speech_title)
                     }
                 }
+                Text(text = title)
             }
         }
     }

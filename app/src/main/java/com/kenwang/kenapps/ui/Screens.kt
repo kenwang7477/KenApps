@@ -23,4 +23,5 @@ sealed class Screens(val route: String) {
         const val argLatitude = "argLatitude"
     }
     object ChatGPT : Screens("ChatGPT")
+    object TextToSpeech : Screens("TextToSpeech")
 }

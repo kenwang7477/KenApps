@@ -53,3 +53,5 @@ fun NavController.toMapLocationMap(
 }
 
 fun NavController.toChatGPT() = navigate(Screens.ChatGPT.route)
+
+fun NavController.toTextToSpeech() = navigate(Screens.TextToSpeech.route)

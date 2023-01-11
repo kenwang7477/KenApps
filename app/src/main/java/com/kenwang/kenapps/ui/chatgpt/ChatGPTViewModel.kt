@@ -23,7 +23,6 @@ class ChatGPTViewModel @Inject constructor(
 
     fun getResult(keyword: String) {
         viewModelScope.launch {
-//            _viewState.emit(ChatGPTViewState.Loading)
             getChatGPTResultUseCase.get().invoke(keyword).collect {
                 _viewState.emit(ChatGPTViewState.ShowResult(it.messageList.toImmutableList()))
             }

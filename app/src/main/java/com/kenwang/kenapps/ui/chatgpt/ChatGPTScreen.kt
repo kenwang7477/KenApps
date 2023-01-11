@@ -34,7 +34,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -62,12 +61,12 @@ object ChatGPTScreen {
         ) {
             val (keywordFieldId, sendButtonId, messageListId) = createRefs()
 
-            var keyword by remember { mutableStateOf(TextFieldValue("")) }
+            var keyword by remember { mutableStateOf("") }
             val focusManager = LocalFocusManager.current
 
             fun sendMessage() {
-                viewModel.getResult(keyword.text)
-                keyword = TextFieldValue("")
+                viewModel.getResult(keyword)
+                keyword = ""
                 focusManager.clearFocus()
             }
 
@@ -150,7 +149,7 @@ object ChatGPTScreen {
     }
 
     @Composable
-    fun MessageCard(chatMessage: ChatMessage) { // 1
+    fun MessageCard(chatMessage: ChatMessage) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()

@@ -47,6 +47,7 @@ import com.kenwang.kenapps.extensions.toMapLocationList
 import com.kenwang.kenapps.extensions.toMapLocationMap
 import com.kenwang.kenapps.extensions.toParkingList
 import com.kenwang.kenapps.extensions.toParkingMap
+import com.kenwang.kenapps.extensions.toTextToSpeech
 import com.kenwang.kenapps.extensions.toTvProgramList
 import com.kenwang.kenapps.ui.Screens
 import com.kenwang.kenapps.ui.armrecyclertool.armrecyclerlist.ArmRecyclerListScreen
@@ -60,6 +61,7 @@ import com.kenwang.kenapps.ui.maplocation.maplocationmap.MapLocationMapScreen
 import com.kenwang.kenapps.ui.parkingtool.parkinglist.ParkingListScreen
 import com.kenwang.kenapps.ui.parkingtool.parkingmap.ParkingMapScreen
 import com.kenwang.kenapps.ui.setting.SettingScreen
+import com.kenwang.kenapps.ui.texttospeech.TextToSpeechScreen
 import com.kenwang.kenapps.ui.theme.KenAppsTheme
 import com.kenwang.kenapps.ui.tvprogramlist.TvProgramListScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -115,6 +117,7 @@ fun AppNavHost(
         Screens.MapLocationList.route,
         Screens.MapLocationMap.route -> stringResource(id = R.string.map_location_title)
         Screens.ChatGPT.route -> stringResource(id = R.string.chatgpt_title)
+        Screens.TextToSpeech.route -> stringResource(id = R.string.text_to_speech_title)
         else -> stringResource(id = R.string.app_name)
     }
     KenAppsTheme(
@@ -166,6 +169,7 @@ fun AppNavHost(
                         addMapLocationGraph(paddingValues, navController)
                         addMapLocationMapGraph(paddingValues)
                         addChatGPTGraph(paddingValues)
+                        addTextToSpeechGraph(paddingValues)
                     }
                 }
             )
@@ -204,6 +208,9 @@ private fun NavGraphBuilder.addMainGraph(
                     }
                     MainListItem.ChatGPT -> {
                         navController.toChatGPT()
+                    }
+                    MainListItem.TextToSpeech -> {
+                        navController.toTextToSpeech()
                     }
                 }
             }
@@ -385,5 +392,13 @@ private fun NavGraphBuilder.addChatGPTGraph(
 ) {
     composable(Screens.ChatGPT.route) {
         ChatGPTScreen.ChatGPTUI(paddingValues = paddingValues)
+    }
+}
+
+private fun NavGraphBuilder.addTextToSpeechGraph(
+    paddingValues: PaddingValues
+) {
+    composable(Screens.TextToSpeech.route) {
+        TextToSpeechScreen.TextToSpeechUI(paddingValues = paddingValues)
     }
 }
