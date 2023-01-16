@@ -2,7 +2,7 @@ package com.kenwang.kenapps.data.repository.cctvlist
 
 import com.google.gson.annotations.SerializedName
 
-data class CctvListResponse(
+data class CctvListBean(
     @SerializedName("cctvid") val cctvId: String = "",
     @SerializedName("roadsection") val roadsection: String = "",
     @SerializedName("locationpath") val locationpath: String = "",

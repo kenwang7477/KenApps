@@ -70,7 +70,8 @@ object CctvMapScreen {
         ) {
             val context = LocalContext.current
             when (val state = viewModel.viewState.collectAsStateWithLifecycle().value) {
-                is CctvListViewModel.CctvListViewState.Loading -> Unit
+                is CctvListViewModel.CctvListViewState.Loading,
+                is CctvListViewModel.CctvListViewState.Error,
                 is CctvListViewModel.CctvListViewState.Empty -> Unit
                 is CctvListViewModel.CctvListViewState.Success -> {
                     state.cctvList.forEach { cctv ->

@@ -36,6 +36,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kenwang.kenapps.R
 import com.kenwang.kenapps.data.model.CctvMonitor
 import com.kenwang.kenapps.ui.commonscreen.EmptyView
+import com.kenwang.kenapps.ui.commonscreen.ErrorView
 import com.kenwang.kenapps.ui.commonscreen.LoadingView
 import kotlinx.collections.immutable.ImmutableList
 
@@ -57,6 +58,12 @@ object CctvListScreen {
                         cctvList = state.cctvList
                     )
                 }
+            }
+            is CctvListViewModel.CctvListViewState.Error -> {
+                ErrorView(
+                    modifier = Modifier.padding(paddingValues),
+                    text = state.errorMessage
+                )
             }
             is CctvListViewModel.CctvListViewState.Empty -> {
                 EmptyView(

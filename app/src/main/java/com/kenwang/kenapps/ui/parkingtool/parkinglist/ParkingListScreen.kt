@@ -39,6 +39,7 @@ import com.kenwang.kenapps.R
 import com.kenwang.kenapps.data.model.ParkingSpace
 import com.kenwang.kenapps.extensions.cleanLineBreak
 import com.kenwang.kenapps.ui.commonscreen.EmptyView
+import com.kenwang.kenapps.ui.commonscreen.ErrorView
 import com.kenwang.kenapps.ui.commonscreen.LoadingView
 import com.kenwang.kenapps.ui.commonscreen.ShowLocationPermissionView
 import kotlinx.collections.immutable.ImmutableList
@@ -110,6 +111,12 @@ object ParkingListScreen {
                                     modifier = Modifier.padding(top = 10.dp),
                                     toParkingMap = toParkingMap,
                                     parkingSpaces = state.list
+                                )
+                            }
+                            is ParkingListViewModel.ParkingListViewState.Error -> {
+                                ErrorView(
+                                    modifier = Modifier.fillMaxSize(),
+                                    state.errorMessage
                                 )
                             }
                             is ParkingListViewModel.ParkingListViewState.Empty -> {

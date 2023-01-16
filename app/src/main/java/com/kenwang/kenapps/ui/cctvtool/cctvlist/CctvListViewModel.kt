@@ -36,14 +36,16 @@ class CctvListViewModel @Inject constructor(
                 .invoke()
                 .collect { result ->
                     when (result) {
-                        is GetCctvListUseCase.Result.Empty -> {
-                            _viewState.emit(CctvListViewState.Empty)
-                        }
-
                         is GetCctvListUseCase.Result.Success -> {
                             _viewState.emit(
                                 CctvListViewState.Success(result.cctvList.toImmutableList())
                             )
+                        }
+                        is GetCctvListUseCase.Result.Error -> {
+                            _viewState.emit(CctvListViewState.Error(result.exception.errorMessage))
+                        }
+                        is GetCctvListUseCase.Result.Empty -> {
+                            _viewState.emit(CctvListViewState.Empty)
                         }
                     }
                 }
@@ -54,5 +56,6 @@ class CctvListViewModel @Inject constructor(
         object Loading : CctvListViewState()
         object Empty : CctvListViewState()
         data class Success(val cctvList: ImmutableList<CctvMonitor>) : CctvListViewState()
+        data class Error(val errorMessage: String) : CctvListViewState()
     }
 }

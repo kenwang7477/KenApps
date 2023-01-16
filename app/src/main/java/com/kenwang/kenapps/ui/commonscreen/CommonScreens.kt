@@ -120,6 +120,20 @@ fun EmptyView(
 }
 
 @Composable
+fun ErrorView(
+    modifier: Modifier = Modifier,
+    text: String = stringResource(id = R.string.no_data)
+) {
+    Column(
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = text)
+    }
+}
+
+@Composable
 fun LoadingView(
     modifier: Modifier = Modifier
 ) {

@@ -42,6 +42,11 @@ class ParkingListViewModel @Inject constructor(
                                 ParkingListViewState.Success(result.list.toImmutableList())
                             )
                         }
+                        is GetParkingListUseCase.Result.Error -> {
+                            _viewState.emit(
+                                ParkingListViewState.Error(result.exception.errorMessage)
+                            )
+                        }
                     }
                 }
         }
@@ -49,6 +54,7 @@ class ParkingListViewModel @Inject constructor(
 
     sealed class ParkingListViewState {
         data class Success(val list: ImmutableList<ParkingSpace>) : ParkingListViewState()
+        data class Error(val errorMessage: String) : ParkingListViewState()
         object Empty : ParkingListViewState()
         object Loading : ParkingListViewState()
     }

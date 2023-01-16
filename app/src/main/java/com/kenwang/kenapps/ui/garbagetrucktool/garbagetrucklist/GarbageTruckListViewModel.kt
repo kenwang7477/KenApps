@@ -46,7 +46,11 @@ class GarbageTruckListViewModel @Inject constructor(
                                 GarbageTruckViewState.Success(result.list.toImmutableList())
                             )
                         }
-
+                        is GetGarbageTruckListUseCase.Result.Error -> {
+                            _viewState.emit(
+                                GarbageTruckViewState.Error(result.exception.errorMessage)
+                            )
+                        }
                         is GetGarbageTruckListUseCase.Result.Empty -> {
                             _viewState.emit(GarbageTruckViewState.Empty)
                         }
@@ -71,5 +75,6 @@ class GarbageTruckListViewModel @Inject constructor(
         object Loading : GarbageTruckViewState()
         object Empty : GarbageTruckViewState()
         data class Success(val garbageTrucks: ImmutableList<GarbageTruck>) : GarbageTruckViewState()
+        data class Error(val errorMessage: String) : GarbageTruckViewState()
     }
 }

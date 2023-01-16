@@ -31,13 +31,18 @@ class ArmRecyclerListViewModel @Inject constructor(
 
             getArmRecyclerListUseCase.get().invoke().collect { result ->
                 when (result) {
-                    is GetArmRecyclerListUseCase.Result.Empty -> {
-                        _viewState.emit(ArmRecyclerListViewState.Empty)
-                    }
                     is GetArmRecyclerListUseCase.Result.Success -> {
                         _viewState.emit(
                             ArmRecyclerListViewState.Success(result.list.toImmutableList())
                         )
+                    }
+                    is GetArmRecyclerListUseCase.Result.Error -> {
+                        _viewState.emit(
+                            ArmRecyclerListViewState.Error(result.exception.errorMessage)
+                        )
+                    }
+                    is GetArmRecyclerListUseCase.Result.Empty -> {
+                        _viewState.emit(ArmRecyclerListViewState.Empty)
                     }
                 }
             }
@@ -48,5 +53,6 @@ class ArmRecyclerListViewModel @Inject constructor(
         object Loading : ArmRecyclerListViewState()
         object Empty : ArmRecyclerListViewState()
         data class Success(val armRecyclers: ImmutableList<ArmRecycler>) : ArmRecyclerListViewState()
+        data class Error(val errorMessage: String) : ArmRecyclerListViewState()
     }
 }

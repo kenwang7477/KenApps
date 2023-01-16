@@ -36,6 +36,7 @@ class ParkingMapViewModel @Inject constructor(
                             ParkingMapViewState.Success(result.list.toImmutableList())
                         )
                     }
+                    is GetParkingListUseCase.Result.Error,
                     is GetParkingListUseCase.Result.Empty -> Unit
                 }
             }

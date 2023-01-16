@@ -28,6 +28,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kenwang.kenapps.data.model.ArmRecycler
 import com.kenwang.kenapps.extensions.isVersionAboveTiramisu
 import com.kenwang.kenapps.ui.commonscreen.EmptyView
+import com.kenwang.kenapps.ui.commonscreen.ErrorView
 import com.kenwang.kenapps.ui.commonscreen.LoadingView
 import com.kenwang.kenapps.utils.MapUtil
 import kotlinx.collections.immutable.ImmutableList
@@ -65,11 +66,19 @@ object ArmRecyclerListScreen {
 //                    }
 //                }
             }
+            is ArmRecyclerListViewModel.ArmRecyclerListViewState.Error -> {
+                ErrorView(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    text = state.errorMessage
+                )
+            }
             is ArmRecyclerListViewModel.ArmRecyclerListViewState.Empty -> {
                 EmptyView(
                     modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
+                        .fillMaxSize()
+                        .padding(paddingValues)
                 )
             }
             is ArmRecyclerListViewModel.ArmRecyclerListViewState.Loading -> {
@@ -95,8 +104,8 @@ object ArmRecyclerListScreen {
                 if (isVersionAboveTiramisu()) {
                     geoCoder.getFromLocationName(armRecycler.address, 1) {
                         it.getOrNull(0)?.let { address ->
-                            armRecycler.longitude = address.longitude ?: 0.0
-                            armRecycler.latitude = address.latitude ?: 0.0
+                            armRecycler.longitude = address.longitude
+                            armRecycler.latitude = address.latitude
                         }
                     }
                 } else {

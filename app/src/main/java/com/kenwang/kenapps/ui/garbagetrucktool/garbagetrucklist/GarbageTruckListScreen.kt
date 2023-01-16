@@ -50,6 +50,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.kenwang.kenapps.R
 import com.kenwang.kenapps.data.model.GarbageTruck
 import com.kenwang.kenapps.ui.commonscreen.EmptyView
+import com.kenwang.kenapps.ui.commonscreen.ErrorView
 import com.kenwang.kenapps.ui.commonscreen.LoadingView
 import com.kenwang.kenapps.ui.commonscreen.ShowLocationPermissionView
 import kotlinx.collections.immutable.ImmutableList
@@ -157,15 +158,23 @@ object GarbageTruckListScreen {
                         when (val state = viewModel.viewState.collectAsStateWithLifecycle().value) {
                             is GarbageTruckListViewModel.GarbageTruckViewState.Success -> {
                                 TruckList(
-                                    modifier = Modifier.constrainAs(listView) {
-                                        start.linkTo(parent.start)
-                                        end.linkTo(parent.end)
-                                        top.linkTo(anchor = editView.bottom, margin = 10.dp)
-                                        bottom.linkTo(parent.bottom)
-                                        height = Dimension.fillToConstraints
-                                    }.imeNestedScroll(),
+                                    modifier = Modifier
+                                        .constrainAs(listView) {
+                                            start.linkTo(parent.start)
+                                            end.linkTo(parent.end)
+                                            top.linkTo(anchor = editView.bottom, margin = 10.dp)
+                                            bottom.linkTo(parent.bottom)
+                                            height = Dimension.fillToConstraints
+                                        }
+                                        .imeNestedScroll(),
                                     toGarbageTruckMap = toGarbageTruckMap,
                                     garbageTrucks = state.garbageTrucks
+                                )
+                            }
+                            is GarbageTruckListViewModel.GarbageTruckViewState.Error -> {
+                                ErrorView(
+                                    modifier = Modifier.fillMaxSize(),
+                                    text = state.errorMessage
                                 )
                             }
                             is GarbageTruckListViewModel.GarbageTruckViewState.Empty -> {

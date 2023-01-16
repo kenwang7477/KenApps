@@ -3,15 +3,18 @@ package com.kenwang.kenapps.data.repository.armrecycler
 import com.google.gson.Gson
 import com.kenwang.kenapps.data.model.ArmRecycler
 import com.kenwang.kenapps.data.model.ArmRecyclerBean
+import com.kenwang.kenapps.data.repository.base.APIClientBase
+import com.kenwang.kenapps.data.repository.base.APIClientBaseImpl
 
 class ArmRecyclerClient(
     private val armRecyclerService: ArmRecyclerService,
     private val armRecyclerMapper: ArmRecyclerMapper,
     private val gson: Gson
-) {
+) : APIClientBase by APIClientBaseImpl() {
 
     suspend fun getArmRecyclerList(): List<ArmRecycler> {
-        return armRecyclerService.getArmRecyclerList().body()?.mapNotNull {
+        val response = checkAPIResponse { armRecyclerService.getArmRecyclerList() }
+        return response.body()?.mapNotNull {
             try {
                 val bean = gson.fromJson(it, ArmRecyclerBean::class.java)
                 if (bean.address.isBlank()) {
@@ -26,7 +29,7 @@ class ArmRecyclerClient(
     }
 }
 
-class ArmRecyclerMapper() {
+class ArmRecyclerMapper {
 
     fun toArmRecycler(armRecyclerBean: ArmRecyclerBean): ArmRecycler {
         return ArmRecycler(

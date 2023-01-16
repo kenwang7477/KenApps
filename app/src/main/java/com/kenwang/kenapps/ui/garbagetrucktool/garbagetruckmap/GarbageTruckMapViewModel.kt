@@ -52,10 +52,11 @@ class GarbageTruckMapViewModel @Inject constructor(
                 .invoke()
                 .collect { result ->
                 when (result) {
-                    is GetGarbageTruckListUseCase.Result.Empty -> Unit
                     is GetGarbageTruckListUseCase.Result.Success -> {
                         _viewState.value = ViewState.Success(result.list)
                     }
+                    is GetGarbageTruckListUseCase.Result.Error,
+                    is GetGarbageTruckListUseCase.Result.Empty -> Unit
                 }
             }
         }

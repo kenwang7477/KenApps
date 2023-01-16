@@ -1,5 +1,6 @@
 package com.kenwang.kenapps.ui.chatgpt
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -116,6 +118,17 @@ object ChatGPTScreen {
                 scrollState,
                 viewModel = viewModel
             )
+
+            val context = LocalContext.current
+            LaunchedEffect(key1 = true) {
+                viewModel.actionState.collect {
+                    when(it) {
+                        is ChatGPTViewModel.ChatGPTActionState.ShowErrorToast -> {
+                            Toast.makeText(context, it.errorMessage, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
         }
     }
 

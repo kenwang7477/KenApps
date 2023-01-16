@@ -1,22 +1,15 @@
 package com.kenwang.kenapps.data.repository.chatgpt
 
 import com.google.gson.JsonObject
-import java.net.SocketTimeoutException
+import com.kenwang.kenapps.data.repository.base.APIClientBase
+import com.kenwang.kenapps.data.repository.base.APIClientBaseImpl
 
 class ChatGPTClient(
     private val chatGPTService: ChatGPTService
-) {
+) : APIClientBase by APIClientBaseImpl() {
 
     suspend fun getResult(keyword: String): JsonObject? {
-        return try {
-            chatGPTService
-                .getResult(ChatGPTRequest(prompt = keyword))
-                .body()
-        } catch (e: SocketTimeoutException) {
-            //TODO: 用自訂 error 包起來
-            null
-        } catch (e: Exception) {
-            null
-        }
+        val response = checkAPIResponse { chatGPTService.getResult(ChatGPTRequest(prompt = keyword)) }
+        return response.body()
     }
 }
