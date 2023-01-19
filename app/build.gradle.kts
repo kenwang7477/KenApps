@@ -42,6 +42,13 @@ android {
         }
     }
 
+    externalNativeBuild {
+        ndkVersion = "25.1.8937393"
+        cmake {
+            path(file("src/main/cpp/CMakeLists.txt"))
+            version = "3.22.1"
+        }
+    }
     buildTypes {
         release {
             isMinifyEnabled = false
