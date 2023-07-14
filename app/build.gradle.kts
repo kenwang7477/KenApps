@@ -8,6 +8,7 @@ plugins {
     id("com.google.firebase.crashlytics")
     id("com.google.devtools.ksp")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    kotlin("plugin.serialization") version "1.8.21"
     kotlin("kapt")
 }
 
@@ -51,24 +52,25 @@ android {
     }
     buildTypes {
         release {
+            buildFeatures.buildConfig = true
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.0"
+        kotlinCompilerExtensionVersion = "1.4.7"
     }
-    packagingOptions {
+    packaging {
         resources.excludes.add("META-INF/AL2.0")
         resources.excludes.add("META-INF/LGPL2.1")
     }
@@ -109,9 +111,11 @@ dependencies {
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.androidx.datastore)
     implementation(libs.io.coil.compose)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
 
     // Compose
-    val composeBom = platform("androidx.compose:compose-bom:2023.01.00")
+    val composeBom = platform("androidx.compose:compose-bom:2023.05.01")
     implementation(composeBom)
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.ui:ui")
@@ -122,7 +126,7 @@ dependencies {
     testImplementation("androidx.compose.ui:ui-test-junit4")
 
     // Firebase
-    implementation(platform(libs.firebase))
+    implementation(platform("com.google.firebase:firebase-bom:32.1.1"))
     implementation("com.google.firebase:firebase-perf")
     implementation("com.google.firebase:firebase-crashlytics")
 
@@ -163,4 +167,11 @@ dependencies {
     // retrofit
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
+
+    // ktor
+    implementation(libs.io.ktor.client.core)
+    implementation(libs.io.ktor.client.android)
+    implementation(libs.io.ktor.client.serialization)
+    implementation(libs.io.ktor.client.logging)
+    implementation(libs.io.ktor.client.content.negotiation)
 }

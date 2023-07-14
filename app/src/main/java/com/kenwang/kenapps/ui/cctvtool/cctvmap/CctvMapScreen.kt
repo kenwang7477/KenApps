@@ -11,7 +11,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -26,7 +25,6 @@ import com.kenwang.kenapps.ui.cctvtool.cctvlist.CctvListViewModel
 import com.kenwang.kenapps.ui.commonscreen.ShowLocationPermissionView
 import com.kenwang.kenapps.utils.ChromeTabUtil
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 object CctvMapScreen {
 
     @Composable

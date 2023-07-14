@@ -10,7 +10,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -25,7 +24,6 @@ import com.kenwang.kenapps.data.model.ParkingSpace
 import com.kenwang.kenapps.extensions.cleanLineBreak
 import com.kenwang.kenapps.ui.theme.Blue90
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 object ParkingMapScreen {
 
     @Composable

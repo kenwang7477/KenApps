@@ -23,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kenwang.kenapps.data.model.ArmRecycler
 import com.kenwang.kenapps.extensions.isVersionAboveTiramisu
@@ -33,7 +32,6 @@ import com.kenwang.kenapps.ui.commonscreen.LoadingView
 import com.kenwang.kenapps.utils.MapUtil
 import kotlinx.collections.immutable.ImmutableList
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 object ArmRecyclerListScreen {
 
     @Composable

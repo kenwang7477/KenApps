@@ -13,7 +13,7 @@ class GetMainListUseCase @Inject constructor() {
             MainListItem.ArmRecyclerMap,
             MainListItem.CctvList,
             MainListItem.MapLocation,
-            MainListItem.ChatGPT,
+//            MainListItem.ChatGPT,
             MainListItem.TextToSpeech
         )
         emit(Result.Success(items))

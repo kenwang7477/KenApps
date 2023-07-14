@@ -31,7 +31,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kenwang.kenapps.R
 import com.kenwang.kenapps.data.model.CctvMonitor
@@ -40,7 +39,7 @@ import com.kenwang.kenapps.ui.commonscreen.ErrorView
 import com.kenwang.kenapps.ui.commonscreen.LoadingView
 import kotlinx.collections.immutable.ImmutableList
 
-@OptIn(ExperimentalLifecycleComposeApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 object CctvListScreen {
 
     @Composable

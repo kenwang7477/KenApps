@@ -20,7 +20,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -70,7 +69,6 @@ import javax.inject.Inject
 import javax.inject.Provider
 
 @AndroidEntryPoint
-@OptIn(ExperimentalLifecycleComposeApi::class)
 class MainActivity : ComponentActivity() {
 
     @Inject
@@ -87,7 +85,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppNavHost(
     darkMode: Boolean

@@ -24,6 +24,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,6 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -38,7 +40,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tvprogramlist.repository.TvProgramRepository
 import com.kenwang.kenapps.R
@@ -48,7 +49,7 @@ import com.kenwang.kenapps.ui.commonscreen.LoadingView
 import com.kenwang.kenapps.utils.ChromeTabUtil
 import kotlinx.collections.immutable.ImmutableList
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 object TvProgramListScreen {
 
     @Composable
@@ -96,19 +97,30 @@ object TvProgramListScreen {
             OutlinedTextField(
                 value = selectedText,
                 readOnly = true,
+                enabled = false,
                 onValueChange = {
                     selectedText = it
                 },
                 modifier = Modifier
                     .fillMaxWidth()
+                    .clickable { expanded = !expanded }
                     .onGloballyPositioned { coordinates ->
                         //This value is used to assign to the DropDown the same width
                         textFieldSize = coordinates.size.toSize()
                     },
+                colors = TextFieldDefaults.colors(
+                    disabledLabelColor = MaterialTheme.colorScheme.primary,
+                    disabledContainerColor = Color.Transparent,
+                    disabledIndicatorColor = MaterialTheme.colorScheme.primary,
+                    disabledTextColor = MaterialTheme.colorScheme.primary,
+                    disabledTrailingIconColor = MaterialTheme.colorScheme.primary
+                ),
                 label = { Text(text = stringResource(id = R.string.website)) },
                 trailingIcon = {
-                    Icon(icon,"contentDescription",
-                        Modifier.clickable { expanded = !expanded })
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = "contentDescription"
+                    )
                 }
             )
 

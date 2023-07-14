@@ -32,7 +32,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.gms.maps.model.LatLng
 import com.kenwang.kenapps.R
@@ -44,7 +43,6 @@ import com.kenwang.kenapps.ui.commonscreen.LoadingView
 import com.kenwang.kenapps.ui.commonscreen.ShowLocationPermissionView
 import kotlinx.collections.immutable.ImmutableList
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 object ParkingListScreen {
 
     @SuppressLint("PermissionLaunchedDuringComposition")
