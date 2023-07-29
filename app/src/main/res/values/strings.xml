@@ -5,9 +5,7 @@
     <string name="kh_parking_space_map_title">高雄市停車場地圖</string>
     <string name="tv_program_list_title">數位電視節目表</string>
     <string name="kh_arm_recycler_map_title">高雄市 ARM 回收地圖</string>
-    <string name="kh_cctv_system_title">高雄市路況監視系統</string>
     <string name="map_location_title">地圖位置記錄小幫手</string>
-    <string name="chatgpt_title">ChatGPT</string>
     <string name="text_to_speech_title">文字轉語音</string>
     <string name="setting">設定</string>
     <string name="dark_mode">黑暗模式</string>

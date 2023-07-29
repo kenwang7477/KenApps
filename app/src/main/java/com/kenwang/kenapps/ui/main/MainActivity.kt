@@ -30,16 +30,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.kenwang.kenapps.R
-import com.kenwang.kenapps.data.model.CctvMonitor
 import com.kenwang.kenapps.data.model.ParkingSpace
 import com.kenwang.kenapps.data.model.GarbageTruck
 import com.kenwang.kenapps.domain.usecase.darkmode.GetDarkModeUseCase
 import com.kenwang.kenapps.domain.usecase.main.MainListItem
 import com.kenwang.kenapps.extensions.isVersionAboveTiramisu
 import com.kenwang.kenapps.extensions.toArmRecyclerList
-import com.kenwang.kenapps.extensions.toCctvList
-import com.kenwang.kenapps.extensions.toCctvMap
-import com.kenwang.kenapps.extensions.toChatGPT
 import com.kenwang.kenapps.extensions.toGarbageTruckList
 import com.kenwang.kenapps.extensions.toGarbageTruckMap
 import com.kenwang.kenapps.extensions.toMapLocationList
@@ -50,9 +46,6 @@ import com.kenwang.kenapps.extensions.toTextToSpeech
 import com.kenwang.kenapps.extensions.toTvProgramList
 import com.kenwang.kenapps.ui.Screens
 import com.kenwang.kenapps.ui.armrecyclertool.armrecyclerlist.ArmRecyclerListScreen
-import com.kenwang.kenapps.ui.cctvtool.cctvlist.CctvListScreen
-import com.kenwang.kenapps.ui.cctvtool.cctvmap.CctvMapScreen
-import com.kenwang.kenapps.ui.chatgpt.ChatGPTScreen
 import com.kenwang.kenapps.ui.garbagetrucktool.garbagetrucklist.GarbageTruckListScreen
 import com.kenwang.kenapps.ui.garbagetrucktool.garbagetruckmap.GarbageTruckMapScreen
 import com.kenwang.kenapps.ui.maplocation.maplocationlist.MapLocationListScreen
@@ -109,12 +102,9 @@ fun AppNavHost(
         Screens.GarbageTruckMap.route-> stringResource(id = R.string.kh_garbage_truck_map_title)
         Screens.TvProgramList.route -> stringResource(id = R.string.tv_program_list_title)
         Screens.ArmRecyclerList.route -> stringResource(id = R.string.kh_arm_recycler_map_title)
-        Screens.CctvList.route,
-        Screens.CctvMap.route -> stringResource(id = R.string.kh_cctv_system_title)
         Screens.Setting.route -> stringResource(id = R.string.setting)
         Screens.MapLocationList.route,
         Screens.MapLocationMap.route -> stringResource(id = R.string.map_location_title)
-        Screens.ChatGPT.route -> stringResource(id = R.string.chatgpt_title)
         Screens.TextToSpeech.route -> stringResource(id = R.string.text_to_speech_title)
         else -> stringResource(id = R.string.app_name)
     }
@@ -161,12 +151,9 @@ fun AppNavHost(
                         addGarbageTruckMapGraph(paddingValues)
                         addTvProgramListGraph(paddingValues)
                         addArmRecyclerListGraph(paddingValues)
-                        addCctvMonitorListGraph(paddingValues, navController)
-                        addCctvMonitorMapGraph(paddingValues)
                         addSettingGraph(paddingValues)
                         addMapLocationGraph(paddingValues, navController)
                         addMapLocationMapGraph(paddingValues)
-                        addChatGPTGraph(paddingValues)
                         addTextToSpeechGraph(paddingValues)
                     }
                 }
@@ -198,14 +185,8 @@ private fun NavGraphBuilder.addMainGraph(
                     MainListItem.ArmRecyclerMap -> {
                         navController.toArmRecyclerList()
                     }
-                    MainListItem.CctvList -> {
-                        navController.toCctvList()
-                    }
                     MainListItem.MapLocation -> {
                         navController.toMapLocationList()
-                    }
-                    MainListItem.ChatGPT -> {
-                        navController.toChatGPT()
                     }
                     MainListItem.TextToSpeech -> {
                         navController.toTextToSpeech()
@@ -302,41 +283,6 @@ private fun NavGraphBuilder.addArmRecyclerListGraph(
     }
 }
 
-private fun NavGraphBuilder.addCctvMonitorListGraph(
-    paddingValues: PaddingValues,
-    navController: NavController
-) {
-    composable(Screens.CctvList.route) {
-        CctvListScreen.CctvListUI(
-            paddingValues = paddingValues,
-            toCctvMap = {
-                navController.toCctvMap(it)
-            }
-        )
-    }
-}
-
-private fun NavGraphBuilder.addCctvMonitorMapGraph(
-    paddingValues: PaddingValues
-) {
-    composable(
-        route = "${Screens.CctvMap.route}/{${Screens.CctvMap.argCctvMonitor}}",
-        arguments = listOf(
-            navArgument(Screens.CctvMap.argCctvMonitor) { type = CctvMonitor.NavigationType }
-        )
-    ) {
-        val cctvMonitor = if (isVersionAboveTiramisu()) {
-            it.arguments?.getParcelable(Screens.CctvMap.argCctvMonitor, CctvMonitor::class.java) ?: CctvMonitor()
-        } else {
-            it.arguments?.getParcelable(Screens.CctvMap.argCctvMonitor) ?: CctvMonitor()
-        }
-        CctvMapScreen.CctvMapUI(
-            paddingValues = paddingValues,
-            cctvMonitor = cctvMonitor
-        )
-    }
-}
-
 private fun NavGraphBuilder.addSettingGraph(
     paddingValues: PaddingValues
 ) {
@@ -382,14 +328,6 @@ private fun NavGraphBuilder.addMapLocationMapGraph(
             targetLongitude = longitude?.toDouble(),
             targetLatitude = latitude?.toDouble()
         )
-    }
-}
-
-private fun NavGraphBuilder.addChatGPTGraph(
-    paddingValues: PaddingValues
-) {
-    composable(Screens.ChatGPT.route) {
-        ChatGPTScreen.ChatGPTUI(paddingValues = paddingValues)
     }
 }
 

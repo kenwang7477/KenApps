@@ -7,15 +7,6 @@ import com.kenwang.kenapps.data.repository.armrecycler.ArmRecyclerClient
 import com.kenwang.kenapps.data.repository.armrecycler.ArmRecyclerLocalDataSource
 import com.kenwang.kenapps.data.repository.armrecycler.ArmRecyclerRepository
 import com.kenwang.kenapps.data.repository.armrecycler.ArmRecyclerServerDataSource
-import com.kenwang.kenapps.data.repository.cctvlist.CctvListClient
-import com.kenwang.kenapps.data.repository.cctvlist.CctvListLocalDataSource
-import com.kenwang.kenapps.data.repository.cctvlist.CctvListRepository
-import com.kenwang.kenapps.data.repository.cctvlist.CctvListServerDataSource
-import com.kenwang.kenapps.data.repository.chatgpt.ChatGPTClient
-import com.kenwang.kenapps.data.repository.chatgpt.ChatGPTMessageLocalDataSource
-import com.kenwang.kenapps.data.repository.chatgpt.ChatGPTMessageRepository
-import com.kenwang.kenapps.data.repository.chatgpt.ChatGPTRepository
-import com.kenwang.kenapps.data.repository.chatgpt.ChatGPTServerDataSource
 import com.kenwang.kenapps.data.repository.garbagetruck.GarbageTruckClient
 import com.kenwang.kenapps.data.repository.garbagetruck.GarbageTruckLocalDataSource
 import com.kenwang.kenapps.data.repository.garbagetruck.GarbageTruckRepository
@@ -74,15 +65,6 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideCctvListRepository(
-        cctvListClient: CctvListClient
-    ) = CctvListRepository(
-        CctvListServerDataSource(cctvListClient),
-        CctvListLocalDataSource()
-    )
-
-    @Provides
-    @Singleton
     fun provideSystemPreferenceRepository(
         @ApplicationContext context: Context
     ): SystemPreferenceRepository = SystemPreferenceRepository(SystemPreferenceLocalDataStore(context))
@@ -97,14 +79,4 @@ object RepositoryModule {
             MapLocationMapper()
         )
     )
-
-    @Provides
-    @Singleton
-    fun provideChatGPTRepository(
-        chatGPTClient: ChatGPTClient
-    ) = ChatGPTRepository(ChatGPTServerDataSource(chatGPTClient))
-
-    @Provides
-    @Singleton
-    fun provideChatGPTMessageRepository() = ChatGPTMessageRepository(ChatGPTMessageLocalDataSource())
 }

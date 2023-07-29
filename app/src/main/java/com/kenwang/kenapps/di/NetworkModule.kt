@@ -5,10 +5,6 @@ import com.google.gson.GsonBuilder
 import com.kenwang.kenapps.data.repository.armrecycler.ArmRecyclerClient
 import com.kenwang.kenapps.data.repository.armrecycler.ArmRecyclerMapper
 import com.kenwang.kenapps.data.repository.armrecycler.ArmRecyclerService
-import com.kenwang.kenapps.data.repository.cctvlist.CctvListClient
-import com.kenwang.kenapps.data.repository.cctvlist.CctvListService
-import com.kenwang.kenapps.data.repository.chatgpt.ChatGPTClient
-import com.kenwang.kenapps.data.repository.chatgpt.ChatGPTService
 import com.kenwang.kenapps.data.repository.garbagetruck.GarbageTruckClient
 import com.kenwang.kenapps.data.repository.garbagetruck.GarbageTruckMapper
 import com.kenwang.kenapps.data.repository.garbagetruck.GarbageTruckService
@@ -101,20 +97,6 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideCctvListService(
-        okHttpClient: OkHttpClient,
-        gson: Gson
-    ) = govOpenDataRetrofit<CctvListService>(okHttpClient = okHttpClient, gson = gson)
-
-    @Provides
-    @Singleton
-    fun provideCctvListClient(
-        cctvListService: CctvListService,
-        gson: Gson
-    ) = CctvListClient(cctvListService = cctvListService, gson = gson)
-
-    @Provides
-    @Singleton
     fun provideOkHttpClient(): OkHttpClient {
 //        val interceptor = HttpLoggingInterceptor().apply {
 //            level = if (BuildConfig.DEBUG) {
@@ -126,24 +108,6 @@ object NetworkModule {
 //        return OkHttpClient.Builder().addInterceptor(interceptor).build()
         return OkHttpClient.Builder().build()
     }
-
-    @Provides
-    @Singleton
-    fun provideChatGPTService(
-        okHttpClient: OkHttpClient,
-        gson: Gson
-    ) = Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .baseUrl("https://api.openai.com/")
-            .client(okHttpClient)
-            .build()
-            .create(ChatGPTService::class.java)
-
-    @Provides
-    @Singleton
-    fun provideChatGPTClient(
-        chatGPTService: ChatGPTService
-    ) = ChatGPTClient(chatGPTService = chatGPTService)
 
     private inline fun <reified T: Any> govOpenDataRetrofit(
         okHttpClient: OkHttpClient,

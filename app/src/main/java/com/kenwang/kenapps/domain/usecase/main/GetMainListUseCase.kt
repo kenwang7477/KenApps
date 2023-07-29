@@ -11,9 +11,7 @@ class GetMainListUseCase @Inject constructor() {
             MainListItem.GarbageTruckMap,
             MainListItem.TvProgramList,
             MainListItem.ArmRecyclerMap,
-            MainListItem.CctvList,
             MainListItem.MapLocation,
-//            MainListItem.ChatGPT,
             MainListItem.TextToSpeech
         )
         emit(Result.Success(items))
@@ -29,8 +27,6 @@ enum class MainListItem {
     GarbageTruckMap,
     TvProgramList,
     ArmRecyclerMap,
-    CctvList,
     MapLocation,
-    ChatGPT,
     TextToSpeech
 }

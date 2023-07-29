@@ -3,7 +3,6 @@ package com.kenwang.kenapps.extensions
 import android.net.Uri
 import androidx.navigation.NavController
 import com.google.gson.Gson
-import com.kenwang.kenapps.data.model.CctvMonitor
 import com.kenwang.kenapps.data.model.ParkingSpace
 import com.kenwang.kenapps.data.model.GarbageTruck
 import com.kenwang.kenapps.ui.Screens
@@ -28,13 +27,6 @@ fun NavController.toTvProgramList() = navigate(Screens.TvProgramList.route)
 
 fun NavController.toArmRecyclerList() = navigate(Screens.ArmRecyclerList.route)
 
-fun NavController.toCctvList() = navigate(Screens.CctvList.route)
-
-fun NavController.toCctvMap(cctvMonitor: CctvMonitor) {
-    val cctv = Gson().toJson(cctvMonitor)
-    navigate("${Screens.CctvMap.route}/$cctv")
-}
-
 fun NavController.toSetting() {
     navigate(Screens.Setting.route)
 }
@@ -51,7 +43,5 @@ fun NavController.toMapLocationMap(
         navigate("${Screens.MapLocationMap.route}?${Screens.MapLocationMap.argLongitude}=$longitude&${Screens.MapLocationMap.argLatitude}=$latitude")
     }
 }
-
-fun NavController.toChatGPT() = navigate(Screens.ChatGPT.route)
 
 fun NavController.toTextToSpeech() = navigate(Screens.TextToSpeech.route)

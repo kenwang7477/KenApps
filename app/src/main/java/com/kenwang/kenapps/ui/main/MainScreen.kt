@@ -90,14 +90,8 @@ object MainScreen {
                     MainListItem.ArmRecyclerMap -> {
                         stringResource(id = R.string.kh_arm_recycler_map_title)
                     }
-                    MainListItem.CctvList -> {
-                        stringResource(id = R.string.kh_cctv_system_title)
-                    }
                     MainListItem.MapLocation -> {
                         stringResource(id = R.string.map_location_title)
-                    }
-                    MainListItem.ChatGPT -> {
-                        stringResource(id = R.string.chatgpt_title)
                     }
                     MainListItem.TextToSpeech -> {
                         stringResource(id = R.string.text_to_speech_title)
