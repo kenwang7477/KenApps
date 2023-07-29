@@ -161,7 +161,8 @@ object ParkingListScreen {
             border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.onBackground),
             modifier = Modifier
                 .padding(5.dp)
-                .clickable(onClick = onClick)) {
+//                .clickable(onClick = onClick)
+        ) {
             Column(
                 Modifier
                     .fillMaxWidth()
@@ -171,6 +172,7 @@ object ParkingListScreen {
                 Text(text = "${stringResource(id = R.string.type)}:${parkingSpace.type.cleanLineBreak()}")
                 Text(text = "${stringResource(id = R.string.name)}:${parkingSpace.name.cleanLineBreak()}")
                 Text(text = "${stringResource(id = R.string.charge)}:${parkingSpace.charges.cleanLineBreak()}")
+                Text(text = "${stringResource(id = R.string.address)}:${parkingSpace.address.cleanLineBreak()}")
                 Text(text = "${stringResource(id = R.string.contact_information)}:${parkingSpace.information.cleanLineBreak()}")
             }
         }

@@ -1,6 +1,5 @@
 package com.kenwang.kenapps.data.repository.armrecycler
 
-import com.google.gson.Gson
 import com.kenwang.kenapps.data.model.ArmRecycler
 import com.kenwang.kenapps.data.model.ArmRecyclerBean
 import com.kenwang.kenapps.data.repository.base.APIClientBase
@@ -8,24 +7,12 @@ import com.kenwang.kenapps.data.repository.base.APIClientBaseImpl
 
 class ArmRecyclerClient(
     private val armRecyclerService: ArmRecyclerService,
-    private val armRecyclerMapper: ArmRecyclerMapper,
-    private val gson: Gson
+    private val armRecyclerMapper: ArmRecyclerMapper
 ) : APIClientBase by APIClientBaseImpl() {
 
     suspend fun getArmRecyclerList(): List<ArmRecycler> {
-        val response = checkAPIResponse { armRecyclerService.getArmRecyclerList() }
-        return response.body()?.mapNotNull {
-            try {
-                val bean = gson.fromJson(it, ArmRecyclerBean::class.java)
-                if (bean.address.isBlank()) {
-                    null
-                } else {
-                    armRecyclerMapper.toArmRecycler(bean)
-                }
-            } catch (e: Exception) {
-                null
-            }
-        } ?: emptyList()
+        val result = armRecyclerService.getArmRecyclerList()
+        return result.getOrNull()?.map { armRecyclerMapper.toArmRecycler(it) } ?: emptyList()
     }
 }
 

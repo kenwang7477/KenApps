@@ -5,6 +5,8 @@ import android.os.Parcelable
 import androidx.navigation.NavType
 import com.google.gson.Gson
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.Json
 
 @Parcelize
 data class GarbageTruck(
@@ -17,12 +19,21 @@ data class GarbageTruck(
 ): Parcelable {
 
     object NavigationType : NavType<GarbageTruck>(isNullableAllowed = false) {
+
+        @OptIn(ExperimentalSerializationApi::class)
+        private val json = Json {
+            isLenient = true
+            explicitNulls = true
+            ignoreUnknownKeys = true
+            encodeDefaults = true
+        }
+
         override fun get(bundle: Bundle, key: String): GarbageTruck? {
             return bundle.getParcelable(key)
         }
 
         override fun parseValue(value: String): GarbageTruck {
-            return Gson().fromJson(value, GarbageTruck::class.java)
+            return json.decodeFromString(value)
         }
 
         override fun put(bundle: Bundle, key: String, value: GarbageTruck) {

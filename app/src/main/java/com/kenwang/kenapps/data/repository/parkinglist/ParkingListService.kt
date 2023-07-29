@@ -1,12 +1,18 @@
 package com.kenwang.kenapps.data.repository.parkinglist
 
-import com.google.gson.JsonArray
-import retrofit2.Response
-import retrofit2.http.GET
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+import kotlinx.serialization.json.JsonArray
 
-interface ParkingListService {
+class ParkingListService(private val httpClient: HttpClient) {
 
     // https://data.gov.tw/dataset/46944
-    @GET("dq_download_json.php?nid=46944&md5_url=b25bf7a2fc1f634231115a7195a2a3ed")
-    suspend fun getParkingList(): Response<JsonArray>
+    suspend fun getParkingList(): Result<JsonArray> {
+        return runCatching {
+            httpClient
+                .get("dq_download_json.php?nid=46944&md5_url=25c99af1dc44fe2c6be61b3c79a006bd")
+                .body()
+        }
+    }
 }

@@ -68,8 +68,10 @@ androidx-navigation-testing = { group = "androidx.navigation", name = "navigatio
 io-ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
 io-ktor-client-android = { group = "io.ktor", name = "ktor-client-android", version.ref = "ktor" }
 io-ktor-client-serialization = { group = "io.ktor", name = "ktor-client-serialization", version.ref = "ktor" }
+io-ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }
 io-ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor" }
 io-ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
+io-ktor-serialization-ktolin-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

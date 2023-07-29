@@ -10,6 +10,8 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Provider
@@ -30,33 +32,30 @@ class GarbageTruckListViewModel @Inject constructor(
     }
 
     fun getTrucks(currentLatLng: LatLng?, forceUpdate: Boolean = false) {
-        viewModelScope.launch {
-            _viewState.value = GarbageTruckViewState.Loading
-
-            getGarbageTruckListUseCase.get()
-                .apply {
-                    this.currentLatLng = currentLatLng
-                    this.forceUpdate = forceUpdate
-                }
-                .invoke()
-                .collect { result ->
-                    when (result) {
-                        is GetGarbageTruckListUseCase.Result.Success -> {
-                            _viewState.emit(
-                                GarbageTruckViewState.Success(result.list.toImmutableList())
-                            )
-                        }
-                        is GetGarbageTruckListUseCase.Result.Error -> {
-                            _viewState.emit(
-                                GarbageTruckViewState.Error(result.exception.errorMessage)
-                            )
-                        }
-                        is GetGarbageTruckListUseCase.Result.Empty -> {
-                            _viewState.emit(GarbageTruckViewState.Empty)
-                        }
+        getGarbageTruckListUseCase.get()
+            .apply {
+                this.currentLatLng = currentLatLng
+                this.forceUpdate = forceUpdate
+            }
+            .invoke()
+            .onEach { result ->
+                when (result) {
+                    is GetGarbageTruckListUseCase.Result.Success -> {
+                        _viewState.emit(
+                            GarbageTruckViewState.Success(result.list.toImmutableList())
+                        )
+                    }
+                    is GetGarbageTruckListUseCase.Result.Error -> {
+                        _viewState.emit(
+                            GarbageTruckViewState.Error(result.exception.errorMessage)
+                        )
+                    }
+                    is GetGarbageTruckListUseCase.Result.Empty -> {
+                        _viewState.emit(GarbageTruckViewState.Empty)
                     }
                 }
-        }
+            }
+            .launchIn(viewModelScope)
     }
 
     fun search(title: String = "") {

@@ -1,26 +1,20 @@
 package com.kenwang.kenapps.data.repository.garbagetruck
 
-import com.google.gson.Gson
 import com.kenwang.kenapps.data.model.GarbageTruck
 import com.kenwang.kenapps.data.repository.base.APIClientBase
 import com.kenwang.kenapps.data.repository.base.APIClientBaseImpl
 
 class GarbageTruckClient(
     private val garbageTruckService: GarbageTruckService,
-    private val garbageTruckMapper: GarbageTruckMapper,
-    private val gson: Gson
+    private val garbageTruckMapper: GarbageTruckMapper
 ) : APIClientBase by APIClientBaseImpl() {
 
     suspend fun getTrucks(): List<GarbageTruck> {
-        val response = checkAPIResponse { garbageTruckService.getTrucks() }
-        return response.body()?.getAsJsonArray("data")?.mapNotNull {
-            try {
-                val bean = gson.fromJson(it, GarbageTruckBean::class.java)
-                garbageTruckMapper.toGarbageTruck(bean)
-            } catch (e: Exception) {
-                null
-            }
-        } ?: emptyList()
+        val result = garbageTruckService.getTrucks()
+        return result.getOrNull()
+            ?.trucks
+            ?.map { garbageTruckMapper.toGarbageTruck(it) }
+            ?: emptyList()
     }
 }
 

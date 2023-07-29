@@ -1,18 +1,21 @@
 package com.kenwang.kenapps.data.repository.garbagetruck
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class GarbageTruckResponse(
-    @SerializedName("contentType") val contentType: String,
-    @SerializedName("isImage") val isImage: Boolean,
-    @SerializedName("data") val trucks: List<GarbageTruckBean>
+    @SerialName("contentType") val contentType: String,
+    @SerialName("isImage") val isImage: Boolean,
+    @SerialName("data") val trucks: List<GarbageTruckBean>
 )
 
+@Serializable
 data class GarbageTruckBean(
-    @SerializedName("linid") val linId: String?,
-    @SerializedName("car") val car: String?,
-    @SerializedName("time") val time: String?,
-    @SerializedName("location") val location: String?,
-    @SerializedName("x") val longitude: Double?,
-    @SerializedName("y") val latitude: Double?
+    @SerialName("linid") val linId: String?,
+    @SerialName("car") val car: String?,
+    @SerialName("time") val time: String?,
+    @SerialName("location") val location: String?,
+    @SerialName("x") val longitude: Double?,
+    @SerialName("y") val latitude: Double?
 )

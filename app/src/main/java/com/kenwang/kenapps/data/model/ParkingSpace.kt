@@ -6,19 +6,20 @@ import androidx.navigation.NavType
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class ParkingSpaceBean(
-    @SerializedName("行政區") val area: String = "",
-    @SerializedName("型式") val type: String = "",
-    @SerializedName("場名") val name: String = "",
-    @SerializedName("位置") val address: String = "",
-    @SerializedName("經度") val longitude: Double = 0.0,
-    @SerializedName("緯度") val latitude: Double = 0.0,
-    @SerializedName("大型車") val largeCarCount: Int = 0,
-    @SerializedName("小型車") val normalCarCount: Int = 0,
-    @SerializedName("機慢車") val bicycleCount: Int = 0,
-    @SerializedName("收費標準") val charges: String = "",
-    @SerializedName("管理者資訊") val information: String = ""
+    @SerialName("行政區") val area: String = "",
+    @SerialName("型式") val type: String = "",
+    @SerialName("場名") val name: String = "",
+    @SerialName("位置") val address: String = "",
+    @SerialName("大車") val largeCarCount: Int = 0,
+    @SerialName("小車") val normalCarCount: Int = 0,
+    @SerialName("機車") val bicycleCount: Int = 0,
+    @SerialName("收費標準") val charges: String = "",
+    @SerialName("管理業者") val information: String = ""
 )
 
 @Parcelize
@@ -37,6 +38,7 @@ data class ParkingSpace(
 ) : Parcelable {
 
     object NavigationType : NavType<ParkingSpace>(isNullableAllowed = false) {
+
         override fun get(bundle: Bundle, key: String): ParkingSpace? {
             return bundle.getParcelable(key)
         }

@@ -1,27 +1,29 @@
 package com.kenwang.kenapps.data.repository.parkinglist
 
-import com.google.gson.Gson
 import com.kenwang.kenapps.data.model.ParkingSpace
 import com.kenwang.kenapps.data.model.ParkingSpaceBean
 import com.kenwang.kenapps.data.repository.base.APIClientBase
 import com.kenwang.kenapps.data.repository.base.APIClientBaseImpl
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromJsonElement
 
 class ParkingListClient(
     private val parkingListService: ParkingListService,
     private val parkingSpaceMapper: ParkingSpaceMapper,
-    private val gson: Gson
+    private val json: Json
 ) : APIClientBase by APIClientBaseImpl() {
 
     suspend fun getParkingList(): List<ParkingSpace> {
-        val response = checkAPIResponse { parkingListService.getParkingList() }
-        return response.body()?.mapNotNull {
+        val result = parkingListService.getParkingList()
+        val jsonArray = result.getOrNull() ?: return emptyList()
+        return jsonArray.mapNotNull {
             try {
-                val bean = gson.fromJson(it, ParkingSpaceBean::class.java)
+                val bean = json.decodeFromJsonElement<ParkingSpaceBean>(it)
                 parkingSpaceMapper.toParkingSpace(bean)
-            } catch(e: Exception) {
+            } catch (e: Exception) {
                 null
             }
-        } ?: emptyList()
+        }
     }
 }
 
@@ -33,8 +35,6 @@ class ParkingSpaceMapper {
             type = parkingSpaceBean.type,
             name = parkingSpaceBean.name,
             address = parkingSpaceBean.address,
-            longitude = parkingSpaceBean.longitude,
-            latitude = parkingSpaceBean.latitude,
             largeCarCount = parkingSpaceBean.largeCarCount,
             normalCarCount = parkingSpaceBean.normalCarCount,
             bicycleCount = parkingSpaceBean.bicycleCount,

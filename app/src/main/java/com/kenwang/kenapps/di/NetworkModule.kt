@@ -19,6 +19,17 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.plugins.logging.DEFAULT
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -28,6 +39,14 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
+    @OptIn(ExperimentalSerializationApi::class)
+    private val json = Json {
+        isLenient = true
+        explicitNulls = true
+        ignoreUnknownKeys = true
+        encodeDefaults = true
+    }
+
     @Provides
     @Singleton
     fun provideGson(): Gson = GsonBuilder()
@@ -36,64 +55,63 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideParkingListService(
-        okHttpClient: OkHttpClient,
-        gson: Gson
-    ) = govOpenDataRetrofit<ParkingListService>(okHttpClient, gson)
+    fun provideParkingListService(): ParkingListService {
+        return ParkingListService(httpClient = getOpenDataHttpClient())
+    }
 
     @Provides
     @Singleton
     fun provideParkingListClient(
-        parkingListService: ParkingListService,
-        gson: Gson
-    ) = ParkingListClient(parkingListService, ParkingSpaceMapper(), gson)
+        parkingListService: ParkingListService
+    ) = ParkingListClient(
+        parkingListService = parkingListService,
+        parkingSpaceMapper = ParkingSpaceMapper(),
+        json = json
+    )
+
+    @Provides
+    @Singleton
+    fun provideGarbageTruckService(): GarbageTruckService {
+        return GarbageTruckService(httpClient = getKcgHttpClient())
+    }
 
     @Provides
     @Singleton
     fun provideGarbageTruckClient(
-        clientService: GarbageTruckService,
-        gson: Gson
-    ) = GarbageTruckClient(clientService, GarbageTruckMapper(), gson)
+        clientService: GarbageTruckService
+    ) = GarbageTruckClient(
+        garbageTruckService = clientService,
+        garbageTruckMapper = GarbageTruckMapper()
+    )
 
     @Provides
     @Singleton
-    fun provideGarbageTruckService(
-        okHttpClient: OkHttpClient,
-        gson: Gson
-    ) = Retrofit.Builder()
-        .addConverterFactory(GsonConverterFactory.create(gson))
-        .baseUrl("https://api.kcg.gov.tw/")
-        .client(okHttpClient)
-        .build()
-        .create(GarbageTruckService::class.java)
-
-    @Provides
-    @Singleton
-    fun provideArmRecyclerService(
-        okHttpClient: OkHttpClient,
-        gson: Gson
-    ) = govOpenDataRetrofit<ArmRecyclerService>(okHttpClient, gson)
+    fun provideArmRecyclerService(): ArmRecyclerService {
+        return ArmRecyclerService(httpClient = getOpenDataHttpClient())
+    }
 
     @Provides
     @Singleton
     fun provideArmRecyclerClient(
         armRecyclerService: ArmRecyclerService,
-        gson: Gson
-    ) = ArmRecyclerClient(armRecyclerService, ArmRecyclerMapper(), gson)
+    ) = ArmRecyclerClient(
+        armRecyclerService = armRecyclerService,
+        armRecyclerMapper = ArmRecyclerMapper()
+    )
 
     @Provides
     @Singleton
     fun provideCctvListService(
         okHttpClient: OkHttpClient,
         gson: Gson
-    ) = govOpenDataRetrofit<CctvListService>(okHttpClient, gson)
+    ) = govOpenDataRetrofit<CctvListService>(okHttpClient = okHttpClient, gson = gson)
 
     @Provides
     @Singleton
     fun provideCctvListClient(
         cctvListService: CctvListService,
         gson: Gson
-    ) = CctvListClient(cctvListService, gson)
+    ) = CctvListClient(cctvListService = cctvListService, gson = gson)
 
     @Provides
     @Singleton
@@ -125,7 +143,7 @@ object NetworkModule {
     @Singleton
     fun provideChatGPTClient(
         chatGPTService: ChatGPTService
-    ) = ChatGPTClient(chatGPTService)
+    ) = ChatGPTClient(chatGPTService = chatGPTService)
 
     private inline fun <reified T: Any> govOpenDataRetrofit(
         okHttpClient: OkHttpClient,
@@ -136,4 +154,34 @@ object NetworkModule {
         .client(okHttpClient)
         .build()
         .create(T::class.java)
+
+    private fun getOpenDataHttpClient(): HttpClient {
+        return HttpClient(OkHttp) {
+            defaultRequest {
+                url("https://quality.data.gov.tw/")
+            }
+            Logging {
+                logger = Logger.DEFAULT
+                level = LogLevel.BODY
+            }
+            install(ContentNegotiation) {
+                json(json = json)
+            }
+        }
+    }
+
+    private fun getKcgHttpClient(): HttpClient {
+        return HttpClient(OkHttp) {
+            defaultRequest {
+                url("https://api.kcg.gov.tw/")
+            }
+            Logging {
+                logger = Logger.DEFAULT
+                level = LogLevel.BODY
+            }
+            install(ContentNegotiation) {
+                json(json = json)
+            }
+        }
+    }
 }

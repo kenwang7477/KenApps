@@ -33,6 +33,7 @@
     <string name="type">Type</string>
     <string name="name">Name</string>
     <string name="charge">Charge</string>
+    <string name="address">Address</string>
     <string name="contact_information">Contact Information</string>
     <string name="website">Website</string>
     <string name="title">Title</string>

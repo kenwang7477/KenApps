@@ -1,12 +1,18 @@
 package com.kenwang.kenapps.data.repository.armrecycler
 
-import com.google.gson.JsonArray
-import retrofit2.Response
-import retrofit2.http.GET
+import com.kenwang.kenapps.data.model.ArmRecyclerBean
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.get
 
-interface ArmRecyclerService {
+class ArmRecyclerService(private val httpClient: HttpClient) {
 
     // https://data.gov.tw/dataset/86420
-    @GET("dq_download_json.php?nid=86420&md5_url=7ddfe00e6779090ba10ec9e10b1d6aea")
-    suspend fun getArmRecyclerList(): Response<JsonArray>
+    suspend fun getArmRecyclerList(): Result<List<ArmRecyclerBean>> {
+        return runCatching {
+            httpClient
+                .get("dq_download_json.php?nid=86420&md5_url=7ddfe00e6779090ba10ec9e10b1d6aea")
+                .body()
+        }
+    }
 }

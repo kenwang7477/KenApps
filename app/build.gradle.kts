@@ -172,6 +172,8 @@ dependencies {
     implementation(libs.io.ktor.client.core)
     implementation(libs.io.ktor.client.android)
     implementation(libs.io.ktor.client.serialization)
+    implementation(libs.io.ktor.client.okhttp)
     implementation(libs.io.ktor.client.logging)
     implementation(libs.io.ktor.client.content.negotiation)
+    implementation(libs.io.ktor.serialization.ktolin.json)
 }
