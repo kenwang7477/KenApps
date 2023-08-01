@@ -112,7 +112,6 @@ dependencies {
     implementation(libs.androidx.datastore)
     implementation(libs.io.coil.compose)
     implementation(libs.kotlinx.serialization.json)
-    implementation(libs.retrofit2.kotlinx.serialization.converter)
 
     // Compose
     val composeBom = platform(libs.androidx.compose.bom)
@@ -163,10 +162,6 @@ dependencies {
     implementation(libs.maps.compose)
     implementation(libs.play.services.maps)
     implementation(libs.android.maps.utils)
-
-    // retrofit
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.gson)
 
     // ktor
     implementation(libs.io.ktor.client.core)

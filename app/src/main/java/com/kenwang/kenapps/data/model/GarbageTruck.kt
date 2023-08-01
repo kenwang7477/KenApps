@@ -3,12 +3,13 @@ package com.kenwang.kenapps.data.model
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.navigation.NavType
-import com.google.gson.Gson
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
 @Parcelize
+@Serializable
 data class GarbageTruck(
     val linId: String = "",
     val car: String = "",

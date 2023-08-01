@@ -6,7 +6,6 @@ firebaseBom = "32.2.0"
 androidxLifecycle = "2.6.1"
 hilt = "2.46.1"
 room = "2.5.2"
-retrofit = "2.9.0"
 ktor = "2.3.1"
 
 [libraries]
@@ -34,10 +33,6 @@ androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-te
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 firebase-perf = { group = "com.google.firebase", name = "firebase-perf" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
-
-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
-retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
-retrofit2-kotlinx-serialization-converter = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version = "1.0.0" }
 
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version = "0.23.1" }
 

@@ -1,7 +1,5 @@
 package com.kenwang.kenapps.di
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.kenwang.kenapps.data.repository.armrecycler.ArmRecyclerClient
 import com.kenwang.kenapps.data.repository.armrecycler.ArmRecyclerMapper
 import com.kenwang.kenapps.data.repository.armrecycler.ArmRecyclerService
@@ -27,8 +25,6 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -42,12 +38,6 @@ object NetworkModule {
         ignoreUnknownKeys = true
         encodeDefaults = true
     }
-
-    @Provides
-    @Singleton
-    fun provideGson(): Gson = GsonBuilder()
-        .setLenient()
-        .create()
 
     @Provides
     @Singleton
@@ -108,16 +98,6 @@ object NetworkModule {
 //        return OkHttpClient.Builder().addInterceptor(interceptor).build()
         return OkHttpClient.Builder().build()
     }
-
-    private inline fun <reified T: Any> govOpenDataRetrofit(
-        okHttpClient: OkHttpClient,
-        gson: Gson
-    ) = Retrofit.Builder()
-        .addConverterFactory(GsonConverterFactory.create(gson))
-        .baseUrl("https://quality.data.gov.tw/")
-        .client(okHttpClient)
-        .build()
-        .create(T::class.java)
 
     private fun getOpenDataHttpClient(): HttpClient {
         return HttpClient(OkHttp) {

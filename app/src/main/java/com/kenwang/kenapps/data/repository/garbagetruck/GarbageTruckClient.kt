@@ -7,7 +7,7 @@ import com.kenwang.kenapps.data.repository.base.APIClientBaseImpl
 class GarbageTruckClient(
     private val garbageTruckService: GarbageTruckService,
     private val garbageTruckMapper: GarbageTruckMapper
-) : APIClientBase by APIClientBaseImpl() {
+) {
 
     suspend fun getTrucks(): List<GarbageTruck> {
         val result = garbageTruckService.getTrucks()

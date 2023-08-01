@@ -2,24 +2,34 @@ package com.kenwang.kenapps.extensions
 
 import android.net.Uri
 import androidx.navigation.NavController
-import com.google.gson.Gson
 import com.kenwang.kenapps.data.model.ParkingSpace
 import com.kenwang.kenapps.data.model.GarbageTruck
 import com.kenwang.kenapps.ui.Screens
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+
+@OptIn(ExperimentalSerializationApi::class)
+private val json = Json {
+    isLenient = true
+    explicitNulls = true
+    ignoreUnknownKeys = true
+    encodeDefaults = true
+}
 
 fun NavController.toParkingList() = navigate(Screens.ParkingList.route)
 
 fun NavController.toParkingMap(
     parkingSpace: ParkingSpace
 ) {
-    val parkingJson = Uri.encode(Gson().toJson(parkingSpace))
+    val parkingJson = Uri.encode(json.encodeToString(parkingSpace))
     navigate("${Screens.ParkingMap.route}/$parkingJson")
 }
 
 fun NavController.toGarbageTruckList() = navigate(Screens.GarbageTruckList.route)
 
 fun NavController.toGarbageTruckMap(garbageTruck: GarbageTruck) {
-    val truckJson = Gson().toJson(garbageTruck)
+    val truckJson = json.encodeToString(garbageTruck)
     navigate("${Screens.GarbageTruckMap.route}/$truckJson")
 }
 
