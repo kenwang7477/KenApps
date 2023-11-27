@@ -83,7 +83,7 @@ object TvProgramListScreen {
 
     @Composable
     fun ProgramSelector(viewModel: TvProgramListViewModel) {
-        val menus = TvProgramRepository.TvProgramEnum.values().map { it.title }
+        val menus = TvProgramRepository.TvProgramEnum.entries.map { it.title }
         var expanded by remember { mutableStateOf(false) }
         var selectedText by remember { mutableStateOf(menus[0]) }
         var textFieldSize by remember { mutableStateOf(Size.Zero) }
