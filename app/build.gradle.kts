@@ -9,12 +9,11 @@ plugins {
     alias(libs.plugins.gms)
     alias(libs.plugins.android.secrets.plugin)
     id("kotlin-parcelize")
-    kotlin("kapt")
 }
 
 android {
     namespace = "com.kenwang.kenapps"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.kenwang.kenapps"
@@ -29,8 +28,7 @@ android {
             useSupportLibrary = true
         }
 
-        //TODO: error in AGP 7.3.1, wait for AGP update to fix
-//        resourceConfigurations.addAll(listOf("en", "zh-Hant-TW"))
+        resourceConfigurations.addAll(listOf("en", "zh-rTW"))
 
         /**
          * To fix
@@ -68,7 +66,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.0"
+        kotlinCompilerExtensionVersion = "1.5.6"
     }
     packaging {
         resources.excludes.add("META-INF/AL2.0")
@@ -93,10 +91,6 @@ android {
             }
         }
     }
-}
-
-kapt {
-    correctErrorTypes = true
 }
 
 dependencies {
@@ -154,14 +148,14 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
     testImplementation(libs.hilt.android.testing)
     androidTestImplementation(libs.hilt.android.testing)
-    kapt(libs.hilt.android.compiler)
-    kaptTest(libs.hilt.android.compiler)
-    kaptAndroidTest(libs.hilt.android.compiler)
+    ksp(libs.hilt.android.compiler)
+    kspTest(libs.hilt.android.compiler)
+    kspAndroidTest(libs.hilt.android.compiler)
 
     // Map
     implementation(libs.maps.compose)
     implementation(libs.play.services.maps)
-    implementation(libs.android.maps.utils)
+    implementation(libs.maps.compose.utils)
 
     // ktor
     implementation(libs.io.ktor.client.core)
@@ -169,6 +163,7 @@ dependencies {
     implementation(libs.io.ktor.client.serialization)
     implementation(libs.io.ktor.client.okhttp)
     implementation(libs.io.ktor.client.logging)
+    implementation(libs.io.ktor.client.auth)
     implementation(libs.io.ktor.client.content.negotiation)
     implementation(libs.io.ktor.serialization.ktolin.json)
 }
