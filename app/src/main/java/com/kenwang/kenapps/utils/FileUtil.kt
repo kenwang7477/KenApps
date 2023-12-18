@@ -42,7 +42,7 @@ object FileUtil {
         val uri = context.contentResolver.insert(contentUri, contentValues) ?: return null
         var outputStream: OutputStream? = null
         return try {
-            outputStream = context.contentResolver.openOutputStream(uri)
+            outputStream = context.contentResolver.openOutputStream(uri) ?: return null
             bitmap.compress(format, 100, outputStream)
             contentValues.clear()
             contentValues.put(MediaStore.MediaColumns.IS_PENDING, 0)

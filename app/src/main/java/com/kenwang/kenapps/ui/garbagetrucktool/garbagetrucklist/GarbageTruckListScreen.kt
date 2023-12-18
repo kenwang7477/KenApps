@@ -54,9 +54,7 @@ import com.kenwang.kenapps.ui.commonscreen.LoadingView
 import com.kenwang.kenapps.ui.commonscreen.ShowLocationPermissionView
 import kotlinx.collections.immutable.ImmutableList
 
-@OptIn(ExperimentalMaterial3Api::class,
-    ExperimentalLayoutApi::class
-)
+@OptIn(ExperimentalLayoutApi::class)
 object GarbageTruckListScreen {
 
     @Composable
