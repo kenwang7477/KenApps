@@ -3,10 +3,10 @@ package com.kenwang.kenapps.ui.main
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.DrawerState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
@@ -22,7 +22,6 @@ import com.kenwang.kenapps.R
 import com.kenwang.kenapps.extensions.toSetting
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainDrawer(
     drawerState: DrawerState,
@@ -35,7 +34,7 @@ fun MainDrawer(
         drawerState = drawerState,
         gesturesEnabled = gesturesEnabled,
         drawerContent = {
-            ModalDrawerSheet {
+            ModalDrawerSheet(modifier = Modifier.width(220.dp)) {
                 Column(modifier = Modifier
                     .fillMaxSize()
                     .padding(top = 48.dp, start = 10.dp)) {
@@ -52,7 +51,6 @@ fun MainDrawer(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SettingMenu(onClick: () -> Unit) {
     NavigationDrawerItem(

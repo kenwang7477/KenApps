@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.os.Parcelable
 import androidx.navigation.NavType
 import kotlinx.parcelize.Parcelize
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -35,7 +34,6 @@ data class ArmRecycler(
 
     object NavigationType : NavType<ArmRecycler>(isNullableAllowed = false) {
 
-        @OptIn(ExperimentalSerializationApi::class)
         private val json = Json {
             isLenient = true
             explicitNulls = true

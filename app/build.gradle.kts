@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.firebase.perf)
     alias(libs.plugins.gms)
     alias(libs.plugins.android.secrets.plugin)
+    alias(libs.plugins.compose.compiler)
     id("kotlin-parcelize")
 }
 
@@ -65,9 +66,6 @@ android {
     buildFeatures {
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.6"
-    }
     packaging {
         resources.excludes.add("META-INF/AL2.0")
         resources.excludes.add("META-INF/LGPL2.1")
@@ -92,6 +90,12 @@ android {
         }
     }
 }
+
+//kotlin {
+//    sourceSets.all {
+//        languageSettings.enableLanguageFeature("ExplicitBackingFields")
+//    }
+//}
 
 dependencies {
 

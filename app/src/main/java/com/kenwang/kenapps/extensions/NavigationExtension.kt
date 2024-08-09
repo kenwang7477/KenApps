@@ -5,11 +5,9 @@ import androidx.navigation.NavController
 import com.kenwang.kenapps.data.model.ParkingSpace
 import com.kenwang.kenapps.data.model.GarbageTruck
 import com.kenwang.kenapps.ui.Screens
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-@OptIn(ExperimentalSerializationApi::class)
 private val json = Json {
     isLenient = true
     explicitNulls = true

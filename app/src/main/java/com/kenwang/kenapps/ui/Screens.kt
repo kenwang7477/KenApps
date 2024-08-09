@@ -1,22 +1,22 @@
 package com.kenwang.kenapps.ui
 
 sealed class Screens(val route: String) {
-    object Main : Screens("Main")
-    object ParkingList : Screens("ParkingList")
-    object ParkingMap : Screens("ParkingMap") {
+    data object Main : Screens("Main")
+    data object ParkingList : Screens("ParkingList")
+    data object ParkingMap : Screens("ParkingMap") {
         const val argParkingSpace = "argParkingSpace"
     }
-    object GarbageTruckList : Screens("GarbageTruckList")
-    object GarbageTruckMap : Screens("GarbageTruckMap") {
+    data object GarbageTruckList : Screens("GarbageTruckList")
+    data object GarbageTruckMap : Screens("GarbageTruckMap") {
         const val argGarbageTruck = "argGarbageTruck"
     }
-    object TvProgramList : Screens("TvProgramList")
-    object ArmRecyclerList : Screens("ArmRecyclerList")
-    object Setting : Screens("Setting")
-    object MapLocationList : Screens("MapLocationList")
-    object MapLocationMap : Screens("MapLocationMap") {
+    data object TvProgramList : Screens("TvProgramList")
+    data object ArmRecyclerList : Screens("ArmRecyclerList")
+    data object Setting : Screens("Setting")
+    data object MapLocationList : Screens("MapLocationList")
+    data object MapLocationMap : Screens("MapLocationMap") {
         const val argLongitude = "argLongitude"
         const val argLatitude = "argLatitude"
     }
-    object TextToSpeech : Screens("TextToSpeech")
+    data object TextToSpeech : Screens("TextToSpeech")
 }

@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DrawerValue
@@ -123,8 +123,8 @@ fun AppNavHost(
                         navigationIcon = {
                             if (showBackButton) {
                                 IconButton(
-                                    onClick = { navController.popBackStack() }
-                                ) { Icon(Icons.Default.ArrowBack, "Back") }
+                                    onClick = { navController.navigateUp() }
+                                ) { Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back") }
                             } else {
                                 IconButton(
                                     modifier = Modifier.testTag("mainMenu"),
@@ -144,17 +144,26 @@ fun AppNavHost(
                 },
                 content = { paddingValues ->
                     NavHost(navController = navController, startDestination = Screens.Main.route) {
-                        addMainGraph(paddingValues, navController)
-                        addParkingListGraph(paddingValues, navController)
-                        addParkingMapGraph(paddingValues)
-                        addGarbageTruckListGraph(paddingValues, navController)
-                        addGarbageTruckMapGraph(paddingValues)
-                        addTvProgramListGraph(paddingValues)
-                        addArmRecyclerListGraph(paddingValues)
-                        addSettingGraph(paddingValues)
-                        addMapLocationGraph(paddingValues, navController)
-                        addMapLocationMapGraph(paddingValues)
-                        addTextToSpeechGraph(paddingValues)
+                        addMainGraph(paddingValues = paddingValues, navController = navController)
+                        addParkingListGraph(
+                            paddingValues = paddingValues,
+                            navController = navController
+                        )
+                        addParkingMapGraph(paddingValues = paddingValues)
+                        addGarbageTruckListGraph(
+                            paddingValues = paddingValues,
+                            navController = navController
+                        )
+                        addGarbageTruckMapGraph(paddingValues = paddingValues)
+                        addTvProgramListGraph(paddingValues = paddingValues)
+                        addArmRecyclerListGraph(paddingValues = paddingValues)
+                        addSettingGraph(paddingValues = paddingValues)
+                        addMapLocationGraph(
+                            paddingValues = paddingValues,
+                            navController = navController
+                        )
+                        addMapLocationMapGraph(paddingValues = paddingValues)
+                        addTextToSpeechGraph(paddingValues = paddingValues)
                     }
                 }
             )
