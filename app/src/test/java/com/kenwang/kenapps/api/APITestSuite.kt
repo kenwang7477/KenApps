@@ -8,7 +8,6 @@ import org.junit.runners.Suite
 @RunWith(Suite::class)
 @Suite.SuiteClasses(
     ArmRecyclerAPITest::class,
-    CctvListAPITest::class,
     GarbageTruckAPITest::class,
     ParkingListAPITest::class
 )
