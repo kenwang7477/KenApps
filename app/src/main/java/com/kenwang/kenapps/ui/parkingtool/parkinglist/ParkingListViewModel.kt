@@ -27,10 +27,7 @@ class ParkingListViewModel @Inject constructor(
             _viewState.emit(ParkingListViewState.Loading)
 
             getParkingListUseCase.get()
-                .apply {
-                    this.currentLatLng = currentLatLng
-                }
-                .invoke()
+                .invoke(currentLatLng = currentLatLng)
                 .collect { result ->
                     when (result) {
                         is GetParkingListUseCase.Result.Empty -> {
@@ -55,7 +52,7 @@ class ParkingListViewModel @Inject constructor(
     sealed class ParkingListViewState {
         data class Success(val list: ImmutableList<ParkingSpace>) : ParkingListViewState()
         data class Error(val errorMessage: String) : ParkingListViewState()
-        object Empty : ParkingListViewState()
-        object Loading : ParkingListViewState()
+        data object Empty : ParkingListViewState()
+        data object Loading : ParkingListViewState()
     }
 }

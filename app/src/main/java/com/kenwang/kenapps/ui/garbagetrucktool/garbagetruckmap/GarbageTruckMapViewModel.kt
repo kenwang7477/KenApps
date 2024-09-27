@@ -46,10 +46,7 @@ class GarbageTruckMapViewModel @Inject constructor(
     private fun getTrucks(forceUpdate: Boolean = false) {
         viewModelScope.launch {
             getGarbageTruckListUseCase.get()
-                .apply {
-                    this.forceUpdate = forceUpdate
-                }
-                .invoke()
+                .invoke(forceUpdate = forceUpdate)
                 .collect { result ->
                 when (result) {
                     is GetGarbageTruckListUseCase.Result.Success -> {

@@ -12,9 +12,7 @@ class GetParkingListUseCase @Inject constructor(
     private val parkingListRepository: ParkingListRepository
 ) {
 
-    var currentLatLng: LatLng? = null
-
-    operator fun invoke() = flow {
+    operator fun invoke(currentLatLng: LatLng? = null) = flow {
         try {
             val parkingList = parkingListRepository.getParkingList()
             if (parkingList.isEmpty()) {

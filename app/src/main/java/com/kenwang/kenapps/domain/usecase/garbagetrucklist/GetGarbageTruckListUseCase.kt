@@ -12,10 +12,7 @@ class GetGarbageTruckListUseCase @Inject constructor(
     private val garbageTruckRepository: GarbageTruckRepository
 ) {
 
-    var currentLatLng: LatLng? = null
-    var forceUpdate: Boolean = false
-
-    operator fun invoke() = flow {
+    operator fun invoke(currentLatLng: LatLng? = null, forceUpdate: Boolean = false) = flow {
         try {
             val garbageTruckList = garbageTruckRepository.getTrucks(forceUpdate)
             if (garbageTruckList.isEmpty()) {

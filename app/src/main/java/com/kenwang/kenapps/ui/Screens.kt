@@ -1,22 +1,44 @@
 package com.kenwang.kenapps.ui
 
-sealed class Screens(val route: String) {
-    data object Main : Screens("Main")
-    data object ParkingList : Screens("ParkingList")
-    data object ParkingMap : Screens("ParkingMap") {
-        const val argParkingSpace = "argParkingSpace"
-    }
-    data object GarbageTruckList : Screens("GarbageTruckList")
-    data object GarbageTruckMap : Screens("GarbageTruckMap") {
-        const val argGarbageTruck = "argGarbageTruck"
-    }
-    data object TvProgramList : Screens("TvProgramList")
-    data object ArmRecyclerList : Screens("ArmRecyclerList")
-    data object Setting : Screens("Setting")
-    data object MapLocationList : Screens("MapLocationList")
-    data object MapLocationMap : Screens("MapLocationMap") {
-        const val argLongitude = "argLongitude"
-        const val argLatitude = "argLatitude"
-    }
-    data object TextToSpeech : Screens("TextToSpeech")
-}
+import com.kenwang.kenapps.data.model.GarbageTruck
+import com.kenwang.kenapps.data.model.ParkingSpace
+import kotlinx.serialization.Serializable
+
+@Serializable
+sealed class Screens
+
+@Serializable
+data object MainRoute : Screens()
+
+@Serializable
+data object ParkingListRoute : Screens()
+
+@Serializable
+data class ParkingMapRoute(val argParkingSpace: ParkingSpace) : Screens()
+
+@Serializable
+data object GarbageTruckListRoute : Screens()
+
+@Serializable
+data class GarbageTruckMapRoute(val argGarbageTruck: GarbageTruck) : Screens()
+
+@Serializable
+data object TvProgramListRoute : Screens()
+
+@Serializable
+data object ArmRecyclerListRoute : Screens()
+
+@Serializable
+data object SettingRoute : Screens()
+
+@Serializable
+data object MapLocationListRoute : Screens()
+
+@Serializable
+data class MapLocationMapRoute(
+    val argLongitude: String? = null,
+    val argLatitude: String? = null
+) : Screens()
+
+@Serializable
+data object TextToSpeechRoute : Screens()

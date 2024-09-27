@@ -33,11 +33,7 @@ class GarbageTruckListViewModel @Inject constructor(
 
     fun getTrucks(currentLatLng: LatLng?, forceUpdate: Boolean = false) {
         getGarbageTruckListUseCase.get()
-            .apply {
-                this.currentLatLng = currentLatLng
-                this.forceUpdate = forceUpdate
-            }
-            .invoke()
+            .invoke(currentLatLng = currentLatLng, forceUpdate = forceUpdate)
             .onEach { result ->
                 when (result) {
                     is GetGarbageTruckListUseCase.Result.Success -> {

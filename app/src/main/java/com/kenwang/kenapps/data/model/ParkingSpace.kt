@@ -1,11 +1,13 @@
 package com.kenwang.kenapps.data.model
 
+import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.navigation.NavType
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 @Serializable
@@ -52,6 +54,10 @@ data class ParkingSpace(
 
         override fun parseValue(value: String): ParkingSpace {
             return json.decodeFromString(value)
+        }
+
+        override fun serializeAsValue(value: ParkingSpace): String {
+            return Uri.encode(json.encodeToString(value))
         }
 
         override fun put(bundle: Bundle, key: String, value: ParkingSpace) {

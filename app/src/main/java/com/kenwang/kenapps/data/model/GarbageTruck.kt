@@ -1,10 +1,12 @@
 package com.kenwang.kenapps.data.model
 
+import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.navigation.NavType
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 @Parcelize
@@ -33,6 +35,10 @@ data class GarbageTruck(
 
         override fun parseValue(value: String): GarbageTruck {
             return json.decodeFromString(value)
+        }
+
+        override fun serializeAsValue(value: GarbageTruck): String {
+            return Uri.encode(json.encodeToString(value))
         }
 
         override fun put(bundle: Bundle, key: String, value: GarbageTruck) {
