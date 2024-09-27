@@ -2,22 +2,23 @@
 agp = "8.4.1"
 kotlin = "2.0.0"
 ksp = "2.0.0-1.0.21"
-androidxComposeBom = "2024.06.00"
-firebaseBom = "33.1.2"
-androidxLifecycle = "2.8.4"
-hilt = "2.51.1"
+androidxComposeBom = "2024.09.00"
+firebaseBom = "33.2.0"
+androidxLifecycle = "2.8.5"
+hilt = "2.52"
 room = "2.6.1"
-ktor = "2.3.5"
-kotlinx-serialization-json = "1.7.0"
+ktorBom = "2.3.5"
+kotlinx-serialization-json = "1.7.1"
 maps-compose = "4.3.0"
+mockk = "1.13.8"
 
 [libraries]
 androidx-core = { group = "androidx.core", name = "core-ktx", version = "1.13.1" }
 androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidxLifecycle" }
 androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
 androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
-androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version = "1.9.1" }
-androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version = "2.7.7" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version = "1.9.2" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version = "2.8.1" }
 androidx-constraintlayout-compose = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version = "1.0.1" }
 kotlinx-collections-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version = "0.3.6" }
 androidx-datastore = { group = "androidx.datastore", name = "datastore-preferences", version = "1.1.1" }
@@ -54,23 +55,24 @@ play-services-maps = { group = "com.google.android.gms", name = "play-services-m
 
 androidx-browser = { group = "androidx.browser", name = "browser", version = "1.8.0" }
 
-mockk = { group = "io.mockk", name = "mockk", version = "1.13.8" }
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version = "1.8.1" }
 truth = { group = "com.google.truth", name = "truth", version = "1.1.4" }
 robolectric = { group = "org.robolectric", name = "robolectric", version = "4.11.1" }
 androidx-test-core = { group = "androidx.test", name = "core", version = "1.6.1" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version = "1.2.1" }
 androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version = "3.6.1" }
-androidx-navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version = "2.7.7" }
+androidx-navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version = "2.8.0" }
 
-io-ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
-io-ktor-client-android = { group = "io.ktor", name = "ktor-client-android", version.ref = "ktor" }
-io-ktor-client-serialization = { group = "io.ktor", name = "ktor-client-serialization", version.ref = "ktor" }
-io-ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }
-io-ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor" }
-io-ktor-client-auth = { group = "io.ktor", name = "ktor-client-auth", version.ref = "ktor"}
-io-ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
-io-ktor-serialization-ktolin-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
+io-ktor-bom = { group = "io.ktor", name = "ktor-bom", version.ref = "ktorBom" }
+io-ktor-client-core = { group = "io.ktor", name = "ktor-client-core"}
+io-ktor-client-android = { group = "io.ktor", name = "ktor-client-android"}
+io-ktor-client-serialization = { group = "io.ktor", name = "ktor-client-serialization"}
+io-ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp"}
+io-ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging"}
+io-ktor-client-auth = { group = "io.ktor", name = "ktor-client-auth"}
+io-ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation"}
+io-ktor-serialization-ktolin-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

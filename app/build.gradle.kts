@@ -40,6 +40,18 @@ android {
         ksp {
             arg("room.schemaKenApps", "$projectDir/schemas")
         }
+
+//        ndk {
+//            abiFilters += listOf("arm64-v8a", "armeabi-v7a")
+//        }
+//        splits {
+//            abi {
+//                isEnable = true
+//                reset()
+//                include("arm64-v8a", "armeabi-v7a", "x86_64")
+//                isUniversalApk = false
+//            }
+//        }
     }
 
     externalNativeBuild {
@@ -162,6 +174,7 @@ dependencies {
     implementation(libs.maps.compose.utils)
 
     // ktor
+    implementation(platform(libs.io.ktor.bom))
     implementation(libs.io.ktor.client.core)
     implementation(libs.io.ktor.client.android)
     implementation(libs.io.ktor.client.serialization)
