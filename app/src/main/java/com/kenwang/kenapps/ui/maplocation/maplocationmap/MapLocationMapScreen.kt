@@ -99,9 +99,6 @@ object MapLocationMapScreen {
                             val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
                             val latLng = getCurrentLocation(context, locationManager)
                             coroutineScope.launch {
-//                                val uri = bitmap?.let {
-//                                    FileUtil.saveImageToAppFolder(context, it)
-//                                }
                                 viewModel.addMapLocation(title, description, latLng, uri)
                                 openDialog.value = false
                             }

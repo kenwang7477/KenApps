@@ -37,8 +37,8 @@ object RepositoryModule {
     fun provideParkingListRepository(
         parkingListClient: ParkingListClient
     ) = ParkingListRepository(
-        ParkingListServerDataSource(parkingListClient),
-        ParkingListLocalDataSource()
+        parkingListServerDataSource = ParkingListServerDataSource(parkingListClient = parkingListClient),
+        parkingListLocalDataSource = ParkingListLocalDataSource()
     )
 
     @Singleton
@@ -46,37 +46,39 @@ object RepositoryModule {
     fun provideGarbageTruckRepository(
         garbageTruckClient: GarbageTruckClient
     ) = GarbageTruckRepository(
-        GarbageTruckServerDataSource(garbageTruckClient),
-        GarbageTruckLocalDataSource()
+        garbageTruckServerDataSource = GarbageTruckServerDataSource(garbageTruckClient = garbageTruckClient),
+        garbageTruckLocalDataSource = GarbageTruckLocalDataSource()
     )
 
     @Provides
     @Singleton
-    fun provideTvProgramRepository() = TvProgramRepository(TvProgramDataSource())
+    fun provideTvProgramRepository() = TvProgramRepository(tvProgramDataSource = TvProgramDataSource())
 
     @Provides
     @Singleton
     fun provideArmRecyclerRepository(
         armRecyclerClient: ArmRecyclerClient
     ) = ArmRecyclerRepository(
-        ArmRecyclerServerDataSource(armRecyclerClient),
-        ArmRecyclerLocalDataSource()
+        armRecyclerServerDataSource = ArmRecyclerServerDataSource(armRecyclerClient = armRecyclerClient),
+        armRecyclerLocalDataSource = ArmRecyclerLocalDataSource()
     )
 
     @Provides
     @Singleton
     fun provideSystemPreferenceRepository(
         @ApplicationContext context: Context
-    ): SystemPreferenceRepository = SystemPreferenceRepository(SystemPreferenceLocalDataStore(context))
+    ): SystemPreferenceRepository = SystemPreferenceRepository(
+        systemPreferenceLocalDataStore = SystemPreferenceLocalDataStore(context = context)
+    )
 
     @Provides
     @Singleton
     fun provideMapLocationRepository(
         mapLocationDao: MapLocationDao
     ) = MapLocationRepository(
-        MapLocationLocalDataSource(
-            mapLocationDao,
-            MapLocationMapper()
+        mapLocationLocalDataSource = MapLocationLocalDataSource(
+            mapLocationDao = mapLocationDao,
+            mapLocationMapper = MapLocationMapper()
         )
     )
 }

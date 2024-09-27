@@ -24,17 +24,15 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.kenwang.kenapps.R
-import com.kenwang.kenapps.data.model.ParkingSpace
 import com.kenwang.kenapps.data.model.GarbageTruck
+import com.kenwang.kenapps.data.model.ParkingSpace
 import com.kenwang.kenapps.domain.usecase.darkmode.GetDarkModeUseCase
 import com.kenwang.kenapps.domain.usecase.main.MainListItem
-import com.kenwang.kenapps.extensions.isVersionAboveTiramisu
 import com.kenwang.kenapps.extensions.toArmRecyclerList
 import com.kenwang.kenapps.extensions.toGarbageTruckList
 import com.kenwang.kenapps.extensions.toGarbageTruckMap
@@ -44,7 +42,17 @@ import com.kenwang.kenapps.extensions.toParkingList
 import com.kenwang.kenapps.extensions.toParkingMap
 import com.kenwang.kenapps.extensions.toTextToSpeech
 import com.kenwang.kenapps.extensions.toTvProgramList
-import com.kenwang.kenapps.ui.Screens
+import com.kenwang.kenapps.ui.ArmRecyclerListRoute
+import com.kenwang.kenapps.ui.GarbageTruckListRoute
+import com.kenwang.kenapps.ui.GarbageTruckMapRoute
+import com.kenwang.kenapps.ui.MainRoute
+import com.kenwang.kenapps.ui.MapLocationListRoute
+import com.kenwang.kenapps.ui.MapLocationMapRoute
+import com.kenwang.kenapps.ui.ParkingListRoute
+import com.kenwang.kenapps.ui.ParkingMapRoute
+import com.kenwang.kenapps.ui.SettingRoute
+import com.kenwang.kenapps.ui.TextToSpeechRoute
+import com.kenwang.kenapps.ui.TvProgramListRoute
 import com.kenwang.kenapps.ui.armrecyclertool.armrecyclerlist.ArmRecyclerListScreen
 import com.kenwang.kenapps.ui.garbagetrucktool.garbagetrucklist.GarbageTruckListScreen
 import com.kenwang.kenapps.ui.garbagetrucktool.garbagetruckmap.GarbageTruckMapScreen
@@ -56,10 +64,12 @@ import com.kenwang.kenapps.ui.setting.SettingScreen
 import com.kenwang.kenapps.ui.texttospeech.TextToSpeechScreen
 import com.kenwang.kenapps.ui.theme.KenAppsTheme
 import com.kenwang.kenapps.ui.tvprogramlist.TvProgramListScreen
+import com.kenwang.kenapps.utils.KenLog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Provider
+import kotlin.reflect.typeOf
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -89,23 +99,24 @@ fun AppNavHost(
         .currentBackStackEntryFlow
         .collectAsStateWithLifecycle(initialValue = navController.currentBackStackEntry)
 
+    KenLog.e("route = ${currentRoute.value?.destination?.route}, main = ${MainRoute::class.java.name}")
     val showBackButton = when (currentRoute.value?.destination?.route) {
-        Screens.Main.route -> false
+        MainRoute::class.java.name -> false
         else -> true
     }
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-    val topAppBarTitle = when (currentRoute.value?.destination?.route?.split("/", "?")?.getOrNull(0)) {
-        Screens.ParkingList.route,
-        Screens.ParkingMap.route -> stringResource(id = R.string.kh_parking_space_map_title)
-        Screens.GarbageTruckList.route,
-        Screens.GarbageTruckMap.route-> stringResource(id = R.string.kh_garbage_truck_map_title)
-        Screens.TvProgramList.route -> stringResource(id = R.string.tv_program_list_title)
-        Screens.ArmRecyclerList.route -> stringResource(id = R.string.kh_arm_recycler_map_title)
-        Screens.Setting.route -> stringResource(id = R.string.setting)
-        Screens.MapLocationList.route,
-        Screens.MapLocationMap.route -> stringResource(id = R.string.map_location_title)
-        Screens.TextToSpeech.route -> stringResource(id = R.string.text_to_speech_title)
+    val topAppBarTitle = when (currentRoute.value?.destination?.route) {
+        ParkingListRoute::class.java.name,
+        ParkingMapRoute::class.java.name -> stringResource(id = R.string.kh_parking_space_map_title)
+        GarbageTruckListRoute::class.java.name,
+        GarbageTruckMapRoute::class.java.name -> stringResource(id = R.string.kh_garbage_truck_map_title)
+        TvProgramListRoute::class.java.name -> stringResource(id = R.string.tv_program_list_title)
+        ArmRecyclerListRoute::class.java.name -> stringResource(id = R.string.kh_arm_recycler_map_title)
+        SettingRoute::class.java.name -> stringResource(id = R.string.setting)
+        MapLocationListRoute::class.java.name,
+        MapLocationMapRoute::class.java.name -> stringResource(id = R.string.map_location_title)
+        TextToSpeechRoute::class.java.name -> stringResource(id = R.string.text_to_speech_title)
         else -> stringResource(id = R.string.app_name)
     }
     KenAppsTheme(
@@ -143,7 +154,7 @@ fun AppNavHost(
                     )
                 },
                 content = { paddingValues ->
-                    NavHost(navController = navController, startDestination = Screens.Main.route) {
+                    NavHost(navController = navController, startDestination = MainRoute) {
                         addMainGraph(paddingValues = paddingValues, navController = navController)
                         addParkingListGraph(
                             paddingValues = paddingValues,
@@ -175,7 +186,7 @@ private fun NavGraphBuilder.addMainGraph(
     paddingValues: PaddingValues,
     navController: NavController
 ) {
-    composable(Screens.Main.route) {
+    composable<MainRoute> {
         MainScreen.MainUI(
             paddingValues = paddingValues,
             navToItem = { listItem ->
@@ -210,7 +221,7 @@ private fun NavGraphBuilder.addParkingListGraph(
     paddingValues: PaddingValues,
     navController: NavController
 ) {
-    composable(Screens.ParkingList.route) {
+    composable<ParkingListRoute> {
         ParkingListScreen.ParkingListUI(
             paddingValues = paddingValues,
             toParkingMap = {
@@ -223,20 +234,11 @@ private fun NavGraphBuilder.addParkingListGraph(
 private fun NavGraphBuilder.addParkingMapGraph(
     paddingValues: PaddingValues
 ) {
-    composable(
-        route = "${Screens.ParkingMap.route}/{${Screens.ParkingMap.argParkingSpace}}",
-        arguments = listOf(
-            navArgument(Screens.ParkingMap.argParkingSpace){ type = ParkingSpace.NavigationType }
-        )
-    ) {
-        val parkingSpace = if (isVersionAboveTiramisu()) {
-            it.arguments?.getParcelable(Screens.ParkingMap.argParkingSpace, ParkingSpace::class.java) ?: ParkingSpace()
-        } else {
-            it.arguments?.getParcelable(Screens.ParkingMap.argParkingSpace) ?: ParkingSpace()
-        }
+    composable<ParkingMapRoute>(typeMap = mapOf(typeOf<ParkingSpace>() to ParkingSpace.NavigationType)) {
+        val arguments = it.toRoute<ParkingMapRoute>()
         ParkingMapScreen.ParkingMapUI(
             paddingValues = paddingValues,
-            parkingSpace = parkingSpace
+            parkingSpace = arguments.argParkingSpace
         )
     }
 }
@@ -245,7 +247,7 @@ private fun NavGraphBuilder.addGarbageTruckListGraph(
     paddingValues: PaddingValues,
     navController: NavController
 ) {
-    composable(Screens.GarbageTruckList.route) {
+    composable<GarbageTruckListRoute> {
         GarbageTruckListScreen.GarbageTruckListUI(
             paddingValues = paddingValues,
             toGarbageTruckMap = {
@@ -258,20 +260,11 @@ private fun NavGraphBuilder.addGarbageTruckListGraph(
 private fun NavGraphBuilder.addGarbageTruckMapGraph(
     paddingValues: PaddingValues
 ) {
-    composable(
-        route = "${Screens.GarbageTruckMap.route}/{${Screens.GarbageTruckMap.argGarbageTruck}}",
-        arguments = listOf(
-            navArgument(Screens.GarbageTruckMap.argGarbageTruck) { type = GarbageTruck.NavigationType }
-        )
-    ) {
-        val truck = if (isVersionAboveTiramisu()) {
-            it.arguments?.getParcelable(Screens.GarbageTruckMap.argGarbageTruck, GarbageTruck::class.java) ?: GarbageTruck()
-        } else {
-            it.arguments?.getParcelable(Screens.GarbageTruckMap.argGarbageTruck) ?: GarbageTruck()
-        }
+    composable<GarbageTruckMapRoute>(typeMap = mapOf(typeOf<GarbageTruck>() to GarbageTruck.NavigationType)) {
+        val arguments = it.toRoute<GarbageTruckMapRoute>()
         GarbageTruckMapScreen.TruckMapUI(
             paddingValues,
-            garbageTruck = truck
+            garbageTruck = arguments.argGarbageTruck
         )
     }
 }
@@ -279,7 +272,7 @@ private fun NavGraphBuilder.addGarbageTruckMapGraph(
 private fun NavGraphBuilder.addTvProgramListGraph(
     paddingValues: PaddingValues
 ) {
-    composable(Screens.TvProgramList.route) {
+    composable<TvProgramListRoute> {
         TvProgramListScreen.TvProgramListUI(paddingValues = paddingValues)
     }
 }
@@ -287,7 +280,7 @@ private fun NavGraphBuilder.addTvProgramListGraph(
 private fun NavGraphBuilder.addArmRecyclerListGraph(
     paddingValues: PaddingValues
 ) {
-    composable(Screens.ArmRecyclerList.route) {
+    composable<ArmRecyclerListRoute> {
         ArmRecyclerListScreen.ArmRecyclerListUI(paddingValues = paddingValues)
     }
 }
@@ -295,7 +288,7 @@ private fun NavGraphBuilder.addArmRecyclerListGraph(
 private fun NavGraphBuilder.addSettingGraph(
     paddingValues: PaddingValues
 ) {
-    composable(Screens.Setting.route) {
+    composable<SettingRoute> {
         SettingScreen.SettingUI(paddingValues = paddingValues)
     }
 }
@@ -304,7 +297,7 @@ private fun NavGraphBuilder.addMapLocationGraph(
     paddingValues: PaddingValues,
     navController: NavController
 ) {
-    composable(Screens.MapLocationList.route) {
+    composable<MapLocationListRoute> {
         MapLocationListScreen.MapLocationListUI(
             paddingValues = paddingValues,
             toMapLocationMap = { longitude, latitude ->
@@ -317,25 +310,12 @@ private fun NavGraphBuilder.addMapLocationGraph(
 private fun NavGraphBuilder.addMapLocationMapGraph(
     paddingValues: PaddingValues
 ) {
-    composable(
-        route = "${Screens.MapLocationMap.route}?${Screens.MapLocationMap.argLongitude}={${Screens.MapLocationMap.argLongitude}}&${Screens.MapLocationMap.argLatitude}={${Screens.MapLocationMap.argLatitude}}",
-        arguments = listOf(
-            navArgument(Screens.MapLocationMap.argLongitude) {
-                type = NavType.StringType
-                nullable = true
-            },
-            navArgument(Screens.MapLocationMap.argLatitude) {
-                type = NavType.StringType
-                nullable = true
-            }
-        )
-    ) { backStackEntry ->
-        val longitude = backStackEntry.arguments?.getString(Screens.MapLocationMap.argLongitude)
-        val latitude = backStackEntry.arguments?.getString(Screens.MapLocationMap.argLatitude)
+    composable<MapLocationMapRoute> {
+        val arguments = it.toRoute<MapLocationMapRoute>()
         MapLocationMapScreen.MapLocationMapUI(
             paddingValues = paddingValues,
-            targetLongitude = longitude?.toDouble(),
-            targetLatitude = latitude?.toDouble()
+            targetLongitude = arguments.argLongitude?.toDouble(),
+            targetLatitude = arguments.argLatitude?.toDouble()
         )
     }
 }
@@ -343,7 +323,7 @@ private fun NavGraphBuilder.addMapLocationMapGraph(
 private fun NavGraphBuilder.addTextToSpeechGraph(
     paddingValues: PaddingValues
 ) {
-    composable(Screens.TextToSpeech.route) {
+    composable<TextToSpeechRoute> {
         TextToSpeechScreen.TextToSpeechUI(paddingValues = paddingValues)
     }
 }
