@@ -14,11 +14,11 @@ plugins {
 
 android {
     namespace = "com.kenwang.kenapps"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.kenwang.kenapps"
-        minSdk = 29
+        minSdk = 28
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
@@ -61,8 +61,17 @@ android {
             version = "3.22.1"
         }
     }
+//    signingConfigs {
+//        create("release") {
+//            storeFile = file("./key/release_key.jks")
+//            storePassword = "123456"
+//            keyAlias = "ascentac"
+//            keyPassword = "123456"
+//        }
+//    }
     buildTypes {
-        release {
+        getByName("release") {
+//            signingConfig = signingConfigs.getByName("release")
             buildFeatures.buildConfig = true
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
