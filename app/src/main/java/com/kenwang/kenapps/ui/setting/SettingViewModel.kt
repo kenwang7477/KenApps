@@ -21,17 +21,13 @@ class SettingViewModel @Inject constructor(
     private val _darkModeState = MutableStateFlow(false)
     val darkModeState = _darkModeState.asStateFlow()
 
-    init {
-        loadDarkMode()
-    }
-
     fun setDarkMode(darkMode: Boolean) {
         viewModelScope.launch {
             _darkModeState.emit(setDarkModeUseCase.get().invoke(darkMode).first())
         }
     }
 
-    private fun loadDarkMode() {
+    fun loadDarkMode() {
         viewModelScope.launch {
             _darkModeState.emit(getDarkModeUseCase.get().invoke().first())
         }
