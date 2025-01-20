@@ -55,17 +55,17 @@ android {
     }
 
     externalNativeBuild {
-        ndkVersion = "25.2.9519653"
+        ndkVersion = "26.1.10909125"
         cmake {
             path(file("src/main/cpp/CMakeLists.txt"))
-            version = "3.22.1"
+            version = "3.31.1"
         }
     }
 //    signingConfigs {
 //        create("release") {
 //            storeFile = file("./key/release_key.jks")
 //            storePassword = "123456"
-//            keyAlias = "ascentac"
+//            keyAlias = "kenwang"
 //            keyPassword = "123456"
 //        }
 //    }
@@ -163,6 +163,7 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.truth)
     testImplementation(libs.robolectric)
+    testImplementation(libs.app.cash.turbine)
     androidTestImplementation(libs.androidx.test.core)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)

@@ -1,5 +1,6 @@
 package com.kenwang.kenapps.ui.setting
 
+import app.cash.turbine.test
 import com.google.common.truth.Truth
 import com.kenwang.kenapps.domain.usecase.darkmode.GetDarkModeUseCase
 import com.kenwang.kenapps.domain.usecase.darkmode.SetDarkModeUseCase
@@ -12,8 +13,6 @@ import io.mockk.spyk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runCurrent
@@ -40,8 +39,6 @@ class SettingViewModelTest {
     fun setUp() {
         MockKAnnotations.init(this)
         Dispatchers.setMain(testDispatcher)
-        val darkMode = flow { emit(true) }
-        coEvery { getDarkModeUseCase.invoke() } returns darkMode
         viewModel = spyk(
             SettingViewModel(
                 getDarkModeUseCase = getDarkModeUseCase.mockProvider(),
@@ -59,18 +56,15 @@ class SettingViewModelTest {
     fun `Test setDarkMode then setDarkModeUseCase invoke`() = runTest {
         val darkMode = flow { emit(true) }
         coEvery { setDarkModeUseCase.invoke(any()) } returns darkMode
-        val darkModeState = mutableListOf<Boolean>()
-        val job = launch {
-            viewModel.darkModeState.toList(darkModeState)
-        }
 
         viewModel.setDarkMode(darkMode = true)
         runCurrent()
 
+        viewModel.darkModeState.test {
+            Truth.assertThat(awaitItem()).isEqualTo(true)
+        }
         coVerify(exactly = 1) {
             setDarkModeUseCase.invoke(darkMode = true)
         }
-        Truth.assertThat(darkModeState[0]).isEqualTo(true)
-        job.cancel()
     }
 }
