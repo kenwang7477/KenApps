@@ -9,7 +9,8 @@ import com.kenwang.kenapps.data.database.maplocation.MapLocationEntity
 
 @Database(
     entities = [MapLocationEntity::class],
-    version = 1
+    version = 1,
+    exportSchema = false
 )
 abstract class KenAppsDataBase : RoomDatabase() {
 

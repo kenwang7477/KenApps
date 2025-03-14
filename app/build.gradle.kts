@@ -29,17 +29,8 @@ android {
             useSupportLibrary = true
         }
 
-        resourceConfigurations.addAll(listOf("en", "zh-rTW"))
-
-        /**
-         * To fix
-         * Schema export directory is not provided to the annotation processor so we cannot export the schema. You can either provide `room.schemaLocation` annotation processor argument OR set exportSchema to false.
-         * issue
-         * reference: https://blog.csdn.net/qq_41886129/article/details/124111081
-         */
-        ksp {
-            arg("room.schemaKenApps", "$projectDir/schemas")
-        }
+        androidResources.localeFilters.addAll(listOf("en", "zh-rTW"))
+//        resourceConfigurations.addAll(listOf("en", "zh-rTW"))
 
 //        ndk {
 //            abiFilters += listOf("arm64-v8a", "armeabi-v7a")
@@ -98,14 +89,14 @@ android {
 
         // https://developer.android.com/studio/test/gradle-managed-devices?hl=zh-tw
         managedDevices {
-            devices {
-                val pixel5api33 by creating(com.android.build.api.dsl.ManagedVirtualDevice::class) {
+            localDevices {
+                create("pixel5api33") {
                     // Use device profiles you typically see in Android Studio.
                     device = "Pixel 5"
                     // Use only API levels 33 and higher.
                     apiLevel = 33
                     // To include Google services, use "google".
-                    systemImageSource = "google"
+                    systemImageSource = "aosp"
                 }
             }
         }
