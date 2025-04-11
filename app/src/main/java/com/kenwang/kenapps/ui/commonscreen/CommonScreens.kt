@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.PermissionsRequired
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.kenwang.kenapps.R
 
@@ -42,29 +41,23 @@ fun ShowLocationPermissionView(
         )
     )
 
-    PermissionsRequired(
-        multiplePermissionsState = permissionState,
-        permissionsNotGrantedContent = {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = modifier
-            ) {
-                Text(
-                    text = stringResource(id = R.string.please_enable_location_permission)
-                )
-                Button(
-                    onClick = { permissionState.launchMultiplePermissionRequest() }
-                ) {
-                    Text(text = stringResource(id = R.string.enable_permission))
-                }
-            }
-        },
-        permissionsNotAvailableContent = {
-            EmptyView(text = stringResource(id = R.string.unknown_error))
-        }
-    ) {
+    if (permissionState.allPermissionsGranted) {
         content.invoke()
+    } else {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = modifier
+        ) {
+            Text(
+                text = stringResource(id = R.string.please_enable_location_permission)
+            )
+            Button(
+                onClick = { permissionState.launchMultiplePermissionRequest() }
+            ) {
+                Text(text = stringResource(id = R.string.enable_permission))
+            }
+        }
     }
 }
 
@@ -79,29 +72,23 @@ fun ShowPermissionView(
         permissions = permissions
     )
 
-    PermissionsRequired(
-        multiplePermissionsState = permissionState,
-        permissionsNotGrantedContent = {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = modifier
-            ) {
-                Text(
-                    text = stringResource(id = R.string.please_enable_permissions)
-                )
-                Button(
-                    onClick = { permissionState.launchMultiplePermissionRequest() }
-                ) {
-                    Text(text = stringResource(id = R.string.enable_permission))
-                }
-            }
-        },
-        permissionsNotAvailableContent = {
-            EmptyView(text = stringResource(id = R.string.unknown_error))
-        }
-    ) {
+    if (permissionState.allPermissionsGranted) {
         content.invoke()
+    } else {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = modifier
+        ) {
+            Text(
+                text = stringResource(id = R.string.please_enable_permissions)
+            )
+            Button(
+                onClick = { permissionState.launchMultiplePermissionRequest() }
+            ) {
+                Text(text = stringResource(id = R.string.enable_permission))
+            }
+        }
     }
 }
 
