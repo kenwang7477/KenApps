@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -98,23 +99,23 @@ fun AppNavHost(
         .currentBackStackEntryFlow
         .collectAsStateWithLifecycle(initialValue = navController.currentBackStackEntry)
 
-    val showBackButton = when (currentRoute.value?.destination?.route) {
-        MainRoute::class.java.name -> false
-        else -> true
-    }
+    val destination = currentRoute.value?.destination
+    val showBackButton = destination?.hasRoute<MainRoute>() != true
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-    val topAppBarTitle = when (currentRoute.value?.destination?.route) {
-        ParkingListRoute::class.java.name,
-        ParkingMapRoute::class.java.name -> stringResource(id = R.string.kh_parking_space_map_title)
-        GarbageTruckListRoute::class.java.name,
-        GarbageTruckMapRoute::class.java.name -> stringResource(id = R.string.kh_garbage_truck_map_title)
-        TvProgramListRoute::class.java.name -> stringResource(id = R.string.tv_program_list_title)
-        ArmRecyclerListRoute::class.java.name -> stringResource(id = R.string.kh_arm_recycler_map_title)
-        SettingRoute::class.java.name -> stringResource(id = R.string.setting)
-        MapLocationListRoute::class.java.name,
-        MapLocationMapRoute::class.java.name -> stringResource(id = R.string.map_location_title)
-        TextToSpeechRoute::class.java.name -> stringResource(id = R.string.text_to_speech_title)
+    val topAppBarTitle = when {
+        destination?.hasRoute<ParkingListRoute>() == true ||
+            destination?.hasRoute<ParkingMapRoute>() == true -> stringResource(R.string.kh_parking_space_map_title)
+
+        destination?.hasRoute<GarbageTruckListRoute>() == true ||
+            destination?.hasRoute<GarbageTruckMapRoute>() == true -> stringResource(id = R.string.kh_garbage_truck_map_title)
+
+        destination?.hasRoute<TvProgramListRoute>() == true -> stringResource(id = R.string.tv_program_list_title)
+        destination?.hasRoute<ArmRecyclerListRoute>() == true -> stringResource(id = R.string.kh_arm_recycler_map_title)
+        destination?.hasRoute<SettingRoute>() == true -> stringResource(id = R.string.setting)
+        destination?.hasRoute<MapLocationListRoute>() == true ||
+            destination?.hasRoute<MapLocationMapRoute>() == true -> stringResource(id = R.string.map_location_title)
+        destination?.hasRoute<TextToSpeechRoute>() == true -> stringResource(id = R.string.text_to_speech_title)
         else -> stringResource(id = R.string.app_name)
     }
     KenAppsTheme(
