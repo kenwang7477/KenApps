@@ -1,14 +1,7 @@
 package com.kenwang.kenapps.data.model
 
-import android.net.Uri
-import android.os.Bundle
-import android.os.Parcelable
-import androidx.navigation.NavType
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 @Serializable
 data class ParkingSpaceBean(
@@ -23,7 +16,6 @@ data class ParkingSpaceBean(
     @SerialName("管理業者") val information: String = ""
 )
 
-@Parcelize
 @Serializable
 data class ParkingSpace(
     val area: String = "",
@@ -37,31 +29,4 @@ data class ParkingSpace(
     val bicycleCount: Int = 0,
     val charges: String = "",
     val information: String = ""
-) : Parcelable {
-
-    object NavigationType : NavType<ParkingSpace>(isNullableAllowed = false) {
-
-        private val json = Json {
-            isLenient = true
-            explicitNulls = true
-            ignoreUnknownKeys = true
-            encodeDefaults = true
-        }
-
-        override fun get(bundle: Bundle, key: String): ParkingSpace? {
-            return bundle.getParcelable(key)
-        }
-
-        override fun parseValue(value: String): ParkingSpace {
-            return json.decodeFromString(value)
-        }
-
-        override fun serializeAsValue(value: ParkingSpace): String {
-            return Uri.encode(json.encodeToString(value))
-        }
-
-        override fun put(bundle: Bundle, key: String, value: ParkingSpace) {
-            bundle.putParcelable(key, value)
-        }
-    }
-}
+)

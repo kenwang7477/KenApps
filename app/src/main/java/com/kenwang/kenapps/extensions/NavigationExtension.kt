@@ -1,52 +1,41 @@
 package com.kenwang.kenapps.extensions
 
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import com.kenwang.kenapps.data.model.ParkingSpace
 import com.kenwang.kenapps.data.model.GarbageTruck
-import com.kenwang.kenapps.ui.ArmRecyclerListRoute
-import com.kenwang.kenapps.ui.GarbageTruckListRoute
-import com.kenwang.kenapps.ui.GarbageTruckMapRoute
-import com.kenwang.kenapps.ui.MapLocationListRoute
-import com.kenwang.kenapps.ui.MapLocationMapRoute
-import com.kenwang.kenapps.ui.ParkingListRoute
-import com.kenwang.kenapps.ui.ParkingMapRoute
-import com.kenwang.kenapps.ui.SettingRoute
-import com.kenwang.kenapps.ui.TextToSpeechRoute
-import com.kenwang.kenapps.ui.TvProgramListRoute
+import com.kenwang.kenapps.ui.Screens
 
-fun NavController.toParkingList() = navigate(ParkingListRoute)
+fun NavBackStack.addParkingList() = add(Screens.ParkingListRoute)
 
-fun NavController.toParkingMap(
+fun NavBackStack.addParkingMap(
     parkingSpace: ParkingSpace
 ) {
-    navigate(ParkingMapRoute(argParkingSpace = parkingSpace))
+    add(Screens.ParkingMapRoute(argParkingSpace = parkingSpace))
 }
 
-fun NavController.toGarbageTruckList() = navigate(GarbageTruckListRoute)
+fun NavBackStack.addGarbageTruckList() = add(Screens.GarbageTruckListRoute)
 
-fun NavController.toGarbageTruckMap(garbageTruck: GarbageTruck) {
-    navigate(GarbageTruckMapRoute(argGarbageTruck = garbageTruck))
+fun NavBackStack.addGarbageTruckMap(garbageTruck: GarbageTruck) {
+    add(Screens.GarbageTruckMapRoute(argGarbageTruck = garbageTruck))
 }
 
-fun NavController.toTvProgramList() = navigate(TvProgramListRoute)
+fun NavBackStack.addTvProgramList() = add(Screens.TvProgramListRoute)
 
-fun NavController.toArmRecyclerList() = navigate(ArmRecyclerListRoute)
+fun NavBackStack.addArmRecyclerList() = add(Screens.ArmRecyclerListRoute)
 
-fun NavController.toSetting() {
-    navigate(SettingRoute)
-}
+fun NavBackStack.addSetting() = add(Screens.SettingRoute)
 
-fun NavController.toMapLocationList() = navigate(MapLocationListRoute)
+fun NavBackStack.addMapLocationList() = add(Screens.MapLocationListRoute)
 
-fun NavController.toMapLocationMap(
+fun NavBackStack.addMapLocationMap(
     longitude: Double?,
     latitude: Double?
 ) {
     if (longitude == null || latitude == null) {
-        navigate(MapLocationMapRoute())
+        add(Screens.MapLocationMapRoute())
     } else {
-        navigate(
-            MapLocationMapRoute(
+        add(
+            Screens.MapLocationMapRoute(
                 argLongitude = longitude.toString(),
                 argLatitude = latitude.toString()
             )
@@ -54,4 +43,4 @@ fun NavController.toMapLocationMap(
     }
 }
 
-fun NavController.toTextToSpeech() = navigate(TextToSpeechRoute)
+fun NavBackStack.addTextToSpeech() = add(Screens.TextToSpeechRoute)

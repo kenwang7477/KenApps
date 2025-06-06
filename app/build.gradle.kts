@@ -14,12 +14,12 @@ plugins {
 
 android {
     namespace = "com.kenwang.kenapps"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.kenwang.kenapps"
         minSdk = 28
-        targetSdk = 33
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -30,7 +30,6 @@ android {
         }
 
         androidResources.localeFilters.addAll(listOf("en", "zh-rTW"))
-//        resourceConfigurations.addAll(listOf("en", "zh-rTW"))
 
 //        ndk {
 //            abiFilters += listOf("arm64-v8a", "armeabi-v7a")
@@ -60,11 +59,12 @@ android {
 //            keyPassword = "123456"
 //        }
 //    }
+
     buildTypes {
         getByName("release") {
 //            signingConfig = signingConfigs.getByName("release")
             buildFeatures.buildConfig = true
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
@@ -116,7 +116,6 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
-    implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.constraintlayout.compose)
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.androidx.datastore)
@@ -133,6 +132,10 @@ dependencies {
     androidTestImplementation(composeBom)
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     testImplementation(libs.androidx.compose.ui.test.junit4)
+
+    // Compose navigation
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.navigation3.runtime)
 
     // Firebase
     implementation(platform(libs.firebase.bom))

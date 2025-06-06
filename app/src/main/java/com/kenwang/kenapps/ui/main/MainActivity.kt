@@ -3,7 +3,6 @@ package com.kenwang.kenapps.ui.main
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
@@ -21,39 +20,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination.Companion.hasRoute
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
+import androidx.navigation3.runtime.entry
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.ui.NavDisplay
 import com.kenwang.kenapps.R
-import com.kenwang.kenapps.data.model.GarbageTruck
-import com.kenwang.kenapps.data.model.ParkingSpace
 import com.kenwang.kenapps.domain.usecase.darkmode.GetDarkModeUseCase
 import com.kenwang.kenapps.domain.usecase.main.MainListItem
-import com.kenwang.kenapps.extensions.toArmRecyclerList
-import com.kenwang.kenapps.extensions.toGarbageTruckList
-import com.kenwang.kenapps.extensions.toGarbageTruckMap
-import com.kenwang.kenapps.extensions.toMapLocationList
-import com.kenwang.kenapps.extensions.toMapLocationMap
-import com.kenwang.kenapps.extensions.toParkingList
-import com.kenwang.kenapps.extensions.toParkingMap
-import com.kenwang.kenapps.extensions.toTextToSpeech
-import com.kenwang.kenapps.extensions.toTvProgramList
-import com.kenwang.kenapps.ui.ArmRecyclerListRoute
-import com.kenwang.kenapps.ui.GarbageTruckListRoute
-import com.kenwang.kenapps.ui.GarbageTruckMapRoute
-import com.kenwang.kenapps.ui.MainRoute
-import com.kenwang.kenapps.ui.MapLocationListRoute
-import com.kenwang.kenapps.ui.MapLocationMapRoute
-import com.kenwang.kenapps.ui.ParkingListRoute
-import com.kenwang.kenapps.ui.ParkingMapRoute
-import com.kenwang.kenapps.ui.SettingRoute
-import com.kenwang.kenapps.ui.TextToSpeechRoute
-import com.kenwang.kenapps.ui.TvProgramListRoute
+import com.kenwang.kenapps.extensions.addArmRecyclerList
+import com.kenwang.kenapps.extensions.addGarbageTruckList
+import com.kenwang.kenapps.extensions.addGarbageTruckMap
+import com.kenwang.kenapps.extensions.addMapLocationList
+import com.kenwang.kenapps.extensions.addMapLocationMap
+import com.kenwang.kenapps.extensions.addParkingList
+import com.kenwang.kenapps.extensions.addParkingMap
+import com.kenwang.kenapps.extensions.addTextToSpeech
+import com.kenwang.kenapps.extensions.addTvProgramList
+import com.kenwang.kenapps.ui.Screens
 import com.kenwang.kenapps.ui.armrecyclertool.armrecyclerlist.ArmRecyclerListScreen
 import com.kenwang.kenapps.ui.garbagetrucktool.garbagetrucklist.GarbageTruckListScreen
 import com.kenwang.kenapps.ui.garbagetrucktool.garbagetruckmap.GarbageTruckMapScreen
@@ -69,7 +52,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Provider
-import kotlin.reflect.typeOf
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -93,37 +75,31 @@ class MainActivity : ComponentActivity() {
 fun AppNavHost(
     darkMode: Boolean
 ) {
-    
-    val navController: NavHostController = rememberNavController()
-    val currentRoute = navController
-        .currentBackStackEntryFlow
-        .collectAsStateWithLifecycle(initialValue = navController.currentBackStackEntry)
-
-    val destination = currentRoute.value?.destination
-    val showBackButton = destination?.hasRoute<MainRoute>() != true
+    val backStack = rememberNavBackStack(Screens.MainRoute)
+    val showBackButton = backStack.last() != Screens.MainRoute
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-    val topAppBarTitle = when {
-        destination?.hasRoute<ParkingListRoute>() == true ||
-            destination?.hasRoute<ParkingMapRoute>() == true -> stringResource(R.string.kh_parking_space_map_title)
 
-        destination?.hasRoute<GarbageTruckListRoute>() == true ||
-            destination?.hasRoute<GarbageTruckMapRoute>() == true -> stringResource(id = R.string.kh_garbage_truck_map_title)
+    val topAppBarTitle = when(backStack.last()) {
+        is Screens.ParkingListRoute,
+        is Screens.ParkingMapRoute -> stringResource(R.string.kh_parking_space_map_title)
 
-        destination?.hasRoute<TvProgramListRoute>() == true -> stringResource(id = R.string.tv_program_list_title)
-        destination?.hasRoute<ArmRecyclerListRoute>() == true -> stringResource(id = R.string.kh_arm_recycler_map_title)
-        destination?.hasRoute<SettingRoute>() == true -> stringResource(id = R.string.setting)
-        destination?.hasRoute<MapLocationListRoute>() == true ||
-            destination?.hasRoute<MapLocationMapRoute>() == true -> stringResource(id = R.string.map_location_title)
-        destination?.hasRoute<TextToSpeechRoute>() == true -> stringResource(id = R.string.text_to_speech_title)
+        is Screens.GarbageTruckListRoute,
+        is Screens.GarbageTruckMapRoute -> stringResource(id = R.string.kh_garbage_truck_map_title)
+
+        is Screens.TvProgramListRoute -> stringResource(id = R.string.tv_program_list_title)
+        is Screens.ArmRecyclerListRoute -> stringResource(id = R.string.kh_arm_recycler_map_title)
+        is Screens.SettingRoute -> stringResource(id = R.string.setting)
+        is Screens.MapLocationListRoute,
+        is Screens.MapLocationMapRoute -> stringResource(id = R.string.map_location_title)
+        is Screens.TextToSpeechRoute -> stringResource(id = R.string.text_to_speech_title)
         else -> stringResource(id = R.string.app_name)
     }
-    KenAppsTheme(
-        darkTheme = darkMode
-    ) {
+
+    KenAppsTheme(darkTheme = darkMode) {
         MainDrawer(
             drawerState = drawerState,
-            navController = navController,
+            backStack = backStack,
             gesturesEnabled = !showBackButton
         ) {
             Scaffold(
@@ -133,7 +109,7 @@ fun AppNavHost(
                         navigationIcon = {
                             if (showBackButton) {
                                 IconButton(
-                                    onClick = { navController.navigateUp() }
+                                    onClick = { backStack.removeLastOrNull() }
                                 ) { Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back") }
                             } else {
                                 IconButton(
@@ -153,176 +129,101 @@ fun AppNavHost(
                     )
                 },
                 content = { paddingValues ->
-                    NavHost(navController = navController, startDestination = MainRoute) {
-                        addMainGraph(paddingValues = paddingValues, navController = navController)
-                        addParkingListGraph(
-                            paddingValues = paddingValues,
-                            navController = navController
-                        )
-                        addParkingMapGraph(paddingValues = paddingValues)
-                        addGarbageTruckListGraph(
-                            paddingValues = paddingValues,
-                            navController = navController
-                        )
-                        addGarbageTruckMapGraph(paddingValues = paddingValues)
-                        addTvProgramListGraph(paddingValues = paddingValues)
-                        addArmRecyclerListGraph(paddingValues = paddingValues)
-                        addSettingGraph(paddingValues = paddingValues)
-                        addMapLocationGraph(
-                            paddingValues = paddingValues,
-                            navController = navController
-                        )
-                        addMapLocationMapGraph(paddingValues = paddingValues)
-                        addTextToSpeechGraph(paddingValues = paddingValues)
-                    }
+                    NavDisplay(
+                        backStack = backStack,
+                        onBack = { backStack.removeLastOrNull() },
+                        entryProvider = entryProvider {
+                            entry<Screens.MainRoute> {
+                                MainScreen.MainUI(
+                                    paddingValues = paddingValues,
+                                    navToItem = { listItem ->
+                                        when (listItem) {
+                                            MainListItem.ParkingMap -> {
+                                                backStack.addParkingList()
+                                            }
+
+                                            MainListItem.GarbageTruckMap -> {
+                                                backStack.addGarbageTruckList()
+                                            }
+
+                                            MainListItem.TvProgramList -> {
+                                                backStack.addTvProgramList()
+                                            }
+                                            MainListItem.ArmRecyclerMap -> {
+                                                backStack.addArmRecyclerList()
+                                            }
+                                            MainListItem.MapLocation -> {
+                                                backStack.addMapLocationList()
+                                            }
+                                            MainListItem.TextToSpeech -> {
+                                                backStack.addTextToSpeech()
+                                            }
+                                        }
+                                    }
+                                )
+                            }
+                            entry<Screens.ParkingListRoute> {
+                                ParkingListScreen.ParkingListUI(
+                                    paddingValues = paddingValues,
+                                    toParkingMap = { parkingSpace ->
+                                        backStack.addParkingMap(parkingSpace = parkingSpace)
+                                    }
+                                )
+                            }
+                            entry<Screens.ParkingMapRoute> {
+                                ParkingMapScreen.ParkingMapUI(
+                                    paddingValues = paddingValues,
+                                    parkingSpace = it.argParkingSpace
+                                )
+                            }
+                            entry<Screens.GarbageTruckListRoute> {
+                                GarbageTruckListScreen.GarbageTruckListUI(
+                                    paddingValues = paddingValues,
+                                    toGarbageTruckMap = { garbageTruck ->
+                                        backStack.addGarbageTruckMap(garbageTruck = garbageTruck)
+                                    }
+                                )
+                            }
+                            entry<Screens.GarbageTruckMapRoute> {
+                                GarbageTruckMapScreen.TruckMapUI(
+                                    paddingValues = paddingValues,
+                                    garbageTruck = it.argGarbageTruck
+                                )
+                            }
+                            entry<Screens.TvProgramListRoute> {
+                                TvProgramListScreen.TvProgramListUI(paddingValues = paddingValues)
+                            }
+                            entry<Screens.ArmRecyclerListRoute> {
+                                ArmRecyclerListScreen.ArmRecyclerListUI(paddingValues = paddingValues)
+                            }
+                            entry<Screens.SettingRoute> {
+                                SettingScreen.SettingUI(paddingValues = paddingValues)
+                            }
+                            entry<Screens.MapLocationListRoute> {
+                                MapLocationListScreen.MapLocationListUI(
+                                    paddingValues = paddingValues,
+                                    toMapLocationMap = { longitude, latitude ->
+                                        backStack.addMapLocationMap(
+                                            longitude = longitude,
+                                            latitude = latitude
+                                        )
+                                    }
+                                )
+                            }
+                            entry<Screens.MapLocationMapRoute> {
+                                MapLocationMapScreen.MapLocationMapUI(
+                                    paddingValues = paddingValues,
+                                    targetLongitude = it.argLongitude?.toDouble(),
+                                    targetLatitude = it.argLatitude?.toDouble()
+                                )
+                            }
+                            entry<Screens.TextToSpeechRoute> {
+                                TextToSpeechScreen.TextToSpeechUI(paddingValues = paddingValues)
+                            }
+                        }
+                    )
                 }
             )
         }
-    }
-}
-
-private fun NavGraphBuilder.addMainGraph(
-    paddingValues: PaddingValues,
-    navController: NavController
-) {
-    composable<MainRoute> {
-        MainScreen.MainUI(
-            paddingValues = paddingValues,
-            navToItem = { listItem ->
-                when (listItem) {
-                    MainListItem.ParkingMap -> {
-                        navController.toParkingList()
-                    }
-
-                    MainListItem.GarbageTruckMap -> {
-                        navController.toGarbageTruckList()
-                    }
-
-                    MainListItem.TvProgramList -> {
-                        navController.toTvProgramList()
-                    }
-                    MainListItem.ArmRecyclerMap -> {
-                        navController.toArmRecyclerList()
-                    }
-                    MainListItem.MapLocation -> {
-                        navController.toMapLocationList()
-                    }
-                    MainListItem.TextToSpeech -> {
-                        navController.toTextToSpeech()
-                    }
-                }
-            }
-        )
-    }
-}
-
-private fun NavGraphBuilder.addParkingListGraph(
-    paddingValues: PaddingValues,
-    navController: NavController
-) {
-    composable<ParkingListRoute> {
-        ParkingListScreen.ParkingListUI(
-            paddingValues = paddingValues,
-            toParkingMap = {
-                navController.toParkingMap(it)
-            }
-        )
-    }
-}
-
-private fun NavGraphBuilder.addParkingMapGraph(
-    paddingValues: PaddingValues
-) {
-    composable<ParkingMapRoute>(typeMap = mapOf(typeOf<ParkingSpace>() to ParkingSpace.NavigationType)) {
-        val arguments = it.toRoute<ParkingMapRoute>()
-        ParkingMapScreen.ParkingMapUI(
-            paddingValues = paddingValues,
-            parkingSpace = arguments.argParkingSpace
-        )
-    }
-}
-
-private fun NavGraphBuilder.addGarbageTruckListGraph(
-    paddingValues: PaddingValues,
-    navController: NavController
-) {
-    composable<GarbageTruckListRoute> {
-        GarbageTruckListScreen.GarbageTruckListUI(
-            paddingValues = paddingValues,
-            toGarbageTruckMap = {
-                navController.toGarbageTruckMap(it)
-            }
-        )
-    }
-}
-
-private fun NavGraphBuilder.addGarbageTruckMapGraph(
-    paddingValues: PaddingValues
-) {
-    composable<GarbageTruckMapRoute>(typeMap = mapOf(typeOf<GarbageTruck>() to GarbageTruck.NavigationType)) {
-        val arguments = it.toRoute<GarbageTruckMapRoute>()
-        GarbageTruckMapScreen.TruckMapUI(
-            paddingValues,
-            garbageTruck = arguments.argGarbageTruck
-        )
-    }
-}
-
-private fun NavGraphBuilder.addTvProgramListGraph(
-    paddingValues: PaddingValues
-) {
-    composable<TvProgramListRoute> {
-        TvProgramListScreen.TvProgramListUI(paddingValues = paddingValues)
-    }
-}
-
-private fun NavGraphBuilder.addArmRecyclerListGraph(
-    paddingValues: PaddingValues
-) {
-    composable<ArmRecyclerListRoute> {
-        ArmRecyclerListScreen.ArmRecyclerListUI(paddingValues = paddingValues)
-    }
-}
-
-private fun NavGraphBuilder.addSettingGraph(
-    paddingValues: PaddingValues
-) {
-    composable<SettingRoute> {
-        SettingScreen.SettingUI(paddingValues = paddingValues)
-    }
-}
-
-private fun NavGraphBuilder.addMapLocationGraph(
-    paddingValues: PaddingValues,
-    navController: NavController
-) {
-    composable<MapLocationListRoute> {
-        MapLocationListScreen.MapLocationListUI(
-            paddingValues = paddingValues,
-            toMapLocationMap = { longitude, latitude ->
-                navController.toMapLocationMap(longitude, latitude)
-            }
-        )
-    }
-}
-
-private fun NavGraphBuilder.addMapLocationMapGraph(
-    paddingValues: PaddingValues
-) {
-    composable<MapLocationMapRoute> {
-        val arguments = it.toRoute<MapLocationMapRoute>()
-        MapLocationMapScreen.MapLocationMapUI(
-            paddingValues = paddingValues,
-            targetLongitude = arguments.argLongitude?.toDouble(),
-            targetLatitude = arguments.argLatitude?.toDouble()
-        )
-    }
-}
-
-private fun NavGraphBuilder.addTextToSpeechGraph(
-    paddingValues: PaddingValues
-) {
-    composable<TextToSpeechRoute> {
-        TextToSpeechScreen.TextToSpeechUI(paddingValues = paddingValues)
     }
 }

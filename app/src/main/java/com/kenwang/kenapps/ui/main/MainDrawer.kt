@@ -17,15 +17,15 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import com.kenwang.kenapps.R
-import com.kenwang.kenapps.extensions.toSetting
+import com.kenwang.kenapps.extensions.addSetting
 import kotlinx.coroutines.launch
 
 @Composable
 fun MainDrawer(
     drawerState: DrawerState,
-    navController: NavController,
+    backStack: NavBackStack,
     gesturesEnabled: Boolean,
     content: @Composable () -> Unit
 ) {
@@ -41,7 +41,7 @@ fun MainDrawer(
                     SettingMenu {
                         scope.launch {
                             drawerState.close()
-                            navController.toSetting()
+                            backStack.addSetting()
                         }
                     }
                 }
