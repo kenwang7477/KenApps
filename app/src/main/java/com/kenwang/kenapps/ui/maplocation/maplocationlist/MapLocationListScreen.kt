@@ -48,7 +48,6 @@ import com.kenwang.kenapps.ui.commonscreen.EmptyView
 import com.kenwang.kenapps.ui.commonscreen.LoadingView
 import com.kenwang.kenapps.utils.FileUtil
 import com.kenwang.kenapps.utils.TimeUtil
-import kotlinx.collections.immutable.ImmutableList
 
 object MapLocationListScreen {
 
@@ -101,7 +100,7 @@ object MapLocationListScreen {
     @Composable
     private fun MapLocationList(
         onDeleteMapLocation: (mapLocation: MapLocation) -> Unit,
-        mapLocationList: ImmutableList<MapLocation>,
+        mapLocationList: List<MapLocation>,
         toMapLocationMap: (longitude: Double, latitude: Double) -> Unit
     ) {
         LazyColumn(modifier = Modifier.fillMaxSize()) {

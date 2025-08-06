@@ -7,7 +7,6 @@ import org.junit.runners.Suite
 @Ignore("Ignore API test")
 @RunWith(Suite::class)
 @Suite.SuiteClasses(
-    ArmRecyclerAPITest::class,
     GarbageTruckAPITest::class,
     ParkingListAPITest::class
 )

@@ -5,8 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.kenwang.kenapps.domain.usecase.main.GetMainListUseCase
 import com.kenwang.kenapps.domain.usecase.main.MainListItem
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -28,13 +26,13 @@ class MainViewModel @Inject constructor(
     private fun getMainList() {
         viewModelScope.launch {
             getMainListUseCase.get().invoke().collect { result ->
-                _viewState.emit(MainViewState.Success(result.list.toImmutableList()))
+                _viewState.emit(MainViewState.Success(result.list.toList()))
             }
         }
     }
 
     sealed class MainViewState {
         object Empty : MainViewState()
-        data class Success(val items: ImmutableList<MainListItem>) : MainViewState()
+        data class Success(val items: List<MainListItem>) : MainViewState()
     }
 }

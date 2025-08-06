@@ -10,7 +10,6 @@ class GetMainListUseCase @Inject constructor() {
             MainListItem.ParkingMap,
             MainListItem.GarbageTruckMap,
             MainListItem.TvProgramList,
-            MainListItem.ArmRecyclerMap,
             MainListItem.MapLocation,
             MainListItem.TextToSpeech
         )
@@ -26,7 +25,6 @@ enum class MainListItem {
     ParkingMap,
     GarbageTruckMap,
     TvProgramList,
-    ArmRecyclerMap,
     MapLocation,
     TextToSpeech
 }

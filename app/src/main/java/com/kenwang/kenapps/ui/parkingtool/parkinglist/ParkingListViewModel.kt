@@ -6,8 +6,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.kenwang.kenapps.data.model.ParkingSpace
 import com.kenwang.kenapps.domain.usecase.parkinglist.GetParkingListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -36,7 +34,7 @@ class ParkingListViewModel @Inject constructor(
 
                         is GetParkingListUseCase.Result.Success -> {
                             _viewState.emit(
-                                ParkingListViewState.Success(result.list.toImmutableList())
+                                ParkingListViewState.Success(result.list.toList())
                             )
                         }
                         is GetParkingListUseCase.Result.Error -> {
@@ -50,7 +48,7 @@ class ParkingListViewModel @Inject constructor(
     }
 
     sealed class ParkingListViewState {
-        data class Success(val list: ImmutableList<ParkingSpace>) : ParkingListViewState()
+        data class Success(val list: List<ParkingSpace>) : ParkingListViewState()
         data class Error(val errorMessage: String) : ParkingListViewState()
         data object Empty : ParkingListViewState()
         data object Loading : ParkingListViewState()

@@ -8,7 +8,6 @@ import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.Network
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -41,7 +40,6 @@ import com.kenwang.kenapps.ui.commonscreen.EmptyView
 import com.kenwang.kenapps.ui.commonscreen.ErrorView
 import com.kenwang.kenapps.ui.commonscreen.LoadingView
 import com.kenwang.kenapps.ui.commonscreen.ShowLocationPermissionView
-import kotlinx.collections.immutable.ImmutableList
 
 object ParkingListScreen {
 
@@ -143,7 +141,7 @@ object ParkingListScreen {
     fun ParkingList(
         modifier: Modifier,
         toParkingMap: (parkingSpace: ParkingSpace) -> Unit,
-        parkingSpaces: ImmutableList<ParkingSpace>
+        parkingSpaces: List<ParkingSpace>
     ) {
         LazyColumn(modifier = modifier) {
             items(parkingSpaces) { parkingSpace ->

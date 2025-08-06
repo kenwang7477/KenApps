@@ -26,9 +26,6 @@ sealed class Screens : NavKey {
     data object TvProgramListRoute : Screens()
 
     @Serializable
-    data object ArmRecyclerListRoute : Screens()
-
-    @Serializable
     data object SettingRoute : Screens()
 
     @Serializable

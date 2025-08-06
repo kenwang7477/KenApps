@@ -51,7 +51,6 @@ import com.kenwang.kenapps.ui.commonscreen.EmptyView
 import com.kenwang.kenapps.ui.commonscreen.ErrorView
 import com.kenwang.kenapps.ui.commonscreen.LoadingView
 import com.kenwang.kenapps.ui.commonscreen.ShowLocationPermissionView
-import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalLayoutApi::class)
 object GarbageTruckListScreen {
@@ -200,7 +199,7 @@ object GarbageTruckListScreen {
     fun TruckList(
         modifier: Modifier,
         toGarbageTruckMap: (garbageTruck: GarbageTruck) -> Unit,
-        garbageTrucks: ImmutableList<GarbageTruck>
+        garbageTrucks: List<GarbageTruck>
     ) {
         LazyColumn(modifier = modifier) {
             items(garbageTrucks) { truck ->

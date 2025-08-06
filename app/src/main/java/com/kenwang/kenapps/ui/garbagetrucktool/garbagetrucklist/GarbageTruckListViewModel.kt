@@ -6,8 +6,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.kenwang.kenapps.data.model.GarbageTruck
 import com.kenwang.kenapps.domain.usecase.garbagetrucklist.GetGarbageTruckListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -38,7 +36,7 @@ class GarbageTruckListViewModel @Inject constructor(
                 when (result) {
                     is GetGarbageTruckListUseCase.Result.Success -> {
                         _viewState.emit(
-                            GarbageTruckViewState.Success(result.list.toImmutableList())
+                            GarbageTruckViewState.Success(result.list.toList())
                         )
                     }
                     is GetGarbageTruckListUseCase.Result.Error -> {
@@ -62,14 +60,14 @@ class GarbageTruckListViewModel @Inject constructor(
             garbageTruckList
         }
         viewModelScope.launch {
-            _viewState.emit(GarbageTruckViewState.Success(trucks.toImmutableList()))
+            _viewState.emit(GarbageTruckViewState.Success(trucks.toList()))
         }
     }
 
     sealed class GarbageTruckViewState {
         object Loading : GarbageTruckViewState()
         object Empty : GarbageTruckViewState()
-        data class Success(val garbageTrucks: ImmutableList<GarbageTruck>) : GarbageTruckViewState()
+        data class Success(val garbageTrucks: List<GarbageTruck>) : GarbageTruckViewState()
         data class Error(val errorMessage: String) : GarbageTruckViewState()
     }
 }

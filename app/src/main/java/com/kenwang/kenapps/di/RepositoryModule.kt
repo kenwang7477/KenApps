@@ -3,10 +3,6 @@ package com.kenwang.kenapps.di
 import android.content.Context
 import com.example.tvprogramlist.repository.TvProgramRepository
 import com.kenwang.kenapps.data.database.maplocation.MapLocationDao
-import com.kenwang.kenapps.data.repository.armrecycler.ArmRecyclerClient
-import com.kenwang.kenapps.data.repository.armrecycler.ArmRecyclerLocalDataSource
-import com.kenwang.kenapps.data.repository.armrecycler.ArmRecyclerRepository
-import com.kenwang.kenapps.data.repository.armrecycler.ArmRecyclerServerDataSource
 import com.kenwang.kenapps.data.repository.garbagetruck.GarbageTruckClient
 import com.kenwang.kenapps.data.repository.garbagetruck.GarbageTruckLocalDataSource
 import com.kenwang.kenapps.data.repository.garbagetruck.GarbageTruckRepository
@@ -53,15 +49,6 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideTvProgramRepository() = TvProgramRepository(tvProgramDataSource = TvProgramDataSource())
-
-    @Provides
-    @Singleton
-    fun provideArmRecyclerRepository(
-        armRecyclerClient: ArmRecyclerClient
-    ) = ArmRecyclerRepository(
-        armRecyclerServerDataSource = ArmRecyclerServerDataSource(armRecyclerClient = armRecyclerClient),
-        armRecyclerLocalDataSource = ArmRecyclerLocalDataSource()
-    )
 
     @Provides
     @Singleton

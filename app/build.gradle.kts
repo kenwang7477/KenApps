@@ -117,7 +117,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.constraintlayout.compose)
-    implementation(libs.kotlinx.collections.immutable)
     implementation(libs.androidx.datastore)
     implementation(libs.io.coil.compose)
     implementation(libs.kotlinx.serialization.json)

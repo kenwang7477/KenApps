@@ -33,7 +33,7 @@ class ParkingListRepositoryTest {
     }
 
     @Test
-    fun `Test getArmRecyclerList with parkingListLocalDataSource parkingList is empty then parkingListLocalDataSource set result`() = runTest {
+    fun `Test getParkingList with parkingListLocalDataSource parkingList is empty then parkingListLocalDataSource set result`() = runTest {
         val parkingList = listOf(ParkingSpace())
         every { parkingListLocalDataSource.parkingList } returns emptyList() andThen parkingList
         coEvery { parkingListServerDataSource.getParkingList() } returns parkingList
@@ -48,7 +48,7 @@ class ParkingListRepositoryTest {
     }
 
     @Test
-    fun `Test getArmRecyclerList with parkingListLocalDataSource parkingList is not empty then parkingListLocalDataSource get result`() = runTest {
+    fun `Test getParkingList with parkingListLocalDataSource parkingList is not empty then parkingListLocalDataSource get result`() = runTest {
         val parkingList = listOf(ParkingSpace())
         every { parkingListLocalDataSource.parkingList } returns parkingList
 

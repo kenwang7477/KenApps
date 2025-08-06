@@ -21,8 +21,6 @@ fun NavBackStack.addGarbageTruckMap(garbageTruck: GarbageTruck) {
 
 fun NavBackStack.addTvProgramList() = add(Screens.TvProgramListRoute)
 
-fun NavBackStack.addArmRecyclerList() = add(Screens.ArmRecyclerListRoute)
-
 fun NavBackStack.addSetting() = add(Screens.SettingRoute)
 
 fun NavBackStack.addMapLocationList() = add(Screens.MapLocationListRoute)

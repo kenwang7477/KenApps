@@ -6,8 +6,6 @@ import com.example.tvprogramlist.repository.TvProgramRepository
 import com.kenwang.kenapps.data.model.TvProgram
 import com.kenwang.kenapps.domain.usecase.tvprogramlist.GetTvProgramListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -38,7 +36,7 @@ class TvProgramListViewModel @Inject constructor(
                     when (result) {
                         is GetTvProgramListUseCase.Result.Success -> {
                             _viewState.emit(
-                                TvProgramListViewState.Success(result.list.toImmutableList())
+                                TvProgramListViewState.Success(result.list.toList())
                             )
                         }
 
@@ -51,7 +49,7 @@ class TvProgramListViewModel @Inject constructor(
     }
 
     sealed class TvProgramListViewState {
-        data class Success(var programs: ImmutableList<TvProgram>) : TvProgramListViewState()
+        data class Success(var programs: List<TvProgram>) : TvProgramListViewState()
         object Loading : TvProgramListViewState()
         object Empty : TvProgramListViewState()
     }

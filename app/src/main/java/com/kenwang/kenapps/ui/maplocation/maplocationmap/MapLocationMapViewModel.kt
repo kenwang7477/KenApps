@@ -8,8 +8,6 @@ import com.kenwang.kenapps.data.model.MapLocation
 import com.kenwang.kenapps.domain.usecase.maplocation.GetMapLocationListUseCase
 import com.kenwang.kenapps.domain.usecase.maplocation.InsertMapLocationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -48,7 +46,7 @@ class MapLocationMapViewModel @Inject constructor(
             getMapLocationListUseCase.get().invoke().collect { result ->
                 when (result) {
                     is GetMapLocationListUseCase.Result.Success -> {
-                        _viewState.emit(MapLocationMapViewState.Success(result.list.toImmutableList()))
+                        _viewState.emit(MapLocationMapViewState.Success(result.list.toList()))
                     }
                     is GetMapLocationListUseCase.Result.Empty -> {
                         _viewState.emit(MapLocationMapViewState.Empty)
@@ -59,7 +57,7 @@ class MapLocationMapViewModel @Inject constructor(
     }
 
     sealed class MapLocationMapViewState {
-        data class Success(val list: ImmutableList<MapLocation>) : MapLocationMapViewState()
+        data class Success(val list: List<MapLocation>) : MapLocationMapViewState()
         object Empty : MapLocationMapViewState()
     }
 }

@@ -27,7 +27,6 @@ import androidx.navigation3.ui.NavDisplay
 import com.kenwang.kenapps.R
 import com.kenwang.kenapps.domain.usecase.darkmode.GetDarkModeUseCase
 import com.kenwang.kenapps.domain.usecase.main.MainListItem
-import com.kenwang.kenapps.extensions.addArmRecyclerList
 import com.kenwang.kenapps.extensions.addGarbageTruckList
 import com.kenwang.kenapps.extensions.addGarbageTruckMap
 import com.kenwang.kenapps.extensions.addMapLocationList
@@ -37,7 +36,6 @@ import com.kenwang.kenapps.extensions.addParkingMap
 import com.kenwang.kenapps.extensions.addTextToSpeech
 import com.kenwang.kenapps.extensions.addTvProgramList
 import com.kenwang.kenapps.ui.Screens
-import com.kenwang.kenapps.ui.armrecyclertool.armrecyclerlist.ArmRecyclerListScreen
 import com.kenwang.kenapps.ui.garbagetrucktool.garbagetrucklist.GarbageTruckListScreen
 import com.kenwang.kenapps.ui.garbagetrucktool.garbagetruckmap.GarbageTruckMapScreen
 import com.kenwang.kenapps.ui.maplocation.maplocationlist.MapLocationListScreen
@@ -88,7 +86,6 @@ fun AppNavHost(
         is Screens.GarbageTruckMapRoute -> stringResource(id = R.string.kh_garbage_truck_map_title)
 
         is Screens.TvProgramListRoute -> stringResource(id = R.string.tv_program_list_title)
-        is Screens.ArmRecyclerListRoute -> stringResource(id = R.string.kh_arm_recycler_map_title)
         is Screens.SettingRoute -> stringResource(id = R.string.setting)
         is Screens.MapLocationListRoute,
         is Screens.MapLocationMapRoute -> stringResource(id = R.string.map_location_title)
@@ -149,9 +146,6 @@ fun AppNavHost(
                                             MainListItem.TvProgramList -> {
                                                 backStack.addTvProgramList()
                                             }
-                                            MainListItem.ArmRecyclerMap -> {
-                                                backStack.addArmRecyclerList()
-                                            }
                                             MainListItem.MapLocation -> {
                                                 backStack.addMapLocationList()
                                             }
@@ -192,9 +186,6 @@ fun AppNavHost(
                             }
                             entry<Screens.TvProgramListRoute> {
                                 TvProgramListScreen.TvProgramListUI(paddingValues = paddingValues)
-                            }
-                            entry<Screens.ArmRecyclerListRoute> {
-                                ArmRecyclerListScreen.ArmRecyclerListUI(paddingValues = paddingValues)
                             }
                             entry<Screens.SettingRoute> {
                                 SettingScreen.SettingUI(paddingValues = paddingValues)

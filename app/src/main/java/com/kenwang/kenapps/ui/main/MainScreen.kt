@@ -22,7 +22,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kenwang.kenapps.R
 import com.kenwang.kenapps.domain.usecase.main.MainListItem
-import kotlinx.collections.immutable.ImmutableList
 
 object MainScreen {
 
@@ -44,7 +43,7 @@ object MainScreen {
     private fun GridListLayout(
         paddingValues: PaddingValues,
         navToItem: (item: MainListItem) -> Unit,
-        itemList: ImmutableList<MainListItem>
+        itemList: List<MainListItem>
     ) {
         LazyVerticalGrid(
             modifier = Modifier.padding(paddingValues),
@@ -86,9 +85,6 @@ object MainScreen {
                     }
                     MainListItem.TvProgramList -> {
                         stringResource(id = R.string.tv_program_list_title)
-                    }
-                    MainListItem.ArmRecyclerMap -> {
-                        stringResource(id = R.string.kh_arm_recycler_map_title)
                     }
                     MainListItem.MapLocation -> {
                         stringResource(id = R.string.map_location_title)

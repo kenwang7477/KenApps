@@ -1,8 +1,5 @@
 package com.kenwang.kenapps.di
 
-import com.kenwang.kenapps.data.repository.armrecycler.ArmRecyclerClient
-import com.kenwang.kenapps.data.repository.armrecycler.ArmRecyclerMapper
-import com.kenwang.kenapps.data.repository.armrecycler.ArmRecyclerService
 import com.kenwang.kenapps.data.repository.garbagetruck.GarbageTruckClient
 import com.kenwang.kenapps.data.repository.garbagetruck.GarbageTruckMapper
 import com.kenwang.kenapps.data.repository.garbagetruck.GarbageTruckService
@@ -23,7 +20,6 @@ import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-import okhttp3.OkHttpClient
 import javax.inject.Singleton
 
 @Module
@@ -67,35 +63,6 @@ object NetworkModule {
         garbageTruckService = clientService,
         garbageTruckMapper = GarbageTruckMapper()
     )
-
-    @Provides
-    @Singleton
-    fun provideArmRecyclerService(): ArmRecyclerService {
-        return ArmRecyclerService(httpClient = getOpenDataHttpClient())
-    }
-
-    @Provides
-    @Singleton
-    fun provideArmRecyclerClient(
-        armRecyclerService: ArmRecyclerService,
-    ) = ArmRecyclerClient(
-        armRecyclerService = armRecyclerService,
-        armRecyclerMapper = ArmRecyclerMapper()
-    )
-
-    @Provides
-    @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
-//        val interceptor = HttpLoggingInterceptor().apply {
-//            level = if (BuildConfig.DEBUG) {
-//                HttpLoggingInterceptor.Level.BODY
-//            } else {
-//                HttpLoggingInterceptor.Level.NONE
-//            }
-//        }
-//        return OkHttpClient.Builder().addInterceptor(interceptor).build()
-        return OkHttpClient.Builder().build()
-    }
 
     private fun getOpenDataHttpClient(): HttpClient {
         return HttpClient(OkHttp) {

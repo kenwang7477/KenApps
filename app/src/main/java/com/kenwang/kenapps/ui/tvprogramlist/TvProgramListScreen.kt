@@ -46,7 +46,6 @@ import com.kenwang.kenapps.data.model.TvProgram
 import com.kenwang.kenapps.ui.commonscreen.EmptyView
 import com.kenwang.kenapps.ui.commonscreen.LoadingView
 import com.kenwang.kenapps.utils.ChromeTabUtil
-import kotlinx.collections.immutable.ImmutableList
 
 object TvProgramListScreen {
 
@@ -143,7 +142,7 @@ object TvProgramListScreen {
     }
 
     @Composable
-    fun ProgramList(programList: ImmutableList<TvProgram>) {
+    fun ProgramList(programList: List<TvProgram>) {
         LazyColumn {
             items(programList) { program ->
                 ProgramCardItem(program = program)

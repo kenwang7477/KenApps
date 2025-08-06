@@ -51,8 +51,6 @@ import com.kenwang.kenapps.ui.commonscreen.CustomDialog
 import com.kenwang.kenapps.ui.commonscreen.ShowPermissionView
 import com.kenwang.kenapps.utils.FileUtil
 import com.kenwang.kenapps.utils.TimeUtil
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 
 object MapLocationMapScreen {
@@ -114,7 +112,7 @@ object MapLocationMapScreen {
                     }
                     is MapLocationMapViewModel.MapLocationMapViewState.Empty -> {
                         MapLocationMap(
-                            mapLocationList = emptyList<MapLocation>().toImmutableList(),
+                            mapLocationList = emptyList<MapLocation>().toList(),
                             targetLatLng = targetLatLng
                         )
                     }
@@ -125,7 +123,7 @@ object MapLocationMapScreen {
 
     @Composable
     private fun MapLocationMap(
-        mapLocationList: ImmutableList<MapLocation>,
+        mapLocationList: List<MapLocation>,
         targetLatLng: LatLng? = null
     ) {
         val context = LocalContext.current
