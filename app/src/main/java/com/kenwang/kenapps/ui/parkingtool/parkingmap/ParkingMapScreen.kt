@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,6 +22,7 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.kenwang.kenapps.data.model.ParkingSpace
+import com.kenwang.kenapps.data.model.ParkingSpaceCity
 import com.kenwang.kenapps.extensions.cleanLineBreak
 import com.kenwang.kenapps.ui.theme.Blue90
 
@@ -30,8 +32,13 @@ object ParkingMapScreen {
     fun ParkingMapUI(
         paddingValues: PaddingValues,
         parkingSpace: ParkingSpace,
+        city: ParkingSpaceCity,
         parkingMapViewModel: ParkingMapViewModel = hiltViewModel()
     ) {
+        LaunchedEffect(Unit) {
+            parkingMapViewModel.getParkingList(city = city)
+        }
+
         Column(
             modifier = Modifier
                 .padding(paddingValues)
@@ -63,7 +70,7 @@ object ParkingMapScreen {
                             Marker(
                                 state = MarkerState(position = parkingSpaceLatLng),
                                 title = it.name.cleanLineBreak(),
-                                snippet = it.charges.cleanLineBreak()
+                                snippet = it.fareDescription.cleanLineBreak()
                             )
                         }
                     }

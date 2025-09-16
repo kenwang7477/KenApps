@@ -3,14 +3,16 @@ package com.kenwang.kenapps.extensions
 import androidx.navigation3.runtime.NavBackStack
 import com.kenwang.kenapps.data.model.ParkingSpace
 import com.kenwang.kenapps.data.model.GarbageTruck
+import com.kenwang.kenapps.data.model.ParkingSpaceCity
 import com.kenwang.kenapps.ui.Screens
 
 fun NavBackStack.addParkingList() = add(Screens.ParkingListRoute)
 
 fun NavBackStack.addParkingMap(
-    parkingSpace: ParkingSpace
+    parkingSpace: ParkingSpace,
+    city: ParkingSpaceCity
 ) {
-    add(Screens.ParkingMapRoute(argParkingSpace = parkingSpace))
+    add(Screens.ParkingMapRoute(argParkingSpace = parkingSpace, argCity = city))
 }
 
 fun NavBackStack.addGarbageTruckList() = add(Screens.GarbageTruckListRoute)

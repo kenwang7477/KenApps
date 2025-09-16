@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin)
@@ -25,9 +27,6 @@ android {
 
         testInstrumentationRunner = "com.kenwang.kenapps.runner.CustomTestRunner"
 //        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
 
         androidResources.localeFilters.addAll(listOf("en", "zh-rTW"))
 
@@ -45,35 +44,40 @@ android {
     }
 
     externalNativeBuild {
-        ndkVersion = "26.1.10909125"
+        ndkVersion = "28.0.12674087"
         cmake {
             path(file("src/main/cpp/CMakeLists.txt"))
             version = "3.31.1"
         }
     }
-//    signingConfigs {
-//        create("release") {
-//            storeFile = file("./key/release_key.jks")
-//            storePassword = "123456"
-//            keyAlias = "kenwang"
-//            keyPassword = "123456"
-//        }
-//    }
+    signingConfigs {
+        create("release") {
+            storeFile = file("./key/release_key.keystore")
+            storePassword = "123456"
+            keyAlias = "kenwang"
+            keyPassword = "123456"
+        }
+    }
 
     buildTypes {
-        getByName("release") {
-//            signingConfig = signingConfigs.getByName("release")
+        release {
+            signingConfig = signingConfigs.getByName("release")
             buildFeatures.buildConfig = true
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
+        debug {
+//            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = "17"
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
+        }
     }
     buildFeatures {
         compose = true

@@ -29,7 +29,7 @@ class ParkingListAPITest {
         }
         val httpClient = HttpClient(OkHttp) {
             defaultRequest {
-                url("https://quality.data.gov.tw/")
+                url("https://tdx.transportdata.tw/")
             }
             Logging {
                 logger = Logger.DEFAULT
@@ -40,7 +40,7 @@ class ParkingListAPITest {
             }
         }
         val parkingListService = ParkingListService(httpClient)
-        val result = parkingListService.getParkingList()
+        val result = parkingListService.getParkingList("authorization", "Taipei")
         Truth.assertThat(result.isSuccess).isTrue()
     }
 }

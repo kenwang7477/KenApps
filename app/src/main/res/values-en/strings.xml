@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Ken Apps</string>
 
-    <string name="kh_garbage_truck_map_title">Kaohsiung Garbage Truck Map</string>
-    <string name="kh_parking_space_map_title">Kaohsiung Parking Space Map</string>
+    <string name="garbage_truck_map_title">Garbage Truck Map</string>
+    <string name="parking_space_map_title">Parking Space Map</string>
     <string name="tv_program_list_title">TV Program List</string>
     <string name="map_location_title">Map Location Helper</string>
     <string name="text_to_speech_title">Text To Speech</string>
@@ -26,9 +26,8 @@
     <string name="take_picture">Take a picture</string>
     <string name="delete_picture">Delete this picture</string>
 
-    <string name="area">Area</string>
-    <string name="type">Type</string>
     <string name="name">Name</string>
+    <string name="park_description">Description</string>
     <string name="charge">Charge</string>
     <string name="address">Address</string>
     <string name="contact_information">Contact Information</string>
@@ -42,4 +41,11 @@
     <string name="play_speech">Play</string>
     <string name="stop_speech">Stop</string>
     <string name="speech_rate">Speech Rate:</string>
+
+    <string name="city">City</string>
+    <string name="taipei">Taipei</string>
+    <string name="taoyuan">Taoyuan</string>
+    <string name="taichung">Taichung</string>
+    <string name="tainan">Tainan</string>
+    <string name="kaohsiung">Kaohsiung</string>
 </resources>

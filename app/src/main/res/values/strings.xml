@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Ken Apps</string>
 
-    <string name="kh_garbage_truck_map_title">高雄市垃圾車地圖</string>
-    <string name="kh_parking_space_map_title">高雄市停車場地圖</string>
+    <string name="garbage_truck_map_title">垃圾車地圖</string>
+    <string name="parking_space_map_title">停車場地圖</string>
     <string name="tv_program_list_title">數位電視節目表</string>
     <string name="map_location_title">地圖位置記錄小幫手</string>
     <string name="text_to_speech_title">文字轉語音</string>
@@ -26,9 +26,8 @@
     <string name="take_picture">拍照</string>
     <string name="delete_picture">刪除照片</string>
 
-    <string name="area">地區</string>
-    <string name="type">類型</string>
     <string name="name">名稱</string>
+    <string name="park_description">詳細資訊</string>
     <string name="charge">收費</string>
     <string name="address">地址</string>
     <string name="contact_information">聯絡資訊</string>
@@ -42,4 +41,11 @@
     <string name="play_speech">播放</string>
     <string name="stop_speech">停止</string>
     <string name="speech_rate">語音速度:</string>
+
+    <string name="city">城市</string>
+    <string name="taipei">台北</string>
+    <string name="taoyuan">桃園</string>
+    <string name="taichung">台中</string>
+    <string name="tainan">台南</string>
+    <string name="kaohsiung">高雄</string>
 </resources>

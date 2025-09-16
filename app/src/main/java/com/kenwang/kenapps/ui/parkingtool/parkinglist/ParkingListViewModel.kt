@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
 import com.kenwang.kenapps.data.model.ParkingSpace
+import com.kenwang.kenapps.data.model.ParkingSpaceCity
 import com.kenwang.kenapps.domain.usecase.parkinglist.GetParkingListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,16 +17,20 @@ import javax.inject.Provider
 class ParkingListViewModel @Inject constructor(
     private val getParkingListUseCase: Provider<GetParkingListUseCase>
 ) : ViewModel() {
-
     private val _viewState = MutableStateFlow<ParkingListViewState>(ParkingListViewState.Loading)
     val viewState = _viewState.asStateFlow()
 
-    fun getParkingList(currentLatLng: LatLng? = null) {
+    private var city: ParkingSpaceCity = ParkingSpaceCity.entries.first()
+
+    fun getParkingList(currentLatLng: LatLng? = null, selectedCity: ParkingSpaceCity? = null) {
         viewModelScope.launch {
+            if (selectedCity != null) {
+                city = selectedCity
+            }
             _viewState.emit(ParkingListViewState.Loading)
 
             getParkingListUseCase.get()
-                .invoke(currentLatLng = currentLatLng)
+                .invoke(currentLatLng = currentLatLng, city = city)
                 .collect { result ->
                     when (result) {
                         is GetParkingListUseCase.Result.Empty -> {
@@ -34,7 +39,7 @@ class ParkingListViewModel @Inject constructor(
 
                         is GetParkingListUseCase.Result.Success -> {
                             _viewState.emit(
-                                ParkingListViewState.Success(result.list.toList())
+                                ParkingListViewState.Success(city = city, result.list.toList())
                             )
                         }
                         is GetParkingListUseCase.Result.Error -> {
@@ -48,7 +53,7 @@ class ParkingListViewModel @Inject constructor(
     }
 
     sealed class ParkingListViewState {
-        data class Success(val list: List<ParkingSpace>) : ParkingListViewState()
+        data class Success(val city: ParkingSpaceCity, val list: List<ParkingSpace>) : ParkingListViewState()
         data class Error(val errorMessage: String) : ParkingListViewState()
         data object Empty : ParkingListViewState()
         data object Loading : ParkingListViewState()

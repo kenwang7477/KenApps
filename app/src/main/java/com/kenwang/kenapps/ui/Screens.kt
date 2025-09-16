@@ -3,6 +3,7 @@ package com.kenwang.kenapps.ui
 import androidx.navigation3.runtime.NavKey
 import com.kenwang.kenapps.data.model.GarbageTruck
 import com.kenwang.kenapps.data.model.ParkingSpace
+import com.kenwang.kenapps.data.model.ParkingSpaceCity
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -14,7 +15,10 @@ sealed class Screens : NavKey {
     data object ParkingListRoute : Screens()
 
     @Serializable
-    data class ParkingMapRoute(val argParkingSpace: ParkingSpace) : Screens()
+    data class ParkingMapRoute(
+        val argParkingSpace: ParkingSpace,
+        val argCity: ParkingSpaceCity
+    ) : Screens()
 
     @Serializable
     data object GarbageTruckListRoute : Screens()

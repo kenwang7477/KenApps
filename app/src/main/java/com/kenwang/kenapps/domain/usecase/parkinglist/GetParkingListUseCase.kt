@@ -4,27 +4,40 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
 import com.kenwang.kenapps.data.api.APIException
 import com.kenwang.kenapps.data.model.ParkingSpace
+import com.kenwang.kenapps.data.model.ParkingSpaceCity
 import com.kenwang.kenapps.data.repository.parkinglist.ParkingListRepository
+import com.kenwang.kenapps.data.repository.tdx.TdxRepository
+import com.kenwang.kenapps.utils.KenLog
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class GetParkingListUseCase @Inject constructor(
+    private val tdxRepository: TdxRepository,
     private val parkingListRepository: ParkingListRepository
 ) {
 
-    operator fun invoke(currentLatLng: LatLng? = null) = flow {
+    operator fun invoke(
+        currentLatLng: LatLng? = null,
+        city: ParkingSpaceCity = ParkingSpaceCity.entries.first()
+    ) = flow {
+        KenLog.e("get list city = ${city}")
         try {
-            val parkingList = parkingListRepository.getParkingList()
+            val authorization = tdxRepository.getAuthorization()
+            val parkingList = parkingListRepository.getParkingList(
+                authorization = authorization,
+                parkingSpaceCity = city
+            )
             if (parkingList.isEmpty()) {
                 emit(Result.Empty)
             } else {
-                currentLatLng?.let {
-                    val sortedList = parkingList.sortedBy { truck ->
-                        val to = LatLng(truck.latitude, truck.longitude)
-                        SphericalUtil.computeDistanceBetween(currentLatLng, to)
-                    }
-                    emit(Result.Success(sortedList))
-                } ?: emit(Result.Success(parkingList))
+//                currentLatLng?.let {
+//                    val sortedList = parkingList.sortedBy { truck ->
+//                        val to = LatLng(truck.latitude, truck.longitude)
+//                        SphericalUtil.computeDistanceBetween(currentLatLng, to)
+//                    }
+//                    emit(Result.Success(sortedList))
+//                } ?: emit(Result.Success(parkingList))
+                emit(Result.Success(parkingList))
             }
         } catch (e: APIException) {
             emit(Result.Error(e))

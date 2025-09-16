@@ -78,10 +78,10 @@ object MainScreen {
             ) {
                 val title = when (item) {
                     MainListItem.ParkingMap -> {
-                        stringResource(id = R.string.kh_parking_space_map_title)
+                        stringResource(id = R.string.parking_space_map_title)
                     }
                     MainListItem.GarbageTruckMap -> {
-                        stringResource(id = R.string.kh_garbage_truck_map_title)
+                        stringResource(id = R.string.garbage_truck_map_title)
                     }
                     MainListItem.TvProgramList -> {
                         stringResource(id = R.string.tv_program_list_title)

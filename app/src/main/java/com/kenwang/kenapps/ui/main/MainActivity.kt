@@ -80,10 +80,10 @@ fun AppNavHost(
 
     val topAppBarTitle = when(backStack.last()) {
         is Screens.ParkingListRoute,
-        is Screens.ParkingMapRoute -> stringResource(R.string.kh_parking_space_map_title)
+        is Screens.ParkingMapRoute -> stringResource(R.string.parking_space_map_title)
 
         is Screens.GarbageTruckListRoute,
-        is Screens.GarbageTruckMapRoute -> stringResource(id = R.string.kh_garbage_truck_map_title)
+        is Screens.GarbageTruckMapRoute -> stringResource(id = R.string.garbage_truck_map_title)
 
         is Screens.TvProgramListRoute -> stringResource(id = R.string.tv_program_list_title)
         is Screens.SettingRoute -> stringResource(id = R.string.setting)
@@ -159,15 +159,16 @@ fun AppNavHost(
                             entry<Screens.ParkingListRoute> {
                                 ParkingListScreen.ParkingListUI(
                                     paddingValues = paddingValues,
-                                    toParkingMap = { parkingSpace ->
-                                        backStack.addParkingMap(parkingSpace = parkingSpace)
+                                    toParkingMap = { parkingSpace, city ->
+                                        backStack.addParkingMap(parkingSpace = parkingSpace, city = city)
                                     }
                                 )
                             }
                             entry<Screens.ParkingMapRoute> {
                                 ParkingMapScreen.ParkingMapUI(
                                     paddingValues = paddingValues,
-                                    parkingSpace = it.argParkingSpace
+                                    parkingSpace = it.argParkingSpace,
+                                    city = it.argCity
                                 )
                             }
                             entry<Screens.GarbageTruckListRoute> {

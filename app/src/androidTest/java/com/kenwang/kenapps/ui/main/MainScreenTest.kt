@@ -34,8 +34,8 @@ class MainScreenTest {
 
     @Test
     fun testMainListDisplayed() {
-        val garbageTruckString = composeTestRule.activity.getString(R.string.kh_garbage_truck_map_title)
-        val parkingMapString = composeTestRule.activity.getString(R.string.kh_parking_space_map_title)
+        val garbageTruckString = composeTestRule.activity.getString(R.string.garbage_truck_map_title)
+        val parkingMapString = composeTestRule.activity.getString(R.string.parking_space_map_title)
         val tvProgramString = composeTestRule.activity.getString(R.string.tv_program_list_title)
 
         composeTestRule.onNodeWithText(garbageTruckString).assertIsDisplayed()

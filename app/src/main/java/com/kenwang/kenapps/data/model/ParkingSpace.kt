@@ -5,28 +5,48 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ParkingSpaceBean(
-    @SerialName("行政區") val area: String = "",
-    @SerialName("型式") val type: String = "",
-    @SerialName("場名") val name: String = "",
-    @SerialName("位置") val address: String = "",
-    @SerialName("大車") val largeCarCount: Int = 0,
-    @SerialName("小車") val normalCarCount: Int = 0,
-    @SerialName("機車") val bicycleCount: Int = 0,
-    @SerialName("收費標準") val charges: String = "",
-    @SerialName("管理業者") val information: String = ""
-)
+    @SerialName("CarParks") val carParks: List<ParkingSpaceDetailBean> = emptyList()
+) {
+
+    @Serializable
+    data class ParkingSpaceDetailBean(
+        @SerialName("CarParkName") val parkName: ParkNameBean = ParkNameBean(),
+        @SerialName("Description") val description: String = "",
+        @SerialName("CarParkPosition") val position: ParkPositionBean = ParkPositionBean(),
+        @SerialName("Address") val address: String = "",
+        @SerialName("EmergencyPhone") val emergencyPhone: String = "",
+        @SerialName("FareDescription") val fareDescription: String = "",
+        @SerialName("IsPublic") val isPublic: Int = 0
+    )
+
+    @Serializable
+    data class ParkNameBean(
+        @SerialName("Zh_tw") val twName: String? = ""
+    )
+
+    @Serializable
+    data class ParkPositionBean(
+        @SerialName("PositionLat") val latitude: Double = 0.0,
+        @SerialName("PositionLon") val longitude: Double = 0.0
+    )
+}
 
 @Serializable
 data class ParkingSpace(
-    val area: String = "",
-    val type: String = "",
     val name: String = "",
+    val description: String = "",
+    val fareDescription: String = "",
     val address: String = "",
-    val longitude: Double = 0.0,
+    val emergencyPhone: String = "",
     val latitude: Double = 0.0,
-    val largeCarCount: Int = 0,
-    val normalCarCount: Int = 0,
-    val bicycleCount: Int = 0,
-    val charges: String = "",
-    val information: String = ""
+    val longitude: Double = 0.0,
+    val isPublic: Boolean = false
 )
+
+enum class ParkingSpaceCity(val cityName: String) {
+    Taipei("Taipei"),
+    Taoyuan("Taoyuan"),
+    Taichung("Taichung"),
+    Tainan("Tainan"),
+    Kaohsiung("Kaohsiung")
+}

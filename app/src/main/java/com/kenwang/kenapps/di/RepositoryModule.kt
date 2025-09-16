@@ -16,6 +16,10 @@ import com.kenwang.kenapps.data.repository.parkinglist.ParkingListRepository
 import com.kenwang.kenapps.data.repository.parkinglist.ParkingListServerDataSource
 import com.kenwang.kenapps.data.repository.systempreference.SystemPreferenceLocalDataStore
 import com.kenwang.kenapps.data.repository.systempreference.SystemPreferenceRepository
+import com.kenwang.kenapps.data.repository.tdx.TdxClient
+import com.kenwang.kenapps.data.repository.tdx.TdxLocalDataSource
+import com.kenwang.kenapps.data.repository.tdx.TdxRepository
+import com.kenwang.kenapps.data.repository.tdx.TdxServerDataSource
 import com.kenwang.kenapps.data.repository.tvprogramlist.TvProgramDataSource
 import dagger.Module
 import dagger.Provides
@@ -67,5 +71,12 @@ object RepositoryModule {
             mapLocationDao = mapLocationDao,
             mapLocationMapper = MapLocationMapper()
         )
+    )
+
+    @Provides
+    @Singleton
+    fun provideTdxRepository(tdxClient: TdxClient) = TdxRepository(
+        tdxServerDataSource = TdxServerDataSource(tdxClient = tdxClient),
+        tdxLocalDataSource = TdxLocalDataSource()
     )
 }
