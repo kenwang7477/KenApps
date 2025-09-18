@@ -40,6 +40,21 @@ jobs:
         env:
           ChatGPT_API_KEY: ${{ secrets.ChatGPT_API_KEY }}
         run: echo "ChatGPT_API_KEY=$ChatGPT_API_KEY" >> ./local.properties
+
+      # create TDX client Key
+      - name: Access ChatGPT API_KEY
+        env:
+          TDX_CLIENT_ID: ${{ secrets.TDX_CLIENT_ID }}
+        run: echo "TDX_CLIENT_ID=$TDX_CLIENT_ID" >> ./local.properties
+
+      # create TDX client secret
+      - name: Access ChatGPT API_KEY
+        env:
+          TDX_CLIENT_SECRET: ${{ secrets.TDX_CLIENT_SECRET }}
+        run: echo "TDX_CLIENT_SECRET=$TDX_CLIENT_SECRET" >> ./local.properties
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
       
       # Execute unit tests
       - name: Unit Test
