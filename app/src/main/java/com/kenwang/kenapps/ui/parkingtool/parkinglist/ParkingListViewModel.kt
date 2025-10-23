@@ -20,13 +20,10 @@ class ParkingListViewModel @Inject constructor(
     private val _viewState = MutableStateFlow<ParkingListViewState>(ParkingListViewState.Loading)
     val viewState = _viewState.asStateFlow()
 
-    private var city: ParkingSpaceCity = ParkingSpaceCity.entries.first()
-
     fun getParkingList(currentLatLng: LatLng? = null, selectedCity: ParkingSpaceCity? = null) {
         viewModelScope.launch {
-            if (selectedCity != null) {
-                city = selectedCity
-            }
+            val city = selectedCity ?: ParkingSpaceCity.entries.first()
+
             _viewState.emit(ParkingListViewState.Loading)
 
             getParkingListUseCase.get()
@@ -39,7 +36,7 @@ class ParkingListViewModel @Inject constructor(
 
                         is GetParkingListUseCase.Result.Success -> {
                             _viewState.emit(
-                                ParkingListViewState.Success(city = city, result.list.toList())
+                                ParkingListViewState.Success(result.list.toList())
                             )
                         }
                         is GetParkingListUseCase.Result.Error -> {
@@ -53,7 +50,7 @@ class ParkingListViewModel @Inject constructor(
     }
 
     sealed class ParkingListViewState {
-        data class Success(val city: ParkingSpaceCity, val list: List<ParkingSpace>) : ParkingListViewState()
+        data class Success(val list: List<ParkingSpace>) : ParkingListViewState()
         data class Error(val errorMessage: String) : ParkingListViewState()
         data object Empty : ParkingListViewState()
         data object Loading : ParkingListViewState()

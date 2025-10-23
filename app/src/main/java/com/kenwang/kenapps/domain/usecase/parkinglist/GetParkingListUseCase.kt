@@ -7,7 +7,6 @@ import com.kenwang.kenapps.data.model.ParkingSpace
 import com.kenwang.kenapps.data.model.ParkingSpaceCity
 import com.kenwang.kenapps.data.repository.parkinglist.ParkingListRepository
 import com.kenwang.kenapps.data.repository.tdx.TdxRepository
-import com.kenwang.kenapps.utils.KenLog
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
@@ -20,7 +19,6 @@ class GetParkingListUseCase @Inject constructor(
         currentLatLng: LatLng? = null,
         city: ParkingSpaceCity = ParkingSpaceCity.entries.first()
     ) = flow {
-        KenLog.e("get list city = ${city}")
         try {
             val authorization = tdxRepository.getAuthorization()
             val parkingList = parkingListRepository.getParkingList(

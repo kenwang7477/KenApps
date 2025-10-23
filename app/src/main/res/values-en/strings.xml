@@ -48,4 +48,17 @@
     <string name="taichung">Taichung</string>
     <string name="tainan">Tainan</string>
     <string name="kaohsiung">Kaohsiung</string>
+    <string name="keelung">Keelung</string>
+    <string name="hsinchu">Hsinchu</string>
+    <string name="hsinchu_county">Hsinchu County</string>
+    <string name="miaoli_county">Miaoli County</string>
+    <string name="changhua_county">Changhua</string>
+    <string name="nantou_county">Nantou</string>
+    <string name="yunlin_county">Yunlin</string>
+    <string name="chiayi">Chiayi</string>
+    <string name="chiayi_county">Chiayi County</string>
+    <string name="pingtung_county">Pingtung</string>
+    <string name="yilan_county">Yilan</string>
+    <string name="hualien_county">Hualien</string>
+    <string name="taitung_county">Taitung</string>
 </resources>

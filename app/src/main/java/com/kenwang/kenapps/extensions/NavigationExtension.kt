@@ -1,33 +1,34 @@
 package com.kenwang.kenapps.extensions
 
 import androidx.navigation3.runtime.NavBackStack
+import androidx.navigation3.runtime.NavKey
 import com.kenwang.kenapps.data.model.ParkingSpace
 import com.kenwang.kenapps.data.model.GarbageTruck
 import com.kenwang.kenapps.data.model.ParkingSpaceCity
 import com.kenwang.kenapps.ui.Screens
 
-fun NavBackStack.addParkingList() = add(Screens.ParkingListRoute)
+fun NavBackStack<NavKey>.addParkingList() = add(Screens.ParkingListRoute)
 
-fun NavBackStack.addParkingMap(
+fun NavBackStack<NavKey>.addParkingMap(
     parkingSpace: ParkingSpace,
     city: ParkingSpaceCity
 ) {
     add(Screens.ParkingMapRoute(argParkingSpace = parkingSpace, argCity = city))
 }
 
-fun NavBackStack.addGarbageTruckList() = add(Screens.GarbageTruckListRoute)
+fun NavBackStack<NavKey>.addGarbageTruckList() = add(Screens.GarbageTruckListRoute)
 
-fun NavBackStack.addGarbageTruckMap(garbageTruck: GarbageTruck) {
+fun NavBackStack<NavKey>.addGarbageTruckMap(garbageTruck: GarbageTruck) {
     add(Screens.GarbageTruckMapRoute(argGarbageTruck = garbageTruck))
 }
 
-fun NavBackStack.addTvProgramList() = add(Screens.TvProgramListRoute)
+fun NavBackStack<NavKey>.addTvProgramList() = add(Screens.TvProgramListRoute)
 
-fun NavBackStack.addSetting() = add(Screens.SettingRoute)
+fun NavBackStack<NavKey>.addSetting() = add(Screens.SettingRoute)
 
-fun NavBackStack.addMapLocationList() = add(Screens.MapLocationListRoute)
+fun NavBackStack<NavKey>.addMapLocationList() = add(Screens.MapLocationListRoute)
 
-fun NavBackStack.addMapLocationMap(
+fun NavBackStack<NavKey>.addMapLocationMap(
     longitude: Double?,
     latitude: Double?
 ) {
@@ -43,4 +44,4 @@ fun NavBackStack.addMapLocationMap(
     }
 }
 
-fun NavBackStack.addTextToSpeech() = add(Screens.TextToSpeechRoute)
+fun NavBackStack<NavKey>.addTextToSpeech() = add(Screens.TextToSpeechRoute)

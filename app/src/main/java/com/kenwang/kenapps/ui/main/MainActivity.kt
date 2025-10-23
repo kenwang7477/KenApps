@@ -3,6 +3,7 @@ package com.kenwang.kenapps.ui.main
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
@@ -20,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation3.runtime.entry
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
@@ -33,6 +33,7 @@ import com.kenwang.kenapps.extensions.addMapLocationList
 import com.kenwang.kenapps.extensions.addMapLocationMap
 import com.kenwang.kenapps.extensions.addParkingList
 import com.kenwang.kenapps.extensions.addParkingMap
+import com.kenwang.kenapps.extensions.addSetting
 import com.kenwang.kenapps.extensions.addTextToSpeech
 import com.kenwang.kenapps.extensions.addTvProgramList
 import com.kenwang.kenapps.ui.Screens
@@ -59,6 +60,7 @@ class MainActivity : ComponentActivity() {
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContent {
             val darkMode = getDarkModeUseCase.get().invoke().collectAsStateWithLifecycle(
                 initialValue = false
@@ -96,8 +98,10 @@ fun AppNavHost(
     KenAppsTheme(darkTheme = darkMode) {
         MainDrawer(
             drawerState = drawerState,
-            backStack = backStack,
-            gesturesEnabled = !showBackButton
+            gesturesEnabled = !showBackButton,
+            toSetting = {
+                backStack.addSetting()
+            }
         ) {
             Scaffold(
                 topBar = {

@@ -48,5 +48,18 @@ enum class ParkingSpaceCity(val cityName: String) {
     Taoyuan("Taoyuan"),
     Taichung("Taichung"),
     Tainan("Tainan"),
-    Kaohsiung("Kaohsiung")
+    Kaohsiung("Kaohsiung"),
+    Keelung("Keelung"),
+    Hsinchu("Hsinchu"),
+    HsinchuCounty("HsinchuCounty"),
+    MiaoliCounty("MiaoliCounty"),
+    ChanghuaCounty("ChanghuaCounty"),
+    NantouCounty("NantouCounty"),
+    YunlinCounty("YunlinCounty"),
+    Chiayi("Chiayi"),
+    ChiayiCounty("ChiayiCounty"),
+    PingtungCounty("PingtungCounty"),
+    YilanCounty("YilanCounty"),
+    HualienCounty("HualienCounty"),
+    TaitungCounty("TaitungCounty")
 }

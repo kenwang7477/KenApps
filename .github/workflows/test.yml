@@ -42,13 +42,13 @@ jobs:
         run: echo "ChatGPT_API_KEY=$ChatGPT_API_KEY" >> ./local.properties
 
       # create TDX client Key
-      - name: Access ChatGPT API_KEY
+      - name: Access TDX client key
         env:
           TDX_CLIENT_ID: ${{ secrets.TDX_CLIENT_ID }}
         run: echo "TDX_CLIENT_ID=$TDX_CLIENT_ID" >> ./local.properties
 
       # create TDX client secret
-      - name: Access ChatGPT API_KEY
+      - name: Access TDX client secret
         env:
           TDX_CLIENT_SECRET: ${{ secrets.TDX_CLIENT_SECRET }}
         run: echo "TDX_CLIENT_SECRET=$TDX_CLIENT_SECRET" >> ./local.properties

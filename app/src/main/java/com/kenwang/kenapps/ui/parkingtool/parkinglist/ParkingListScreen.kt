@@ -34,6 +34,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
@@ -45,7 +46,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.core.content.ContextCompat
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.gms.maps.model.LatLng
 import com.kenwang.kenapps.R
@@ -79,11 +80,12 @@ object ParkingListScreen {
             var networkState by remember {
                 mutableStateOf(false)
             }
+            val city = rememberSaveable { mutableStateOf(ParkingSpaceCity.Taipei) }
             val callback = object : ConnectivityManager.NetworkCallback() {
                 override fun onAvailable(network: Network) {
                     super.onAvailable(network)
                     networkState = true
-                    viewModel.getParkingList(currentLatLng = getCurrentLocation(context))
+                    viewModel.getParkingList(currentLatLng = getCurrentLocation(context), selectedCity = city.value)
                 }
 
                 override fun onLost(network: Network) {
@@ -113,14 +115,20 @@ object ParkingListScreen {
                     .padding(paddingValues)
                     .fillMaxSize()
             ) {
+                CitySelector(
+                    viewModel = viewModel,
+                    city = city.value,
+                    onCitySelected = { parkingSpaceCity ->
+                        city.value = parkingSpaceCity
+                    }
+                )
                 if (networkState) {
                     Column(modifier = Modifier.fillMaxSize()) {
                         when (val state = viewModel.viewState.collectAsStateWithLifecycle().value) {
                             is ParkingListViewModel.ParkingListViewState.Success -> {
-                                CitySelector(viewModel = viewModel, city = state.city)
                                 ParkingList(
                                     toParkingMap = toParkingMap,
-                                    city = state.city,
+                                    city = city.value,
                                     parkingSpaces = state.list
                                 )
                             }
@@ -153,7 +161,11 @@ object ParkingListScreen {
     }
 
     @Composable
-    private fun CitySelector(viewModel: ParkingListViewModel, city: ParkingSpaceCity) {
+    private fun CitySelector(
+        viewModel: ParkingListViewModel,
+        city: ParkingSpaceCity,
+        onCitySelected: (ParkingSpaceCity) -> Unit
+    ) {
         val cities = getCities()
         var expanded by remember { mutableStateOf(false) }
         var selectedCity by remember { mutableStateOf(cities.find { it.enum.cityName == city.cityName }?.name ?: "") }
@@ -207,6 +219,7 @@ object ParkingListScreen {
                             selectedCity = city.name
                             expanded = false
                             val parkingSpaceCity = ParkingSpaceCity.entries.find { city.enum == it }
+                            parkingSpaceCity?.let { onCitySelected.invoke(it) }
                             viewModel.getParkingList(selectedCity = parkingSpaceCity)
                         }
                     )
@@ -260,7 +273,20 @@ object ParkingListScreen {
             ParkingSpaceCity.Taoyuan to R.string.taoyuan,
             ParkingSpaceCity.Taichung to R.string.taichung,
             ParkingSpaceCity.Tainan to R.string.tainan,
-            ParkingSpaceCity.Kaohsiung to R.string.kaohsiung
+            ParkingSpaceCity.Kaohsiung to R.string.kaohsiung,
+            ParkingSpaceCity.Keelung to R.string.keelung,
+            ParkingSpaceCity.Hsinchu to R.string.hsinchu,
+            ParkingSpaceCity.HsinchuCounty to R.string.hsinchu_county,
+            ParkingSpaceCity.MiaoliCounty to R.string.miaoli_county,
+            ParkingSpaceCity.ChanghuaCounty to R.string.changhua_county,
+            ParkingSpaceCity.NantouCounty to R.string.nantou_county,
+            ParkingSpaceCity.YunlinCounty to R.string.yunlin_county,
+            ParkingSpaceCity.Chiayi to R.string.chiayi,
+            ParkingSpaceCity.ChiayiCounty to R.string.chiayi_county,
+            ParkingSpaceCity.PingtungCounty to R.string.pingtung_county,
+            ParkingSpaceCity.YilanCounty to R.string.yilan_county,
+            ParkingSpaceCity.HualienCounty to R.string.hualien_county,
+            ParkingSpaceCity.TaitungCounty to R.string.taitung_county
         )
 
         return ParkingSpaceCity.entries.mapNotNull { city ->

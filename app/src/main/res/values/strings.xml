@@ -48,4 +48,17 @@
     <string name="taichung">台中</string>
     <string name="tainan">台南</string>
     <string name="kaohsiung">高雄</string>
+    <string name="keelung">基隆</string>
+    <string name="hsinchu">新竹市</string>
+    <string name="hsinchu_county">新竹縣</string>
+    <string name="miaoli_county">苗粟</string>
+    <string name="changhua_county">彰化</string>
+    <string name="nantou_county">南投</string>
+    <string name="yunlin_county">雲林</string>
+    <string name="chiayi">嘉義市</string>
+    <string name="chiayi_county">嘉義縣</string>
+    <string name="pingtung_county">屏東</string>
+    <string name="yilan_county">宜蘭</string>
+    <string name="hualien_county">花蓮</string>
+    <string name="taitung_county">台東</string>
 </resources>
