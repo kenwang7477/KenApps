@@ -21,6 +21,7 @@ import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.maps.android.compose.rememberUpdatedMarkerState
 import com.kenwang.kenapps.data.model.ParkingSpace
 import com.kenwang.kenapps.data.model.ParkingSpaceCity
 import com.kenwang.kenapps.extensions.cleanLineBreak
@@ -68,7 +69,7 @@ object ParkingMapScreen {
                         state.list.forEach {
                             val parkingSpaceLatLng = LatLng(it.latitude, it.longitude)
                             Marker(
-                                state = MarkerState(position = parkingSpaceLatLng),
+                                state = rememberUpdatedMarkerState(position = parkingSpaceLatLng),
                                 title = it.name.cleanLineBreak(),
                                 snippet = it.fareDescription.cleanLineBreak()
                             )

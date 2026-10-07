@@ -49,7 +49,7 @@ object FileUtil {
             context.contentResolver.update(uri, contentValues, null, null)
             uri
         } catch (e: Exception) {
-            KenLog.e(Log.getStackTraceString(e))
+            KenLog.e(message = Log.getStackTraceString(e))
             context.contentResolver.delete(uri, null, null)
             null
         } finally {
@@ -72,7 +72,7 @@ object FileUtil {
             bitmap.compress(format, 100, fileOutputStream)
             file.toUri()
         } catch (e: Exception) {
-            KenLog.e(Log.getStackTraceString(e))
+            KenLog.e(message = Log.getStackTraceString(e))
             null
         } finally {
             fileOutputStream.flush()

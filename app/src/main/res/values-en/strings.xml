@@ -61,4 +61,7 @@
     <string name="yilan_county">Yilan</string>
     <string name="hualien_county">Hualien</string>
     <string name="taitung_county">Taitung</string>
+
+    <string name="lock_tile_label">Lock Screen</string>
+    <string name="accessibility_service_description">Tap to lock screen</string>
 </resources>

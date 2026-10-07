@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
@@ -72,9 +73,7 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppNavHost(
-    darkMode: Boolean
-) {
+fun AppNavHost(darkMode: Boolean) {
     val backStack = rememberNavBackStack(Screens.MainRoute)
     val showBackButton = backStack.last() != Screens.MainRoute
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -133,6 +132,7 @@ fun AppNavHost(
                     NavDisplay(
                         backStack = backStack,
                         onBack = { backStack.removeLastOrNull() },
+                        entryDecorators = listOf(rememberViewModelStoreNavEntryDecorator()),
                         entryProvider = entryProvider {
                             entry<Screens.MainRoute> {
                                 MainScreen.MainUI(
@@ -142,11 +142,9 @@ fun AppNavHost(
                                             MainListItem.ParkingMap -> {
                                                 backStack.addParkingList()
                                             }
-
                                             MainListItem.GarbageTruckMap -> {
                                                 backStack.addGarbageTruckList()
                                             }
-
                                             MainListItem.TvProgramList -> {
                                                 backStack.addTvProgramList()
                                             }

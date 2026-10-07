@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -112,7 +113,7 @@ object TextToSpeechScreen {
 
     @Composable
     fun SpeechRateSlider(viewModel: TextToSpeechViewModel) {
-        var speechRate by remember { mutableStateOf(1.0f) }
+        var speechRate by remember { mutableFloatStateOf(1.0f) }
         Text(
             modifier = Modifier.padding(top = 20.dp, start = 10.dp),
             text = "${stringResource(id = R.string.speech_rate)} $speechRate"

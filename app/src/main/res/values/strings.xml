@@ -61,4 +61,7 @@
     <string name="yilan_county">宜蘭</string>
     <string name="hualien_county">花蓮</string>
     <string name="taitung_county">台東</string>
+
+    <string name="lock_tile_label">鎖定螢幕</string>
+    <string name="accessibility_service_description">點擊鎖定螢幕</string>
 </resources>

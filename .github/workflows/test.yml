@@ -54,7 +54,7 @@ jobs:
         run: echo "TDX_CLIENT_SECRET=$TDX_CLIENT_SECRET" >> ./local.properties
 
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v2
+        uses: android-actions/setup-android@v4
       
       # Execute unit tests
       - name: Unit Test

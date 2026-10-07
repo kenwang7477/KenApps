@@ -1,8 +1,5 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.plugin.serialization)
@@ -11,17 +8,16 @@ plugins {
     alias(libs.plugins.gms)
     alias(libs.plugins.android.secrets.plugin)
     alias(libs.plugins.compose.compiler)
-    id("kotlin-parcelize")
 }
 
 android {
     namespace = "com.kenwang.kenapps"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.kenwang.kenapps"
-        minSdk = 28
-        targetSdk = 36
+        minSdk = 34
+        targetSdk = 37
         versionCode = 1
         versionName = "1.0"
 
@@ -41,13 +37,14 @@ android {
 //                isUniversalApk = false
 //            }
 //        }
+
+        manifestPlaceholders["GOOGLE_MAP_API_KEY"] = properties["GOOGLE_MAP_API_KEY"] ?: ""
     }
 
     externalNativeBuild {
-        ndkVersion = "28.0.12674087"
         cmake {
             path(file("src/main/cpp/CMakeLists.txt"))
-            version = "3.31.1"
+//            version = "3.31.1"
         }
     }
     signingConfigs {
@@ -62,8 +59,8 @@ android {
     buildTypes {
         release {
             signingConfig = signingConfigs.getByName("release")
-            buildFeatures.buildConfig = true
             isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
         debug {
@@ -74,13 +71,9 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlin {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_17)
-        }
-    }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     packaging {
         resources.excludes.add("META-INF/AL2.0")
@@ -94,24 +87,18 @@ android {
         // https://developer.android.com/studio/test/gradle-managed-devices?hl=zh-tw
         managedDevices {
             localDevices {
-                create("pixel5api33") {
+                create("pixel11api37") {
                     // Use device profiles you typically see in Android Studio.
-                    device = "Pixel 5"
+                    device = "Pixel 11"
                     // Use only API levels 33 and higher.
-                    apiLevel = 33
+                    apiLevel = 37
                     // To include Google services, use "google".
-                    systemImageSource = "aosp"
+                    systemImageSource = "google"
                 }
             }
         }
     }
 }
-
-//kotlin {
-//    sourceSets.all {
-//        languageSettings.enableLanguageFeature("ExplicitBackingFields")
-//    }
-//}
 
 dependencies {
 
@@ -120,8 +107,10 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
     implementation(libs.androidx.constraintlayout.compose)
     implementation(libs.androidx.datastore)
+    implementation(libs.vico)
     implementation(libs.io.coil.compose)
     implementation(libs.kotlinx.serialization.json)
 
@@ -131,7 +120,7 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.compose.ui)
-    debugImplementation(libs.androidx.compose.ui.tooling)
+    implementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     androidTestImplementation(composeBom)
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
@@ -160,7 +149,6 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.truth)
-    testImplementation(libs.robolectric)
     testImplementation(libs.app.cash.turbine)
     androidTestImplementation(libs.androidx.test.core)
     androidTestImplementation(libs.androidx.test.ext.junit)
@@ -175,6 +163,8 @@ dependencies {
     ksp(libs.hilt.android.compiler)
     kspTest(libs.hilt.android.compiler)
     kspAndroidTest(libs.hilt.android.compiler)
+    // 暫時 kotlin 升 2.4.0 用
+    ksp("org.jetbrains.kotlin:kotlin-metadata-jvm:2.4.0")
 
     // Map
     implementation(libs.maps.compose)
